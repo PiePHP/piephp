@@ -2,7 +2,7 @@
 require 'common.php';
 ?>
 
-OMG! It seems like this is working!
+Welcome to PiePHP
 
 <?php
 PieLayout::renderPage();

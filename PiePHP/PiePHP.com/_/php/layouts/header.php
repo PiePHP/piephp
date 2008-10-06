@@ -2,8 +2,10 @@
 <html>
 <head>
 	<title>PiePHP - as easy as pie</title>
-	<link href="/screen.css" media="screen" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/screen.css" type="text/css" media="screen">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
+<script type="text/javascript" src="/all.js"></script>
 <body>
 	<div id="shell">
 		<div id="top">

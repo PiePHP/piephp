@@ -6,7 +6,7 @@
 // If no server-specific configuration exists, use the default.
 if (!defined('PIE')) require 'configuration-default.php';
 
-
+// If the calling page has not overridden them, set the array of default required files.
 if (!isset($REQUIRED_FILES)) {
 	$REQUIRED_FILES = array(
 		PIE.'/_/php/libraries/PieAuthentication.class.php',
@@ -20,11 +20,13 @@ if (!isset($REQUIRED_FILES)) {
 		PIE.'/_/php/libraries/PieTimer.class.php');
 }
 
+// Include the required files, breaking on failure.
 while (list(, $REQUIRED_FILE) = each($REQUIRED_FILES)) {
 	require $REQUIRED_FILE;
 }
 
-$REQUIRED_FILES[] = $_SERVER['SCRIPT_NAME'];
+// The calling page's file and this file were also required to build the page.
+$REQUIRED_FILES[] = $_SERVER['SCRIPT_FILENAME'];
 $REQUIRED_FILES[] = DOCS.'/common.php';
 
 ?>

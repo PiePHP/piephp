@@ -17,7 +17,7 @@ class PieRefresher {
 		}
 		?>
 		<script type="text/javascript">
-		Refresher.start(<?=time()?>, ['<?=join("', '", $GLOBALS['REQUIRED_FILES'])?>']);
+		Refresher.setup(<?=time()?>, ['<?=join("', '", $GLOBALS['REQUIRED_FILES'])?>']);
 		</script>
 		<?php
 	}

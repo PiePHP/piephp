@@ -1,13 +1,16 @@
 <?php
+if (!defined('DOCS')) {
+	define('DOCS', $_SERVER['DOCUMENT_ROOT']);
+}
+
 $files = array(
-	'/_/js/jquery-1.2.6.js',
-	'/_/js/pie.js',
-	'/_/js/ready.js',
-	'/_/js/refresher.js'
+	DOCS.'/_/js/pie.js',
+	DOCS.'/_/js/refresher.js'
 );
 
+$GLOBALS['REQUIRED_FILES'][] = DOCS.'/_/js/all.js.php';
 while (list(, $file) = each($files)) {
 	$GLOBALS['REQUIRED_FILES'][] = $file;
-	require $_SERVER['DOCUMENT_ROOT'].$file;
+	require $file;
 }
 ?>

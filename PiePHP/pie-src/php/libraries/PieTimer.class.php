@@ -8,11 +8,15 @@ class PieTimer {
 	}
 	
 	static function startTimer() {
-		$GLOBALS['START_TIME'] = MicroSeconds();
+		$GLOBALS['START_TIME'] = PieTimer::microSeconds();
 	}
 	
 	static function logTime($label) {
-		LogLine('timer', $label.': '.(MicroSeconds() - $GLOBALS['START_TIME']).'s');
+		PieLogging::logLine('timer', $label.': '.(PieTimer::microSeconds() - $GLOBALS['START_TIME']).'s');
+	}
+	
+	static function echoTime() {
+		echo (PieTimer::microSeconds() - $GLOBALS['START_TIME']).'s<br>';
 	}
 	
 }

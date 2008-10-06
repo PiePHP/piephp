@@ -9,5 +9,6 @@ $files = array(
 while (list(, $file) = each($files)) {
 	$GLOBALS['REQUIRED_FILES'][] = $file;
 	require $_SERVER['DOCUMENT_ROOT'].$file;
+	echo "\n";
 }
 ?>
