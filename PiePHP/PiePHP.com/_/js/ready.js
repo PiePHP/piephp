@@ -1,1 +1,0 @@
-var Ready = $(document).ready;
