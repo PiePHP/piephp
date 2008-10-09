@@ -1,5 +1,5 @@
 <?php
-require '../../_/php/libraries/PieTimer.class.php';
+require $_SERVER['DOCUMENT_ROOT'].'/../app-init/common.php';
 ?>
 
 <?php

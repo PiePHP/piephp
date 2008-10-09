@@ -26,7 +26,7 @@
 			</form>
 			<a href="/features/">Features</a>
 			<a href="/downloads/">Downloads</a>
-			<a href="/getting-started/">Getting Started</a>
+			<a href="/get-started/">Get Started</a>
 			<a href="/documentation/">Documentation</a>
 			<a href="/modules/">Modules</a>
 		</div>

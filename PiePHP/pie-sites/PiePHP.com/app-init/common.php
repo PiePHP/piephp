@@ -16,6 +16,7 @@ if (!isset($REQUIRED_FILES)) {
 		PIE_ROOT.'pie-libraries/PieLayout.class.php',
 		PIE_ROOT.'pie-libraries/PieLogging.class.php',
 		PIE_ROOT.'pie-libraries/PieRequests.class.php',
+		PIE_ROOT.'pie-libraries/PieSay.class.php',
 		PIE_ROOT.'pie-libraries/PieScraping.class.php',
 		PIE_ROOT.'pie-libraries/PieTimer.class.php');
 }

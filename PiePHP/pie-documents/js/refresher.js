@@ -14,7 +14,7 @@ var Refresher = {
 	},
 	
 	poll: function() {
-		var url = '/refresher.php?Time=' + Refresher.time + '&Files=' + escape(Refresher.files);
+		var url = '/refresher?Time=' + Refresher.time + '&Files=' + escape(Refresher.files);
 		$.get(url, function(response) {
 			if (response.responseText == 'true') {
 				var loc = window.location;

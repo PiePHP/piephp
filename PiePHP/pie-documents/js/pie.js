@@ -61,16 +61,21 @@ $.set($, {
 	},
 	ajax: function(method, url, options) {
 		if (typeof options == 'function') {
-			options = {success: options};
+			options = {ok: options};
 		}
 		var request = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {
-				var status = request.status;
-				if ((status < 300 || status == 304) && options.success) options.success(request);
+				var status = 0;
+				try {
+					status = request.status;
+				}
+				catch (e) {
+				}
+				if ((status < 300 || status == 304) && options.ok) options.ok(request);
 				if (status > 299 && status < 400) alert('HTTP ' + status);
-				if (status > 399 && options.failure) options.failure(request);
-				if (options.ready) options.ready(request);
+				if (status > 399 && options.failed) options.failed(request);
+				if (status > 0 && options.done) options.done(request);
 			}
 		}
 		request.open(method, url, true);

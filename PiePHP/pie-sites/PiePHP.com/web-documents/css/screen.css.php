@@ -1,8 +1,9 @@
 <?php
-if (!defined('APP_ROOT')) {
+if (!isset($GLOBALS['REQUIRED_FILES'])) {
 	header('Content-Type: text/css', true);
 	header('X-Pad: avoid browser bug', true);
-	define('APP_ROOT', $_SERVER['DOCUMENT_ROOT'].'/../');
+	$GLOBALS['REQUIRED_FILES'] = array();
+	require $_SERVER['DOCUMENT_ROOT'].'/../app-init/common.php';
 }
 
 $files = array(

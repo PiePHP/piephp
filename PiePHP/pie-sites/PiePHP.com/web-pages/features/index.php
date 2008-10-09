@@ -1,12 +1,12 @@
 <?php
-require '../../app-init/common.php';
+require $_SERVER['DOCUMENT_ROOT'].'/../app-init/common.php';
 ?>
 
 <h1>PiePHP Features</h1>
 
 <br>
 
-<h2>Pie Manager</h2>
+<h2>Manager</h2>
 
 <br>
 
@@ -16,6 +16,7 @@ require '../../app-init/common.php';
 	<li>Set up file permissions</li>
 	<li>Set up DB connection</li>
 	<li>Set up Memcache connection</li>
+	<li>Set up Pie Manager user accounts</li>
 </ul>
 
 <br>
@@ -34,7 +35,7 @@ require '../../app-init/common.php';
 
 <br>
 
-<h2>Pie Site Tools</h2>
+<h2>Site Tools</h2>
 
 <br>
 
@@ -90,11 +91,11 @@ require '../../app-init/common.php';
 
 <br>
 
-<h2>Pie Modules</h2>
+<h2>Modules</h2>
 
 <br>
 
-<h3>Pie Projects</h3>
+<h3>Project Planner</h3>
 <ul>
 	<li>Project Management interface with iterations & n-level task nesting</li>
 	<li>Bug system tied to project tasks</li>
@@ -102,7 +103,7 @@ require '../../app-init/common.php';
 
 <br>
 
-<h3>Pie Store</h3>
+<h3>Store</h3>
 <ul>
 	<li>Searchable store with n-level category nesting</li>
 	<li>Shopping cart system (with Google Checkout integration?)</li>
