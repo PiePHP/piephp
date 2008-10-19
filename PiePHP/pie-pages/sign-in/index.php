@@ -29,15 +29,15 @@ if (isset($_REQUEST['Username'])) {
 
 <p><?=$ERROR_MESSAGE?></p>
 
-<form method="post" action="/sign-in/" class="box">
+<form method="post" action="/sign-in/" class="box" style="width:320px;">
 <table>
 	<tr>
 		<th><?php PieSay::say('Username'); ?></th>
-		<td><input type="text" name="Username" value="<?php echo $_COOKIE['UsernameCookie']; ?>" size="30"></td>
+		<td><input type="text" name="Username" value="<?php echo $_COOKIE['UsernameCookie']; ?>" style="width:200px;"></td>
 	</tr>
 	<tr>
 		<th><?php PieSay::say('Password'); ?></th>
-		<td><input type="password" name="Password" value="" size="30"></td>
+		<td><input type="password" name="Password" value="" style="width:200px;"></td>
 	</tr>
 	<tr>
 		<th></th>

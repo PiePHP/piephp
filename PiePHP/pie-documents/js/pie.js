@@ -63,6 +63,15 @@ $.set($, {
 		if (typeof options == 'function') {
 			options = {ok: options};
 		}
+		else if (typeof options == 'array') {
+			options = {ok: options[0], failed: options[1]};
+		}
+		else if (typeof options == 'string') {
+			var id = options;
+			options = {ok: function(response) {
+				$(id).html(response.responseText);
+			}};
+		}
 		var request = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {

@@ -14,13 +14,15 @@ var Refresher = {
 	},
 	
 	poll: function() {
-		var url = '/refresher?Time=' + Refresher.time + '&Files=' + escape(Refresher.files);
-		$.get(url, function(response) {
-			if (response.responseText == 'true') {
-				var loc = window.location;
-				loc.href = '' + loc.href;
+		$.get('/refresher?Time=' + Refresher.time + '&Files=' + escape(Refresher.files), {
+			ok: function(response) {
+				//alert(response.responseText);
+				if (response.responseText == 'true') {
+					var loc = window.location;
+					loc.href = '' + loc.href;
+				}
+				setTimeout(Refresher.poll, 500);
 			}
-			setTimeout(Refresher.poll, 100);
 		});
 	}
 	
