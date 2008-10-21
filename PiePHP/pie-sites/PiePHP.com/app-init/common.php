@@ -1,10 +1,7 @@
 <?php
 
-// Include the server-specific configuration if it exists.
-include 'configuration.php';
-
-// If no server-specific configuration exists, use the default.
-if (!defined('PIE_ROOT')) require 'configuration(production).php';
+// Include the local configuration.
+include 'configuration(local).php';
 
 // If the calling page has not overridden them, set the array of default required files.
 if (!isset($REQUIRED_FILES)) {
