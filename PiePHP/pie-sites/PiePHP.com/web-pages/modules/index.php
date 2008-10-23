@@ -22,15 +22,15 @@ for ($i = 0; $i < 10000; $i++) {
 		return 3;
 	}
 	
-	function pieStuffThataoeu'.$i.'() {
+	function pieStuffSomethingElse'.$i.'() {
 		return 2;
 	}
 	
-	function pieStuffTheOtheraoeu'.$i.'() {
+	function pieStuffAnotherThing'.$i.'() {
 		return 3;
 	}
 	
-	$Something = pieStuffThis'.$i.'() + pieStuffThat'.$i.'() + pieStuffTheOther'.$i.'();
+	$Something = pieStuffThis'.$i.'() + pieStuffThat'.$i.'() + pieStuffTheOther'.$i.'() + pieStuffSomethingElse'.$i.'() + pieStuffAnotherThing'.$i.'();
 	');
 }
 
@@ -44,7 +44,7 @@ PieTimer::startTimer();
 
 for ($i = 0; $i < 10000; $i++) {
 	eval('
-	/*'.$i.''.$i.'*/
+	/*'.$i.''.$i.''.$i.''.$i.'*/
 	
 	class PieStuff'.$i.' {
 		
@@ -60,16 +60,16 @@ for ($i = 0; $i < 10000; $i++) {
 			return 3;
 		}
 		
-		static function thataoeu() {
+		static function somethingElse() {
 			return 2;
 		}
 		
-		static function theOtheraoeu() {
+		static function anotherThing() {
 			return 3;
 		}
 	}
 	
-	$Something = PieStuff'.$i.'::this() + PieStuff'.$i.'::that() + PieStuff'.$i.'::theOther();
+	$Something = PieStuff'.$i.'::this() + PieStuff'.$i.'::that() + PieStuff'.$i.'::theOther() + PieStuff'.$i.'::somethingElse() + PieStuff'.$i.'::anotherThing();
 	');
 }
 
