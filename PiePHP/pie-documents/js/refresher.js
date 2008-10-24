@@ -10,18 +10,20 @@ var Refresher = {
 		$('img').each(function(i, img) {
 			refresher.files.push(img.href);
 		});
-		setTimeout(refresher.poll, 100);
+		setTimeout(function() {
+			refresher.poll(0);
+		}, 100);
 	},
 	
-	poll: function() {
-		$.get('/refresher?Time=' + Refresher.time + '&Files=' + escape(Refresher.files), {
+	poll: function(count) {
+		$.get('/refresher?time=' + Refresher.time + '&files=' + escape(Refresher.files) + '&count=' + (++count), {
 			ok: function(response) {
-				//alert(response.responseText);
 				if (response.responseText == 'true') {
-					var loc = window.location;
-					loc.href = '' + loc.href;
+					window.location.reload(true);
 				}
-				setTimeout(Refresher.poll, 500);
+				setTimeout(function() {
+					Refresher.poll(++count);
+				}, 500);
 			}
 		});
 	}

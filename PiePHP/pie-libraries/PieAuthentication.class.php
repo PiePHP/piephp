@@ -27,7 +27,7 @@ class PieAuthentication {
 			}
 		}
 		else {
-			return isset($_SESSION['Groups'][$group]);
+			return isset($_SESSION['Groups'][$groupOrGroups]);
 		}
 		return false;
 	}

@@ -1,7 +1,7 @@
 <?php
 
 // Include the local configuration.
-include 'configuration(local).php';
+require 'configuration(local).php';
 
 // If the calling page has not overridden them, set the array of default required files.
 if (!isset($REQUIRED_FILES)) {
@@ -18,13 +18,15 @@ if (!isset($REQUIRED_FILES)) {
 		PIE_ROOT.'pie-libraries/PieTimer.class.php');
 }
 
-// Include the required files, breaking on failure.
+// Include the required files, break on failure.
 while (list(, $REQUIRED_FILE) = each($REQUIRED_FILES)) {
 	require $REQUIRED_FILE;
 }
 
 // The calling page's file and this file were also required to build the page.
 $REQUIRED_FILES[] = $_SERVER['SCRIPT_FILENAME'];
-$REQUIRED_FILES[] = APP_ROOT.'web-pages/common.php';
+$REQUIRED_FILES[] = APP_ROOT.'app-init/common.php';
+$REQUIRED_FILES[] = APP_ROOT.'app-init/configuration(local).php';
+$REQUIRED_FILES[] = APP_ROOT.'app-init/configuration('.ENVIRONMENT.').php';
 
 ?>
