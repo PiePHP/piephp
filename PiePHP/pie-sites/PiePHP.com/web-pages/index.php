@@ -16,7 +16,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/../app-init/common.php';
 	<li>Set up file permissions</li>
 	<li>Set up DB connection</li>
 	<li>Set up Memcache connection</li>
-	<li>Set up Pie Manager user accounts</li>
+	<li>Set up user accounts for server tools</li>
 </ul>
 
 <br>
