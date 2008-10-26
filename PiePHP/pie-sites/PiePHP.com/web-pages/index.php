@@ -21,7 +21,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/../app-init/common.php';
 
 <br>
 
-<h3>Site Creator</h3>
+<h3>Site Creation Wizard</h3>
 <ul>
 	<li>Select modules</li>
 	<li>Build navigation</li>
