@@ -2,6 +2,7 @@
 
 // Include the local configuration.
 require 'configuration(local).php';
+require 'configuration('.ENVIRONMENT.').php';
 
 // If the calling page has not overridden them, set the array of default required files.
 if (!isset($REQUIRED_FILES)) {
