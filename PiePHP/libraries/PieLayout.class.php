@@ -7,7 +7,7 @@ class PieLayout {
 	
 	static function renderPage($pageLayout = 'default', $pageContent = array()) {
 		if (ob_get_length()) {
-			PieLayout::saveSliceContent();
+			PieLayout::saveSlice();
 		}
 		PieRefresher::requireFile(APP_ROOT.'layout/templates/'.$pageLayout.'.php');
 	}
@@ -36,7 +36,7 @@ class PieLayout {
 		}
 	}
 	
-	static function saveSliceContent($sliceName = 'body') {
+	static function saveSlice($sliceName = 'body') {
 		$GLOBALS[$sliceName.'Buffer'] = ob_get_clean();
 		ob_start();
 	}

@@ -4,9 +4,9 @@ require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
 if (isset($_REQUEST['Username'])) {
 	if ($User = PieCaching::fetchRow('Users', array('Username' => $_REQUEST['Username']))) {
 		if ($_REQUEST['Password'] == $User['Password']) {
-			$_SESSION['UserId'] = $User['id'];
+			$_SESSION['user_id'] = $User['id'];
 			$_SESSION['Username'] = $User['Username'];
-			$_SESSION['Groups'] = FieldsArray('name, id FROM UserGroups WHERE id IN (SELECT GroupId FROM UserGroupUsers WHERE UserId = '.$User['id'].')');
+			$_SESSION['groups'] = FieldsArray('name, id FROM UserGroups WHERE id IN (SELECT GroupId FROM UserGroupUsers WHERE user_id = '.$User['id'].')');
 			setcookie('UsernameCookie', $Row['Username'], time() + 31536000);
 			header('Location: /');
 			exit;

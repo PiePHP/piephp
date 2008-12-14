@@ -9,20 +9,20 @@ class PieLogging {
 				$line = substr($line, 0, $maxLength);
 			}
 		}
-		$handle = fopen( APP_ROOT.'webpages/_/log/all.log', 'a');
+		$handle = fopen( APP_ROOT . 'logs/all.log', 'a');
 		fwrite($handle, $line."\r\n");
 		fclose($handle);
-		$handle = fopen( APP_ROOT.'webpages/_/log/'.$logName.'.log', 'a');
+		$handle = fopen( APP_ROOT . 'logs/'.$logName.'.log', 'a');
 		fwrite($handle, $line."\r\n");
 		fclose($handle);
 	}
 	
 	static function debug($line, $maxLength = 0) {
-		LogLine('debug', $line, $maxLength);
+		PieLogging::logLine('debug', $line, $maxLength);
 	}
 	
 	static function error($line, $maxLength = 0) {
-		LogLine('error', $line, $maxLength);
+		PieLogging::logLine('error', $line, $maxLength);
 	}
 	
 	static function pre($value) {

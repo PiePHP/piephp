@@ -15,19 +15,19 @@ class PieAuthentication {
 	}
 	
 	static function signedIn() {
-		return isset($_SESSION['UserId']);
+		return isset($_SESSION['user_id']);
 	}
 	
 	static function inGroup($groupOrGroups) {
 		if (is_array($groupOrGroups)) {
 			while (list(, $group) = each($groupOrGroups)) {
-				if (isset($_SESSION['Groups'][$group])) {
+				if (isset($_SESSION['groups'][$group])) {
 					return true;
 				}
 			}
 		}
 		else {
-			return isset($_SESSION['Groups'][$groupOrGroups]);
+			return isset($_SESSION['groups'][$groupOrGroups]);
 		}
 		return false;
 	}
@@ -36,8 +36,32 @@ class PieAuthentication {
 	
 		global $ERROR_MESSAGE, $CONFIRMATION_MESSAGE;
 		
-		if ($_REQUEST['Email']) {
-			$result = Select('Username, Password FROM Users WHERE Email = '.Quote($_REQUEST['Email']));
+		if (isset($_REQUEST['username'])) {
+			if ($user = PieCaching::fetchRow('users', array('username' => $_REQUEST['username']))) {
+				if ($_REQUEST['password'] == $user['password']) {
+					$_SESSION['user_id'] = $user['id'];
+					$_SESSION['username'] = $user['username'];
+					$_SESSION['groups'] = PieDatabase::fieldsArray('name, id FROM user_groups WHERE id IN (SELECT group_id FROM user_group_users WHERE user_id = '.$user['id'].')');
+					setcookie('username_cookie', $Row['username'], time() + 31536000);
+					header('Location: /');
+					exit;
+				}
+				else {
+					if (strtoupper($_REQUEST['password']) == $user['password']) {
+						$ERROR_MESSAGE = 'Incorrect username or password.<br>Please make sure your CAPS lock is off.';
+					}
+					else {
+						$ERROR_MESSAGE = 'Incorrect username or password.<br>Please try again.';
+					}
+				}
+			}
+			else {
+				$ERROR_MESSAGE = 'Incorrect username or password.<br>Please try again.';
+			}
+		}
+		
+		if ($_REQUEST['email']) {
+			$result = Select('username, password FROM users WHERE email = '.Quote($_REQUEST['email']));
 			$signIns = '';
 			if ($row = Row($result)) {
 				while ($row) {
@@ -52,7 +76,7 @@ class PieAuthentication {
 			}
 		}
 		
-		if ($_REQUEST['Forgot']) { ?>
+		if ($_REQUEST['forgot_password']) { ?>
 			<table style="width:380px;margin:32px auto;" align="center"><tr><td>
 			<form name="Form" action="<?=URL('', 1)?>" method="post" class="Form">
 			<table>

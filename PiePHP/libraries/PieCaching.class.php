@@ -7,6 +7,19 @@ if (MEMCACHE_ENABLED) {
 class PieCaching {
 	
 	/**
+	 * Get an associative array representing the structure of a table.
+	 */
+	static function getTableStructure($table) {
+		global $SCHEMA;
+		
+		if (!isset($SCHEMA[$table])) {
+			require APP_ROOT . 'schema/' . $table . '.php';
+		}
+		
+		return $SCHEMA[$table];
+	}
+	
+	/**
 	 * Get a record from memcache, or get it from the database if it's not in memcache.
 	 *
 	 * $table - The database table where the record may be found.
@@ -17,45 +30,41 @@ class PieCaching {
 	 *
 	 */
 	static function fetchRow($table, $values) {
-		global $MEMCACHE, $SCHEMA;
+		global $MEMCACHE;
 		
-		echo 1;
 		// Allow the values to just be an id.
 		if (is_numeric($values)) {
 			$values = array('id' => $values);
 		}
 		
-		echo 2;
 		// Retrieve the structure of the table which is stored in a global array.
-		$fields = $SCHEMA[$table];
+		$fields = PieCaching::getTableStructure($table);
 		
-		print_r($fields);
 		if ($MEMCACHE) {
 			// Iterate through all of the keys by which this record needs to be stored in memcache.
 			for ($key = 0; isset($fields[$key]); $key++) {
 				$keyFields = array();
 				while (list(, $field) = each($fields[$key])) {
 					if (!isset($values[$field])) continue 2;
-					$keyFields[] = $field.':'.str_replace(',', '&comma;', $values[$field]);
+					$keyFields[] = $field . ':' . str_replace(',', '&comma;', $values[$field]);
 				}
-				if ($storedValues = $MEMCACHE->get($table.'('.join(',', $keyFields).')')) {
+				if ($storedValues = $MEMCACHE->get($table . '(' . join(',', $keyFields) . ')')) {
 					return unserialize($storedValues);
 				}
 			}
 		}
 		
-		echo 4;
 		// The record was not in memcache, so get it from the database.
 		for ($key = 0; isset($fields[$key]); $key++) {
 			$keyFields = $fields[$key];
 			$where = array();
 			while (list(, $field) = each($fields[$key])) {
 				if (!isset($values[$field])) continue 2;
-				$where[] = $field.'='.Quote($values[$field]);
+				$where[] = $field . '=' . PieDatabase::quote($values[$field]);
 			}
-			$result = Select("* FROM $table WHERE ".join(' AND ', $where));
-			if (mysql_num_rows($result) == 1) {
-				return Assoc($result);
+			$result = PieDatabase::select("* FROM $table WHERE " . join(' AND ', $where));
+			if (PieDatabase::rows($result) == 1) {
+				return PieDatabase::assoc($result);
 			}
 		}
 		
@@ -74,10 +83,10 @@ class PieCaching {
 	 *
 	 */
 	static function storeRow($table, $values) {
-		global $MEMCACHE, $SCHEMA;
+		global $MEMCACHE;
 		
 		// If the record already exists, get any existing data that is not being replaced.
-		if ($storedValues = FetchRow($table, $values)) {
+		if ($storedValues = PieCaching::fetchRow($table, $values)) {
 			while (list($column, $value) = each($storedValues)) {
 				if (!isset($values[$column])) {
 					$values[$column] = $value;
@@ -88,28 +97,28 @@ class PieCaching {
 		// Iterate through all of the fields that need to be set so they can be joined in a replace statement.
 		$sets = array();
 		while (list($column, $value) = each($values)) {
-			$sets[] = $column.'='.Quote($value);
+			$sets[] = $column . '=' . PieDatabase::quote($value);
 		}
 		
 		// Replace the record, knowing that if it does not exist, it will be created.
-		$result = Query('REPLACE INTO '.$table.' SET '.join(',', $sets));
+		$result = PieDatabase::replace($table . ' SET ' . join(',', $sets));
 		
 		// If an id was auto-generated, store it so that it can be cached.
-		if ($id = mysql_insert_id()) {
+		if ($id = PieDatabase::id($result)) {
 			$values['id'] = $id;
 		}
 		
 		if ($MEMCACHE) {
 			// Retrieve the structure of the table which is stored in a global array.
-			$fields = $SCHEMA[$table];
+			$fields = PieCaching::getTableStructure($table);
 			
 			// Iterate through all of the keys by which this record needs to be stored in memcache.
 			for ($key = 0; isset($fields[$key]); $key++) {
 				$keyFields = array();
 				while (list(, $field) = each($fields[$key])) {
-					$keyFields[] = $field.':'.str_replace(',', '&comma;', $values[$field]);
+					$keyFields[] = $field . ':'.str_replace(',', '&comma;', $values[$field]);
 				}
-				$MEMCACHE->set($table.'('.join(',', $keyFields).')', serialize($values));
+				$MEMCACHE->set($table . '(' . join(',', $keyFields) . ')', serialize($values));
 			}
 		}
 		

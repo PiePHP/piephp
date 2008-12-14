@@ -18,13 +18,13 @@ class PieDatabase {
 			$patched = true;
 			//echo 'Dropping tables...<br/>';
 			$tables = query('SHOW TABLES');
-			while (list($table) = Row($tables)) {
+			while (list($table) = PieDatabase::row($tables)) {
 				PieDatabase::query('DROP TABLE '.$table);
 			}
 			$MEMCACHE->flush();
 		}
 		$patchQuery = PieDatabase::tryQuery('SELECT Number FROM Patches', &$patchNumberErrorMessage);
-		$patchNumber = $patchQuery ? array_shift(mysql_fetch_row($patchQuery)) : -1;
+		$patchNumber = $patchQuery ? array_shift(PieDatabase::row($patchQuery)) : -1;
 		$tryPatch = $patchNumber + 1;
 		while (file_exists($path = APP_ROOT.'webpages//_/sql/patch'.sprintf('%04d', $tryPatch).'.sql')) {
 			$patched = true;
@@ -43,14 +43,14 @@ class PieDatabase {
 	
 	
 	static function field($sql) {
-		$result = Select($sql . (preg_match('/ LIMIT ([0-9]+), 1/', $sql) ? '' : ' LIMIT 0, 1'));
+		$result = PieDatabase::select($sql . (preg_match('/ LIMIT ([0-9]+), 1/', $sql) ? '' : ' LIMIT 0, 1'));
 		$field = ($result && mysql_num_rows($result)) ? array_shift(mysql_fetch_row($result)) : '';
 		mysql_free_result($result);
 		return $field;
 	}
 	
 	static function fieldArray($sql) {
-		$result = Select($sql);
+		$result = PieDatabase::select($sql);
 		$array = array();
 		while (list($value) = mysql_fetch_row($result)) {
 			$array[] = $value;
@@ -60,7 +60,7 @@ class PieDatabase {
 	}
 	
 	static function fieldsArray($sql) {
-		$result = Select($sql);
+		$result = PieDatabase::select($sql);
 		$array = array();
 		while (list($key, $value) = mysql_fetch_row($result)) {
 			$array[$key] = $value;
@@ -71,7 +71,7 @@ class PieDatabase {
 	
 	static function row($query) {
 		if (is_string($query)) {
-			$query = Select($query);
+			$query = PieDatabase::select($query);
 			$row = mysql_fetch_row($query);
 			mysql_free_result($query);
 			return $row;
@@ -81,7 +81,7 @@ class PieDatabase {
 	
 	static function assoc($query) {
 		if (is_string($query)) {
-			$query = Select($query);
+			$query = PieDatabase::select($query);
 			$assoc = mysql_fetch_assoc($query);
 			mysql_free_result($query);
 			return $assoc;
@@ -93,22 +93,35 @@ class PieDatabase {
 		global $DB_BUFFER;
 		ob_end_flush();
 		while (list(, $sql) = each($DB_BUFFER)) {
-			Query($sql);
+			PieDatabase::query($sql);
 		}
 		exit;
 	}
 	
 	static function select($sql) {
-		return Query('SELECT '.$sql);
+		return PieDatabase::query('SELECT '.$sql);
 	}
 	
 	static function update($sql) {
-		Query('UPDATE '.$sql);
+		PieDatabase::query('UPDATE '.$sql);
 		return mysql_affected_rows();
 	}
 	
 	static function insert($sql) {
-		Query('INSERT INTO '.$sql);
+		PieDatabase::query('INSERT INTO '.$sql);
+		return mysql_insert_id();
+	}
+	
+	static function replace($sql) {
+		PieDatabase::query('REPLACE INTO '.$sql);
+		return mysql_affected_rows();
+	}
+	
+	static function rows($result) {
+		return mysql_num_rows($result);
+	}
+	
+	static function id($result) {
 		return mysql_insert_id();
 	}
 	
