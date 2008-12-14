@@ -1,4 +1,4 @@
-<?php
+<?
 require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
 ?>
 
@@ -8,6 +8,6 @@ require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
 
 <p>Sorry, the page you're looking for isn't here.</p>
 
-<?php
+<?
 PieLayout::renderPage();
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?
 
 // Include the local configuration.
 require 'configuration(local).php';

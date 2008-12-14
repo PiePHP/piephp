@@ -1,7 +1,7 @@
 
 
 <div id="log"></div>
-<?php
+<?
 for ($i = 1; $i <= 10000; $i++) {
 	echo '<a href="#" class="link'.($i % 10).'">'.$i.'</a> &nbsp; ';
 }

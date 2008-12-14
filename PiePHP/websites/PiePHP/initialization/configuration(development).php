@@ -1,4 +1,4 @@
-<?php
+<?
 
 /*
  * Environment
@@ -24,7 +24,7 @@ if (!defined('DB_PASS')) define('DB_PASS', 'password');
 /*
  * Memcache
  */
-if (!defined('MEMCACHE_ENABLED')) define('MEMCACHE_ENABLED', false);
+if (!defined('MEMCACHE_ENABLED')) define('MEMCACHE_ENABLED', true);
 if (!defined('MEMCACHE_HOST')) define('MEMCACHE_HOST', 'localhost');
 if (!defined('MEMCACHE_PORT')) define('MEMCACHE_PORT', '11211');
 if (!defined('MEMCACHE_PREFIX')) define('MEMCACHE_PREFIX', 'PiePHP_');

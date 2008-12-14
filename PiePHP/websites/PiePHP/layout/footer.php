@@ -1,7 +1,7 @@
-<?php if (false) { ?><html><body><div><div><?php } ?>
+<? if (false) { ?><html><body><div><div><? } ?>
 		</div>
 	</div>
-<?php
+<?
 PieRefresher::render();
 ?>
 </body>

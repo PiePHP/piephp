@@ -1,4 +1,4 @@
-<?php
+<?
 
 $REQUIRED_FILES = array(
 	'/_/php/custom-libraries/data-structure.php',

@@ -1,4 +1,4 @@
-<?php
+<?
 
 $SCHEMA['UserGroups'] = array(
 	'id' => 'int(10) unsigned NOT NULL auto_increment',

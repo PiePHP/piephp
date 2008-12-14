@@ -1,4 +1,4 @@
-<?php
+<?
 
 class PieRefresher {
 	
@@ -19,7 +19,7 @@ class PieRefresher {
 		<script type="text/javascript">
 		Refresher.setup(<?=time()?>, ['<?=join("', '", $GLOBALS['REQUIRED_FILES'])?>']);
 		</script>
-		<?php
+		<?
 	}
 	
 }

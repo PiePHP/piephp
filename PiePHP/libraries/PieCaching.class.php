@@ -1,4 +1,4 @@
-<?php
+<?
 
 if (MEMCACHE_ENABLED) {
 	$GLOBALS['MEMCACHE'] = memcache_connect(MEMCACHE_HOST, MEMCACHE_PORT);

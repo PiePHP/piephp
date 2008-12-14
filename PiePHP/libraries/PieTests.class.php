@@ -1,4 +1,4 @@
-<?php
+<?
 
 $passed = 0;
 $failed = 0;

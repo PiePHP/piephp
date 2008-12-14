@@ -1,8 +1,8 @@
-<?php
+<?
 require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
 ?>
 
-<?php
+<?
 
 PieTimer::startTimer();
 
@@ -38,7 +38,7 @@ PieTimer::echoTime();
 
 ?>
 
-<?php
+<?
 
 PieTimer::startTimer();
 

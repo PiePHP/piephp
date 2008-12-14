@@ -1,4 +1,4 @@
-<?php
+<?
 session_start();
 
 class PieAuthentication {
@@ -63,7 +63,7 @@ class PieAuthentication {
 			<tr class="Footer"><td><input type="submit" value="Send Password" class="Button" style="margin-left:120px;" onclick="return CheckForm(this.form)" /><input type="hidden" name="NumberOfChanges" value="0"></td></tr>
 			</table>
 			</form>
-			</table><?php
+			</table><?
 		}
 	}
 	
