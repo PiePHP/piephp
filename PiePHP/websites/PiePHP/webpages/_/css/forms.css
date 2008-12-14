@@ -1,0 +1,33 @@
+.box {
+	/*display: block;
+	float: left;*/
+	margin: 0 auto;
+	background: #ED9;
+	border: 1px solid #BA5;
+	padding: 8px;
+}
+
+form th, form td {
+	vertical-align: top;
+	padding: 4px;
+}
+
+form th {
+	text-align: right;
+	font-weight: bold;
+	color: #568;
+}
+
+button {
+	color: #FFF;
+	font-weight: bold;
+	background: #910;
+	border: 1px solid;
+	border-color: #400 #100 #100 #400;
+	padding: 0 6px;
+}
+
+button:hover {
+	background: #B10;
+	border-color: #500 #200 #200 #500;
+}
