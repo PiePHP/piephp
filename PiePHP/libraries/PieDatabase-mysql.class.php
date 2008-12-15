@@ -12,21 +12,23 @@ class PieDatabase {
 		global $MEMCACHE;
 		$patched = false;
 		if (ENABLE_REBUILD && isset($_REQUEST['REBUILD'])) {
-			//@unlink( APP_ROOT.'webpages/logs/all.log');
-			//@unlink( APP_ROOT.'webpages/logs/debug.log');
-			//@unlink( APP_ROOT.'webpages/logs/error.log');
+			@unlink(APP_ROOT . 'logs/all.log');
+			@unlink(APP_ROOT . 'logs/debug.log');
+			@unlink(APP_ROOT . 'logs/error.log');
 			$patched = true;
 			//echo 'Dropping tables...<br/>';
-			$tables = query('SHOW TABLES');
+			$tables = PieDatabase::query('SHOW TABLES');
 			while (list($table) = PieDatabase::row($tables)) {
 				PieDatabase::query('DROP TABLE '.$table);
 			}
-			$MEMCACHE->flush();
+      if (MEMCACHE_ENABLED) {
+  			$MEMCACHE->flush();
+      }
 		}
-		$patchQuery = PieDatabase::tryQuery('SELECT Number FROM Patches', &$patchNumberErrorMessage);
+		$patchQuery = PieDatabase::tryQuery('SELECT number FROM patches', &$patchNumberErrorMessage);
 		$patchNumber = $patchQuery ? array_shift(PieDatabase::row($patchQuery)) : -1;
 		$tryPatch = $patchNumber + 1;
-		while (file_exists($path = APP_ROOT.'webpages//_/sql/patch'.sprintf('%04d', $tryPatch).'.sql')) {
+		while (file_exists($path = APP_ROOT . 'schema/sql/patch'.sprintf('%04d', $tryPatch).'.sql')) {
 			$patched = true;
 			//echo 'Running '.$path.'...<br/>';
 			$statements = preg_split('/;[\r\n]/', file_get_contents($path));
@@ -37,10 +39,9 @@ class PieDatabase {
 				}
 			}
 			$tryPatch++;
-			PieDatabase::query('UPDATE Patches SET Number = '.$tryPatch);
+			PieDatabase::query('UPDATE patches SET number = '.$tryPatch);
 		}
 	}
-	
 	
 	static function field($sql) {
 		$result = PieDatabase::select($sql . (preg_match('/ LIMIT ([0-9]+), 1/', $sql) ? '' : ' LIMIT 0, 1'));
