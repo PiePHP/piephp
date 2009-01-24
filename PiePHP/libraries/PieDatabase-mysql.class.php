@@ -19,7 +19,7 @@ class PieDatabase {
 			//echo 'Dropping tables...<br/>';
 			$tables = PieDatabase::query('SHOW TABLES');
 			while (list($table) = PieDatabase::row($tables)) {
-				PieDatabase::query('DROP TABLE '.$table);
+				PieDatabase::query('DROP TABLE ' . $table);
 			}
       if (MEMCACHE_ENABLED) {
   			$MEMCACHE->flush();
@@ -28,9 +28,9 @@ class PieDatabase {
 		$patchQuery = PieDatabase::tryQuery('SELECT number FROM patches', &$patchNumberErrorMessage);
 		$patchNumber = $patchQuery ? array_shift(PieDatabase::row($patchQuery)) : -1;
 		$tryPatch = $patchNumber + 1;
-		while (file_exists($path = APP_ROOT . 'schema/sql/patch'.sprintf('%04d', $tryPatch).'.sql')) {
+		while (file_exists($path = APP_ROOT . 'schema/sql/patch' . sprintf('%04d', $tryPatch) . '.sql')) {
 			$patched = true;
-			//echo 'Running '.$path.'...<br/>';
+			//echo 'Running ' . $path . '...<br/>';
 			$statements = preg_split('/;[\r\n]/', file_get_contents($path));
 			for ($i = 0; $i < count($statements); $i++) {
 				PieDatabase::tryQuery($statements[$i], &$errorMessage);
@@ -39,7 +39,7 @@ class PieDatabase {
 				}
 			}
 			$tryPatch++;
-			PieDatabase::query('UPDATE patches SET number = '.$tryPatch);
+			PieDatabase::query('UPDATE patches SET number = ' . $tryPatch);
 		}
 	}
 	
@@ -100,21 +100,21 @@ class PieDatabase {
 	}
 	
 	static function select($sql) {
-		return PieDatabase::query('SELECT '.$sql);
+		return PieDatabase::query('SELECT ' . $sql);
 	}
 	
 	static function update($sql) {
-		PieDatabase::query('UPDATE '.$sql);
+		PieDatabase::query('UPDATE ' . $sql);
 		return mysql_affected_rows();
 	}
 	
 	static function insert($sql) {
-		PieDatabase::query('INSERT INTO '.$sql);
+		PieDatabase::query('INSERT INTO ' . $sql);
 		return mysql_insert_id();
 	}
 	
 	static function replace($sql) {
-		PieDatabase::query('REPLACE INTO '.$sql);
+		PieDatabase::query('REPLACE INTO ' . $sql);
 		return mysql_affected_rows();
 	}
 	

@@ -9,15 +9,15 @@ class PieLayout {
 		if (ob_get_length()) {
 			PieLayout::saveSlice();
 		}
-		PieRefresher::requireFile(APP_ROOT.'layout/templates/'.$pageLayout.'.php');
+		Pie::file(APP_ROOT . 'layout/templates/' . $pageLayout . '.php');
 	}
 	
 	static function pageHeader($pageContent) {
-		PieRefresher::requireFile(APP_ROOT.'layout/header.php');
+		Pie::file(APP_ROOT . 'layout/header.php');
 	}
 	
 	static function pageFooter($pageContent) {
-		PieRefresher::requireFile(APP_ROOT.'layout/footer.php');
+		Pie::file(APP_ROOT . 'layout/footer.php');
 		exit;
 	}
 	
@@ -30,14 +30,14 @@ class PieLayout {
 			$nameOrPath = preg_replace('/index\.php$/', 'body', $_SERVER['SCRIPT_NAME']);
 		}
 		if ($nameOrPath{0} == '/') {
-			PieRefresher::requireFile($nameOrPath.'.php');
+			Pie::file($nameOrPath . '.php');
 		} else {
-			echo $GLOBALS[$nameOrPath.'Buffer'];
+			echo $GLOBALS[$nameOrPath . 'Buffer'];
 		}
 	}
 	
 	static function saveSlice($sliceName = 'body') {
-		$GLOBALS[$sliceName.'Buffer'] = ob_get_clean();
+		$GLOBALS[$sliceName . 'Buffer'] = ob_get_clean();
 		ob_start();
 	}
 	

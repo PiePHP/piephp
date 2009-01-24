@@ -95,7 +95,7 @@ if(!$.fn.jqDock){ //can't see why it should be, but it doesn't hurt to check
           //resize each image and store various settings wrt main axis...
           while(i < Dock.Elem.length){
             el = Dock.Elem[i++];
-            //resize the image to make the minor axis dimension meet the specified 'Opts.size'...
+            //resize the image to make the minor axis dimension meet the specified 'Opts.size' . ..
             wh = this.keepProportion(el, op.size, {vh:op.orient.inv, inv:op.orient.vh}); //inverted!
             el.Actual = el.Final = el.Initial = wh[op.vh.wh];
             el.SizeDiff = el[op.vh.wh] - el.Initial; //on main axis!

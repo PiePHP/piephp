@@ -12,11 +12,11 @@ class PieTimer {
 	}
 	
 	static function logTime($label) {
-		PieLogging::logLine('timer', $label.': '.(PieTimer::microSeconds() - $GLOBALS['START_TIME']).'s');
+		PieLogging::logLine('timer', $label . ': ' . (PieTimer::microSeconds() - $GLOBALS['START_TIME']) . 's');
 	}
 	
 	static function echoTime() {
-		echo (PieTimer::microSeconds() - $GLOBALS['START_TIME']).'s<br>';
+		echo (PieTimer::microSeconds() - $GLOBALS['START_TIME']) . 's<br>';
 	}
 	
 }

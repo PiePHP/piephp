@@ -116,7 +116,7 @@ class PieCaching {
 			for ($key = 0; isset($fields[$key]); $key++) {
 				$keyFields = array();
 				while (list(, $field) = each($fields[$key])) {
-					$keyFields[] = $field . ':'.str_replace(',', '&comma;', $values[$field]);
+					$keyFields[] = $field . ':' . str_replace(',', '&comma;', $values[$field]);
 				}
 				$MEMCACHE->set($table . '(' . join(',', $keyFields) . ')', serialize($values));
 			}

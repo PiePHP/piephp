@@ -1,5 +1,5 @@
 <?
-require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../initialization/common.php';
 ?>
 
 <h1>Page Not Found</h1>

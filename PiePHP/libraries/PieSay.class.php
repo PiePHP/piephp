@@ -2,12 +2,12 @@
 
 class PieSay {
 	
-	static function get($Text) {
-		return $Text;
+	static function get($text) {
+		return $text;
 	}
 	
-	static function say($Text) {
-		echo PieSay::get($Text);
+	static function say($text) {
+		echo PieSay::get($text);
 	}
 	
 }

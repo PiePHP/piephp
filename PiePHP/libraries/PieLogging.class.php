@@ -12,7 +12,7 @@ class PieLogging {
 		$handle = fopen( APP_ROOT . 'logs/all.log', 'a');
 		fwrite($handle, $line."\r\n");
 		fclose($handle);
-		$handle = fopen( APP_ROOT . 'logs/'.$logName.'.log', 'a');
+		$handle = fopen( APP_ROOT . 'logs/' . $logName . '.log', 'a');
 		fwrite($handle, $line."\r\n");
 		fclose($handle);
 	}

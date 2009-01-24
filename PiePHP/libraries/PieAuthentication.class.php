@@ -41,8 +41,8 @@ class PieAuthentication {
 				if ($_REQUEST['password'] == $user['password']) {
 					$_SESSION['user_id'] = $user['id'];
 					$_SESSION['username'] = $user['username'];
-					$_SESSION['groups'] = PieDatabase::fieldsArray('name, id FROM user_groups WHERE id IN (SELECT group_id FROM user_group_users WHERE user_id = '.$user['id'].')');
-					setcookie('username_cookie', $Row['username'], time() + 31536000);
+					$_SESSION['groups'] = PieDatabase::fieldsArray('name, id FROM user_groups WHERE id IN (SELECT group_id FROM user_group_users WHERE user_id = ' . $user['id'].')');
+					setcookie('username_cookie', $row['username'], time() + 31536000);
 					header('Location: /');
 					exit;
 				}
@@ -61,16 +61,16 @@ class PieAuthentication {
 		}
 		
 		if ($_REQUEST['email']) {
-			$result = Select('username, password FROM users WHERE email = '.Quote($_REQUEST['email']));
+			$result = PieDatabase::select('username, password FROM users WHERE email = ' . PieDatabase::quote($_REQUEST['email']));
 			$signIns = '';
 			if ($row = Row($result)) {
 				while ($row) {
 					$signIns .= "UN: {$row['Username']}\r\nPW: {$row['Password']}\r\n\r\n";
 					$row = Row($result);
 				}
-				mail($_REQUEST['Email'], 'PriceTag from Pricing Intelligence', $signIns, "From: webmaster@{$_SERVER['SERVER_NAME']}\r\nReply-To: webmaster@{$_SERVER['SERVER_NAME']}\r\nX-Mailer: PHP/".phpversion());
-				$CONFIRMATION_MESSAGE = 'Your username and password have been sent to you at <b>'.$_REQUEST['Email'].'</b>.';
-				$_REQUEST['Forgot'] = '';
+				mail($_REQUEST['email'], 'PriceTag from Pricing Intelligence', $signIns, "From: webmaster@{$_SERVER['SERVER_NAME']}\r\nReply-To: webmaster@{$_SERVER['SERVER_NAME']}\r\nX-Mailer: PHP/" . phpversion());
+				$CONFIRMATION_MESSAGE = 'Your username and password have been sent to you at <b>' . $_REQUEST['email'] . '</b>.';
+				$_REQUEST['forgot'] = '';
 			} else {
 				$ERROR_MESSAGE = 'There is no existing user with that email address.';
 			}
@@ -89,6 +89,12 @@ class PieAuthentication {
 			</form>
 			</table><?
 		}
+	}
+	
+	static function signOut() {
+		session_start();
+		session_destroy();
+		header('Location: /');
 	}
 	
 }

@@ -13,15 +13,15 @@ class PieScraping {
 		$host = $parse['host'];
 	    $socket = fsockopen($host, 80, $errorNumber, $errorString);
 	    if (!$socket) {
-	        echo "$errorString ($errorNumber)<br/>\n".$socket;
+	        echo "$errorString ($errorNumber)<br/>\n" . $socket;
 	    }  else {
 	        $command =
-				"POST $URL  HTTP/1.1\r\n".
-				"Host: $host\r\n".
-				"User-Agent: PHP Script\r\n".
-				"Content-Type: application/x-www-form-urlencoded\r\n".
-				"Content-Length: ".strlen($postData)."\r\n".
-				"Connection: close\r\n\r\n".
+				"POST $URL  HTTP/1.1\r\n" . 
+				"Host: $host\r\n" . 
+				"User-Agent: PHP Script\r\n" . 
+				"Content-Type: application/x-www-form-urlencoded\r\n" . 
+				"Content-Length: " . strlen($postData)."\r\n" . 
+				"Connection: close\r\n\r\n" . 
 				$postData;
 	        fwrite($socket, $command);
 			$response = '';
@@ -51,16 +51,16 @@ class PieScraping {
 	}
 	
 	static function tagContent($tagName, &$text) {
-		/*if ($tagStart = strpos('<'.$tagName, $text)) {
-			echo 'TagStart: '.$tagStart;
+		/*if ($tagStart = strpos('<' . $tagName, $text)) {
+			echo 'TagStart: ' . $tagStart;
 			$contentStart = strpos('>', $text, $tagStart) + 1;
-			echo 'ContentStart: '.$tagStart;
-			$contentEnd = strpos('</'.$tagName, $contentStart);
-			echo 'ContentEnd: '.$tagStart;
+			echo 'ContentStart: ' . $tagStart;
+			$contentEnd = strpos('</' . $tagName, $contentStart);
+			echo 'ContentEnd: ' . $tagStart;
 			return substr($text, $contentStart, $contentEnd - $contentStart);
 		}
 		return '';*/
-		return Match('/<'.$tagName.'[^>]*>(.*?)<\/'.$tagName.'>/msi', $text);
+		return Match('/<' . $tagName . '[^>]*>(.*?)<\/' . $tagName . '>/msi', $text);
 	}
 	
 	
@@ -87,7 +87,7 @@ class PieScraping {
 		$start = 0;
 		$results = array();
 		do {
-			$file = Crawl('http://www.google.com/search?q='.urlencode($query).'&num=100&hl=en&start='.$start.'&sa=N');
+			$file = Crawl('http://www.google.com/search?q=' . urlencode($query) . '&num=100&hl=en&start=' . $start . '&sa=N');
 			$resultMatches = Matches('/<a class=l href="(.*?)<\/span><nobr>/msi', $file);
 			while (list($i, $result) = each($resultMatches)) {
 				if (count($results) < $max) $results[] = array(
@@ -97,7 +97,7 @@ class PieScraping {
 				);
 			}
 			$start += 100;
-		} while (count($results) < $max && preg_match('/&num=100&hl=en&ie=UTF-8&start='.$start.'&sa=N/msi', $file));
+		} while (count($results) < $max && preg_match('/&num=100&hl=en&ie=UTF-8&start=' . $start . '&sa=N/msi', $file));
 		return $results;
 	}
 	
@@ -106,7 +106,7 @@ class PieScraping {
 		$start = 0;
 		$results = array();
 		do {
-			$file = Crawl('http://search.yahoo.com/search?p='.urlencode($query).'&ei=UTF-8&n=100&pstart=1&fr=yfp-t-501&b='.($start + 1));
+			$file = Crawl('http://search.yahoo.com/search?p=' . urlencode($query) . '&ei=UTF-8&n=100&pstart=1&fr=yfp-t-501&b=' . ($start + 1));
 			$resultMatches = Matches('/<a class=yschttl(.*?)(<li>|<\/ol>)/msi', $file, 1);
 			while (list($i, $result) = each($resultMatches)) {
 				if (count($results) < $max) $results[] = array(
@@ -116,7 +116,7 @@ class PieScraping {
 				);
 			}
 			$start += 100;
-		} while (count($results) < $max && preg_match('/&fr=yfp-t-501&b='.($start + 1).'/msi', $file));
+		} while (count($results) < $max && preg_match('/&fr=yfp-t-501&b=' . ($start + 1) . '/msi', $file));
 		return $results;
 	}
 	
@@ -125,7 +125,7 @@ class PieScraping {
 		$start = 0;
 		$results = array();
 		do {
-			$file = Crawl('http://search.msn.com/results.aspx?q='.urlencode($query).'&first='.($start + 1).'&FORM=PERE'.($start ? $start / 10 : ''));
+			$file = Crawl('http://search.msn.com/results.aspx?q=' . urlencode($query) . '&first=' . ($start + 1) . '&FORM=PERE' . ($start ? $start / 10 : ''));
 			$free = preg_replace('/SPONSORED SITES.*$/msi', '', $file);
 			$resultMatches = Matches('/<li[^>]*><h3>(.*?)<\/ul><\/li>/msi', $free, 1);
 			while (list($i, $result) = each($resultMatches)) {
@@ -136,7 +136,7 @@ class PieScraping {
 				);
 			}
 			$start += 10;
-		} while (count($results) < $max && preg_match('/>'.($start / 10).'<\/a><\/li>/msi', $file));
+		} while (count($results) < $max && preg_match('/>' . ($start / 10) . '<\/a><\/li>/msi', $file));
 		return $results;
 	}
 	
@@ -145,15 +145,15 @@ class PieScraping {
 		$start = 0;
 		$page = 1;
 		$results = array();
-		$URL = 'http://www.ask.com/web?q=M-X+Video+Network&qsrc=0&o=0&l=dir'.urlencode($query).'&qsrc=0&o=0&l=dir';
+		$URL = 'http://www.ask.com/web?q=M-X+Video+Network&qsrc=0&o=0&l=dir' . urlencode($query) . '&qsrc=0&o=0&l=dir';
 		do {
 			$file = Crawl($URL);
-			$resultMatches = Matches('/(<div id="r_t[0-9]".*?)>Save<\/a>/msi', $file, 1);
+			$resultMatches = Matches('/(<div id="r_t[0-9]" . *?)>Save<\/a>/msi', $file, 1);
 			for ($i = 0; list(, $result) = each($resultMatches); $i++) {
 				if (count($results) < $max) $results[] = array(
-					'URL' => Match('/id="r'.$i.'_t"[^>]+ href="(.*?)"/msi', $result),
-					'title' => NoBold(Match('/<a id="r'.$i.'_t"[^>]+>(.*?)<\/a>/msi', $result)),
-					'description' => NoTags(Match('/<div[^>]+ id="r'.$i.'_a">(.*?)<\/div>/msi', $result))
+					'URL' => Match('/id="r' . $i . '_t"[^>]+ href="(.*?)"/msi', $result),
+					'title' => NoBold(Match('/<a id="r' . $i . '_t"[^>]+>(.*?)<\/a>/msi', $result)),
+					'description' => NoTags(Match('/<div[^>]+ id="r' . $i . '_a">(.*?)<\/div>/msi', $result))
 				);
 			}
 			$start += 10;

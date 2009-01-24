@@ -1,10 +1,10 @@
 <?
-require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../initialization/common.php';
 ?>
 
 <div id="x"></div>
 
-<h1>To Do.</h1>
+<h1>To Do</h1>
 
 <br>
 

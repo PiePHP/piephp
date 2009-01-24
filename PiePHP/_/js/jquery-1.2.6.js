@@ -6,8 +6,8 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2008-05-24 14:22:17 -0400 (Sat, 24 May 2008) $
- * $Rev: 5685 $
+ * $date: 2008-05-24 14:22:17 -0400 (Sat, 24 May 2008) $
+ * $rev: 5685 $
  */
 
 // Map over jQuery in case of overwrite
@@ -267,7 +267,7 @@ jQuery.fn = jQuery.prototype = {
 			return jQuery.find( selector, elem );
 		});
 
-		return this.pushStack( /[^+>] [^+>]/.test( selector ) || selector.indexOf("..") > -1 ?
+		return this.pushStack( /[^+>] [^+>]/.test( selector ) || selector.indexOf(" . .") > -1 ?
 			jQuery.unique( elems ) :
 			elems );
 	},
@@ -354,7 +354,7 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	hasClass: function( selector ) {
-		return this.is( "." + selector );
+		return this.is( " . " + selector );
 	},
 
 	val: function( value ) {
@@ -460,8 +460,8 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	data: function( key, value ){
-		var parts = key.split(".");
-		parts[1] = parts[1] ? "." + parts[1] : "";
+		var parts = key.split(" . ");
+		parts[1] = parts[1] ? " . " + parts[1] : "";
 
 		if ( value === undefined ) {
 			var data = this.triggerHandler("getData" + parts[1] + "!", [parts[0]]);
@@ -1604,7 +1604,7 @@ jQuery.extend({
 						}
 
 						// It's faster to filter by class and be done with it
-						if ( m[1] == "." )
+						if ( m[1] == " . " )
 							r = jQuery.classFilter( r, m[2] );
 
 						// Same with ID filtering
@@ -1697,7 +1697,7 @@ jQuery.extend({
 					jQuery( r ).not( m[3] );
 
 			// We can get a big speed boost by filtering by class here
-			else if ( m[1] == "." )
+			else if ( m[1] == " . " )
 				r = jQuery.classFilter(r, m[2], not);
 
 			else if ( m[1] == "[" ) {
@@ -1866,7 +1866,7 @@ jQuery.event = {
 		// jQuery(...).bind("mouseover mouseout", fn);
 		jQuery.each(types.split(/\s+/), function(index, type) {
 			// Namespaced event handlers
-			var parts = type.split(".");
+			var parts = type.split(" . ");
 			type = parts[0];
 			handler.type = parts[1];
 
@@ -1913,7 +1913,7 @@ jQuery.event = {
 
 		if ( events ) {
 			// Unbind all events for the element
-			if ( types == undefined || (typeof types == "string" && types.charAt(0) == ".") )
+			if ( types == undefined || (typeof types == "string" && types.charAt(0) == " . ") )
 				for ( var type in events )
 					this.remove( elem, type + (types || "") );
 			else {
@@ -1927,7 +1927,7 @@ jQuery.event = {
 				// jQuery(...).unbind("mouseover mouseout", fn);
 				jQuery.each(types.split(/\s+/), function(index, type){
 					// Namespaced event handlers
-					var parts = type.split(".");
+					var parts = type.split(" . ");
 					type = parts[0];
 
 					if ( events[type] ) {
@@ -2055,7 +2055,7 @@ jQuery.event = {
 		event = arguments[0] = jQuery.event.fix( event || window.event );
 
 		// Namespaced event handlers
-		namespace = event.type.split(".");
+		namespace = event.type.split(" . ");
 		event.type = namespace[0];
 		namespace = namespace[1];
 		// Cache this now, all = true means, any handler
@@ -2096,7 +2096,7 @@ jQuery.event = {
 		// and "clone" to set read-only properties
 		var originalEvent = event;
 		event = { originalEvent: originalEvent };
-		var props = "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target timeStamp toElement type view wheelDelta which".split(" ");
+		var props = "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target timeStamp toElement type view wheelDelta which" . split(" ");
 		for ( var i=props.length; i; i-- )
 			event[ props[i] ] = originalEvent[ props[i] ];
 
@@ -2503,7 +2503,7 @@ jQuery.fn.extend({
 });
 
 // Attach a bunch of functions for handling common AJAX events
-jQuery.each( "ajaxStart,ajaxStop,ajaxComplete,ajaxError,ajaxSuccess,ajaxSend".split(","), function(i,o){
+jQuery.each( "ajaxStart,ajaxStop,ajaxComplete,ajaxError,ajaxSuccess,ajaxSend" . split(","), function(i,o){
 	jQuery.fn[o] = function(f){
 		return this.bind(o, f);
 	};

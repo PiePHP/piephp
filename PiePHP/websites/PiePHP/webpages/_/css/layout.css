@@ -38,10 +38,18 @@ table {
 	height: 80px;
 }
 
+#top h2, #top h3 {
+	position: absolute;
+}
+
 #top img {
 	margin: 10px 20px;
 	width: 252px;
 	height: 60px;
+}
+
+#top h3 {
+	left: 260px;
 }
 
 #site-nav {

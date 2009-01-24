@@ -1,6 +1,6 @@
 <?
 $REQUIRED_FILES = array();
-require $_SERVER['DOCUMENT_ROOT'].'/../initialization/common.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../initialization/common.php';
 
 $count = $_REQUEST['count'] * 1;
 if ($count % 10 == 0) {

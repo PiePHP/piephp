@@ -1,14 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>PiePHP - as easy as pie</title>
+	<title>PiePHP - The easy PHP framework</title>
 	<link rel="stylesheet" href="/_/css/screen.css.php" type="text/css" media="screen">
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <script type="text/javascript" src="/_/js/all.js.php"></script>
 <body>
-
-
+<?/*
 	<!--[if lt IE 7]>
 		<style type="text/css">
 			.dock img { behavior: url(iepngfix.htc) }
@@ -37,7 +36,7 @@
 		});
 	});
 </script>
-
+*/?>
 	<div id="shell">
 		<div id="top">
 			<div id="site-nav">
@@ -45,9 +44,11 @@
 				<a href="/about/">About</a>
 				<a href="/donate/">Donate</a>
 				<a href="/contribute/">Contribute</a>
+				<a href="/interfaces/">Interface Builder</a>
 				<a href="/sign-in/">Sign In</a>
 			</div>
-			<a href="/"><img src="/_/img/logo.gif" alt="PiePHP - as easy as pie"></a>
+			<h2><a href="/"><img src="/_/img/logo.gif" alt="PiePHP - as easy as pie"></a></h2>
+			<h3>The easy PHP framework</h3>
 		</div>
 		<div id="nav">
 			<form id="search" method="get" action="/search/">

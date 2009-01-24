@@ -7,11 +7,11 @@ $failed = 0;
 class PieTests {
 	
 	static function getContents($path) {
-		return file_get_contents(HTTP.$path.(strpos('?', $path) === false ? '?' : '&').'TEST_MODE=true');
+		return file_get_contents(HTTP.$path.(strpos('?', $path) === false ? '?' : '&') . 'TEST_MODE=true');
 	}
 	
 	static function testQuery($sql) {
-		$result = mysql_query($sql) or TestFailed(mysql_error().'<pre>'.htmlentities($sql).'</pre>');
+		$result = mysql_query($sql) or TestFailed(mysql_error() . '<pre>' . htmlentities($sql) . '</pre>');
 	}
 	
 	static function testEquality($message, $expected, $actual) {
@@ -20,7 +20,7 @@ class PieTests {
 			$passed++;
 		} else {
 			$failed++;
-			echo '<p>'.$message.' (expected: '.$expected.', actual: '.$actual.')</p>';
+			echo '<p>' . $message . ' (expected: ' . $expected . ', actual: ' . $actual.')</p>';
 		}
 		
 	}
@@ -28,7 +28,7 @@ class PieTests {
 	static function testFailed($message) {
 		global $failed;
 		$failed++;
-		echo '<p>'.$message.'</p>';
+		echo '<p>' . $message . '</p>';
 	}
 	
 }
