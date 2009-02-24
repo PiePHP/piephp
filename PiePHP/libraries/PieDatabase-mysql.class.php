@@ -3,7 +3,9 @@
 mysql_connect(DB_HOST, DB_USER, DB_PASS);
 mysql_select_db(DB_NAME);
 
-PieDatabase::patch();
+if (DB_AUTO_PATCH || isset($_REQUEST['PATCH'])) {
+	PieDatabase::patch();
+}
 
 
 class PieDatabase {
@@ -21,9 +23,9 @@ class PieDatabase {
 			while (list($table) = PieDatabase::row($tables)) {
 				PieDatabase::query('DROP TABLE ' . $table);
 			}
-      if (MEMCACHE_ENABLED) {
-  			$MEMCACHE->flush();
-      }
+			if (MEMCACHE_ENABLED) {
+				$MEMCACHE->flush();
+			}
 		}
 		$patchQuery = PieDatabase::tryQuery('SELECT number FROM patches', &$patchNumberErrorMessage);
 		$patchNumber = $patchQuery ? array_shift(PieDatabase::row($patchQuery)) : -1;
@@ -127,7 +129,12 @@ class PieDatabase {
 	}
 	
 	static function query($sql) {
-		$result = mysql_query($sql) or die('<p><b>' . mysql_error() . '</b><br/>' . $sql . '</p>');
+		if (isset($GLOBALS['ERROR_HANDLER'])) {
+			$result = mysql_query($sql) or $GLOBALS['ERROR_HANDLER'](E_USER_ERROR, '<p><b>' . mysql_error() . '</b><br/>' . $sql . '</p>', '', 0);
+		}
+		else {
+			$result = mysql_query($sql) or die('<p><b>' . mysql_error() . '</b><br/>' . $sql . '</p>');
+		}
 		return $result;
 	}
 	
