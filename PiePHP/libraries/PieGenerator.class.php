@@ -25,8 +25,8 @@ class PieGenerator {
 					</td>
 					<td>&nbsp;</td>
 					<td style="width:38px;vertical-align:bottom;font-size:11px;">
-						<input type="radio" name="AorAn" style="width:12px;height:12px;margin:0;" value="a"<? if ($AorAn == 'a') { ?> checked="Y"<? } ?> id="AorAn0" /><label for="AorAn0"> a&nbsp;&nbsp;</label>
-						<br /><input type="radio" name="AorAn" style="width:12px;height:12px;margin:0;" value="an"<? if ($AorAn == 'an') { ?> checked="Y"<? } ?> id="AorAn1" /><label for="AorAn1"> an</label>
+						<input type="radio" name="AorAn" style="width:12px;height:12px;margin:0;" value="a"<? if ($AorAn == 'a') { ?> checked<? } ?> id="AorAn0" /><label for="AorAn0"> a&nbsp;&nbsp;</label>
+						<br /><input type="radio" name="AorAn" style="width:12px;height:12px;margin:0;" value="an"<? if ($AorAn == 'an') { ?> checked<? } ?> id="AorAn1" /><label for="AorAn1"> an</label>
 						<br /><img src="/spacer.gif" width="30" height="1" />
 					</td>
 					<td width="33%">
