@@ -125,5 +125,31 @@ class PieCaching {
 		return $values;
 	}
 	
+	/**
+	 * storeBuzz('articles', $values, array('language_id' => 'languages', 'publisher_id' => 'publishers', 'rss_feed_id' => 'rss_feeds'), array(100, 10000));
+	 */
+	static function storeBuzz($table, $values, $timeField, $foreignKeys, $permanences) {
+		global $MEMCACHE;
+		
+		while (list($foreignKey, $foreignTable) = each($foreignKeys)) {
+			
+			$foreignValues = PieCaching::fetchRow($foreignTable, array('id' => $values[$foreignKey]));
+			
+			$count = ++$foreignValues[$table . '_count'];
+			$lastTime = PieDatabase::makeTime($foreignValues[$table . '_counted']);
+			$thisTime = PieDatabase::makeTime($foreignValues[$table . '_counted'] = $values['timeField']);
+			$lull = max(1, $thisTime - $lastTime);
+			
+			while (list(, $permanence) = each($permanences)) {
+				$recency = 1 / min($count, $permanence);
+				$average = $foreignValues[$table . '_lull' . $permanence];
+				$average = $lull * $recency + $average * (1 - $recency);
+				$foreignValues[$table . '_lull' . $permanence] = $average;
+			}
+			
+			PieCaching::storeRow($foreignTable, $foreignValues);
+		}
+	}
+	
 }
 ?>
