@@ -158,7 +158,7 @@ class PieDatabase {
 	
 	static function quote($value) {
 		$value .= '';
-		return is_numeric($value) ? $value : ($value . '' ? "'" . trim(str_replace("'", "\'", str_replace('\\', '\\\\', $value))) . "'" : 'NULL');
+		return is_numeric($value) ? $value : ($value . '' ? "'" . trim(str_replace("'", "\'", str_replace('\\', '\\\\', $value))) . "'" : "''");
 	}
 	
 }

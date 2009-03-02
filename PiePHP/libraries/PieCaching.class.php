@@ -127,7 +127,6 @@ class PieCaching {
 	
 	/**
 	 * Update the relational popularity (AKA buzz) of records that are parents of this record.
-	 * storeBuzz('articles', $values, array('language_id' => 'languages', 'publisher_id' => 'publishers', 'rss_feed_id' => 'rss_feeds'), array(100, 10000));
 	 */
 	static function storeBuzz($table, $values, $timeField, $foreignKeys, $permanences) {
 		
@@ -137,18 +136,20 @@ class PieCaching {
 			
 			$count = ++$foreignValues[$table . '_count'];
 			$lastTime = PieDatabase::makeTime($foreignValues[$table . '_counted']);
-			$thisTime = PieDatabase::makeTime($foreignValues[$table . '_counted'] = $values['timeField']);
+			$thisTime = PieDatabase::makeTime($foreignValues[$table . '_counted'] = $values[$timeField]);
 			$lull = max(1, $thisTime - $lastTime);
 			
 			while (list(, $permanence) = each($permanences)) {
 				$recency = 1 / min($count, $permanence);
-				$average = $foreignValues[$table . '_lull' . $permanence];
+				$average = $foreignValues[$table . '_lull_' . $permanence];
 				$average = $lull * $recency + $average * (1 - $recency);
-				$foreignValues[$table . '_lull' . $permanence] = $average;
+				$foreignValues[$table . '_lull_' . $permanence] = $average;
 			}
+			reset($permanences);
 			
 			PieCaching::storeRow($foreignTable, $foreignValues);
 		}
+		reset($foreignKeys);
 	}
 	
 }
