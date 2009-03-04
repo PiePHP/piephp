@@ -82,8 +82,10 @@ class PieCaching {
 	 *	 e.g.	array('id' => 1, 'name' => 'Sam Eubank')
 	 *
 	 */
-	static function storeRow($table, $values) {
+	static function storeRow($table, $values, $storeInDatabase = true) {
 		global $MEMCACHE;
+		
+		$GLOBALS['caches']++;
 		
 		// If the record already exists, get any existing data that is not being replaced.
 		if ($storedValues = PieCaching::fetchRow($table, $values)) {
@@ -94,18 +96,23 @@ class PieCaching {
 			}
 		}
 		
-		// Iterate through all of the fields that need to be set so they can be joined in a replace statement.
-		$sets = array();
-		while (list($column, $value) = each($values)) {
-			$sets[] = $column . '=' . PieDatabase::quote($value);
-		}
+		if ($storeInDatabase) {
 		
-		// Replace the record, knowing that if it does not exist, it will be created.
-		$result = PieDatabase::replace($table . ' SET ' . join(',', $sets));
-		
-		// If an id was auto-generated, store it so that it can be cached.
-		if ($id = PieDatabase::id($result)) {
-			$values['id'] = $id;
+			$GLOBALS['stores']++;
+			
+			// Iterate through all of the fields that need to be set so they can be joined in a replace statement.
+			$sets = array();
+			while (list($column, $value) = each($values)) {
+				$sets[] = $column . '=' . PieDatabase::quote($value);
+			}
+			
+			// Replace the record, knowing that if it does not exist, it will be created.
+			$result = PieDatabase::replace($table . ' SET ' . join(',', $sets));
+			
+			// If an id was auto-generated, store it so that it can be cached.
+			if ($id = PieDatabase::id($result)) {
+				$values['id'] = $id;
+			}
 		}
 		
 		if ($MEMCACHE) {
@@ -128,11 +135,19 @@ class PieCaching {
 	/**
 	 * Update the relational popularity (AKA buzz) of records that are parents of this record.
 	 */
-	static function storeBuzz($table, $values, $timeField, $foreignKeys, $permanences) {
+	static function storeBuzz($table, $values, $timeField, $foreignKeys, $permanences, $storageInterval = 1, $storageTimeout = 0) {
+	
+		$GLOBALS['buzzes']++;
 		
 		while (list($foreignKey, $foreignTable) = each($foreignKeys)) {
 			
 			$foreignValues = PieCaching::fetchRow($foreignTable, array('id' => $values[$foreignKey]));
+			
+			if (!$foreignValues['name'] && !$foreignValues['url']) {
+				?><pre><?
+				print_r($foreignValues);
+				?></pre><?
+			}
 			
 			$count = ++$foreignValues[$table . '_count'];
 			$lastTime = PieDatabase::makeTime($foreignValues[$table . '_counted']);
@@ -147,7 +162,7 @@ class PieCaching {
 			}
 			reset($permanences);
 			
-			PieCaching::storeRow($foreignTable, $foreignValues);
+			PieCaching::storeRow($foreignTable, $foreignValues, ($count % $storageInterval) == 0 || $lull > $storageTimeout);
 		}
 		reset($foreignKeys);
 	}
