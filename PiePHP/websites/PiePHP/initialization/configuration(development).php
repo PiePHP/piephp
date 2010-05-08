@@ -20,13 +20,16 @@ if (!defined('SVN_ROOT')) define('SVN_ROOT', APP_ROOT);
 if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
 if (!defined('DB_USER')) define('DB_USER', 'piephp');
 if (!defined('DB_PASS')) define('DB_PASS', 'password');
+if (!defined('DB_AUTO_PATCH')) define('DB_AUTO_PATCH', true);
+if (!defined('DB_TRACKING')) define('DB_TRACKING', true);
 
 /*
  * Memcache
  */
-if (!defined('MEMCACHE_ENABLED')) define('MEMCACHE_ENABLED', true);
-if (!defined('MEMCACHE_HOST')) define('MEMCACHE_HOST', 'localhost');
-if (!defined('MEMCACHE_PORT')) define('MEMCACHE_PORT', '11211');
-if (!defined('MEMCACHE_PREFIX')) define('MEMCACHE_PREFIX', 'PiePHP_');
+if (!defined('CACHE_ENABLED')) define('CACHE_ENABLED', true);
+if (!defined('CACHE_HOST')) define('CACHE_HOST', 'localhost');
+if (!defined('CACHE_PORT')) define('CACHE_PORT', '11211');
+if (!defined('CACHE_PREFIX')) define('CACHE_PREFIX', 'PiePHP_');
+if (!defined('CACHE_TRACKING')) define('CACHE_TRACKING', true);
 
 ?>

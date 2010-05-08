@@ -14,6 +14,6 @@ define('DB_PASS', 'password');
 /*
  * Memcache
  */
-define('MEMCACHE_ENABLED', false);
+define('CACHE_ENABLED', false);
 
 ?>
