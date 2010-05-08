@@ -4,7 +4,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../initialization/common.php';
 
 <?
 
-PieTimer::startTimer();
+PieTimer::start();
 
 for ($i = 0; $i < 10000; $i++) {
 	eval('
@@ -34,13 +34,13 @@ for ($i = 0; $i < 10000; $i++) {
 	');
 }
 
-PieTimer::echoTime();
+PieTimer::p();
 
 ?>
 
 <?
 
-PieTimer::startTimer();
+PieTimer::start();
 
 for ($i = 0; $i < 10000; $i++) {
 	eval('
@@ -73,6 +73,6 @@ for ($i = 0; $i < 10000; $i++) {
 	');
 }
 
-PieTimer::echoTime();
+PieTimer::p();
 
 ?>

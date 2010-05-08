@@ -7,16 +7,26 @@ class PieTimer {
 		return ((float)$unixSeconds + (float)$seconds);
 	}
 	
-	static function startTimer() {
-		$GLOBALS['START_TIME'] = PieTimer::microSeconds();
+	static function start($code = '') {
+		$GLOBALS['t0:' . $code] = PieTimer::microSeconds();
 	}
 	
-	static function logTime($label) {
-		PieLogging::logLine('timer', $label . ': ' . (PieTimer::microSeconds() - $GLOBALS['START_TIME']) . 's');
+	static function check($code = '') {
+		return PieTimer::microSeconds() - $GLOBALS['t0:' . $code];
 	}
 	
-	static function echoTime() {
-		echo (PieTimer::microSeconds() - $GLOBALS['START_TIME']) . 's<br>';
+	static function finish($code = '') {
+		$time = PieTimer::check($code);
+		unset($GLOBALS['t0:' . $code]);
+		return $time;
+	}
+	
+	static function log($code = '') {
+		PieLogging::log('timer', $code . ': ' . PieTimer::finish($code) . 's');
+	}
+	
+	static function p($code = '') {
+		Pie::p(PieTimer::finish($code) . 's');
 	}
 	
 }

@@ -8,9 +8,9 @@ for ($i = 1; $i <= 10000; $i++) {
 ?>
 <script src="/js/prototype-1.6.0.2.js"></script>
 <script>
-var startTime = (new Date()).getTime();
+var startTime = (new Date()).finish();
 $$('a').each(function(element) {
 	element.style.color = '#F00';
 });
-$('log').insert('time: ' + ((new Date()).getTime() - startTime));
+$('log').insert('time: ' + ((new Date()).finish() - startTime));
 </script>

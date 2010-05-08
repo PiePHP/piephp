@@ -37,11 +37,11 @@ class PieAuthentication {
 		global $ERROR_MESSAGE, $CONFIRMATION_MESSAGE;
 		
 		if (isset($_REQUEST['username'])) {
-			if ($user = PieCaching::fetchRow('users', array('username' => $_REQUEST['username']))) {
-				if ($_REQUEST['password'] == $user['password']) {
+			if ($user = PieCache::fetchRow('users', array('username' => $_REQUEST['username']))) {
+        if ($_REQUEST['password'] == $user['password']) {
 					$_SESSION['user_id'] = $user['id'];
 					$_SESSION['username'] = $user['username'];
-					$_SESSION['groups'] = PieDatabase::fieldsArray('name, id FROM user_groups WHERE id IN (SELECT group_id FROM user_group_users WHERE user_id = ' . $user['id'].')');
+					$_SESSION['groups'] = PieDb::fieldsArray('name, id FROM user_groups WHERE id IN (SELECT group_id FROM user_group_users WHERE user_id = ' . $user['id'].')');
 					setcookie('username_cookie', $row['username'], time() + 31536000);
 					header('Location: /');
 					exit;
@@ -61,14 +61,14 @@ class PieAuthentication {
 		}
 		
 		if ($_REQUEST['email']) {
-			$result = PieDatabase::select('username, password FROM users WHERE email = ' . PieDatabase::quote($_REQUEST['email']));
+			$result = PieDb::select('username, password FROM users WHERE email = ' . PieDb::quote($_REQUEST['email']));
 			$signIns = '';
-			if ($row = Row($result)) {
+			if ($row = PieDb::row($result)) {
 				while ($row) {
 					$signIns .= "UN: {$row['Username']}\r\nPW: {$row['Password']}\r\n\r\n";
-					$row = Row($result);
+					$row = PieDb::row($result);
 				}
-				mail($_REQUEST['email'], 'PriceTag from Pricing Intelligence', $signIns, "From: webmaster@{$_SERVER['SERVER_NAME']}\r\nReply-To: webmaster@{$_SERVER['SERVER_NAME']}\r\nX-Mailer: PHP/" . phpversion());
+				mail($_REQUEST['email'], 'Forgotten password', $signIns, "From: webmaster@{$_SERVER['SERVER_NAME']}\r\nReply-To: webmaster@{$_SERVER['SERVER_NAME']}\r\nX-Mailer: PHP/" . phpversion());
 				$CONFIRMATION_MESSAGE = 'Your username and password have been sent to you at <b>' . $_REQUEST['email'] . '</b>.';
 				$_REQUEST['forgot'] = '';
 			} else {

@@ -8,16 +8,16 @@ require 'configuration(' . ENVIRONMENT . ').php';
 if (!isset($REQUIRED_FILES)) {
 	$REQUIRED_FILES = array(
 		PIE_ROOT . 'libraries/Pie.class.php',
+		PIE_ROOT . 'libraries/PieTimer.class.php',
 		PIE_ROOT . 'libraries/PieAuthentication.class.php',
-		PIE_ROOT . 'libraries/PieCaching.class.php',
-		PIE_ROOT . 'libraries/PieDatabase-mysql.class.php',
+		PIE_ROOT . 'libraries/PieCache(memcache).class.php',
+		PIE_ROOT . 'libraries/PieDb(mysql).class.php',
 		PIE_ROOT . 'libraries/PieLayout.class.php',
 		PIE_ROOT . 'libraries/PieLogging.class.php',
 		PIE_ROOT . 'libraries/PieRefresher.class.php',
 		PIE_ROOT . 'libraries/PieRequests.class.php',
 		PIE_ROOT . 'libraries/PieSay.class.php',
-		PIE_ROOT . 'libraries/PieScraping.class.php',
-		PIE_ROOT . 'libraries/PieTimer.class.php');
+		PIE_ROOT . 'libraries/PieScraping.class.php');
 }
 
 // Include the required files; break on failure.

@@ -2,7 +2,7 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/../initialization/common.php';
 
 if (isset($_REQUEST['username'])) {
-	if ($user = PieCaching::fetchRow('Users', array('Username' => $_REQUEST['username']))) {
+	if ($user = PieCache::fetchRow('Users', array('Username' => $_REQUEST['username']))) {
 		if ($_REQUEST['password'] == $user['Password']) {
 			$_SESSION['user_id'] = $user['id'];
 			$_SESSION['username'] = $user['username'];
