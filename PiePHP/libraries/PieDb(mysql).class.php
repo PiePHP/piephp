@@ -32,7 +32,6 @@ class PieDb {
 		$patchQuery = PieDb::tryQuery('SELECT number FROM patches', &$patchNumberErrorMessage);
 		$patchNumber = $patchQuery ? array_shift(PieDb::row($patchQuery)) : -1;
 		$tryPatch = $patchNumber + 1;
-		echo $tryPatch . '<br>';
 		while (file_exists($path = APP_ROOT . 'schema/sql/patch' . sprintf('%04d', $tryPatch) . '.sql')) {
 			$patched = true;
 			//echo 'Running ' . $path . '...<br/>';
