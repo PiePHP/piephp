@@ -220,30 +220,22 @@ class PieCache {
 	 */
 	static function storeBuzz($table, $values, $timeField, $foreignKeys, $permanences, $storageInterval = 1, $storageTimeout = 0) {
 	
-		$GLOBALS['buzzes']++;
-		
 		while (list($foreignKey, $foreignTable) = each($foreignKeys)) {
 			
 			$foreignValues = PieCache::fetchRow($foreignTable, array('id' => $values[$foreignKey]));
-			
-			if (!$foreignValues['name'] && !$foreignValues['url']) {
-				?><pre><?
-				print_r($foreignValues);
-				?></pre><?
-			}
 			
 			$count = ++$foreignValues[$table . '_count'];
 			$lastTime = PieDb::makeTime($foreignValues[$table . '_counted']);
 			$thisTime = PieDb::makeTime($foreignValues[$table . '_counted'] = $values[$timeField]);
 			$lull = max(1, $thisTime - $lastTime);
 			
+			reset($permanences);
 			while (list(, $permanence) = each($permanences)) {
 				$recency = 1 / min($count, $permanence);
 				$average = $foreignValues[$table . '_lull_' . $permanence];
 				$average = $lull * $recency + $average * (1 - $recency);
 				$foreignValues[$table . '_lull_' . $permanence] = $average;
 			}
-			reset($permanences);
 			
 			PieCache::storeRow($foreignTable, $foreignValues, ($count % $storageInterval) == 0 || $lull > $storageTimeout);
 		}
