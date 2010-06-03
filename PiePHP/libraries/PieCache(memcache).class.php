@@ -218,7 +218,7 @@ class PieCache {
 	/**
 	 * Update the relational popularity (AKA buzz) of records that are parents of this record.
 	 */
-	static function storeBuzz($table, $values, $timeField, $foreignKeys, $permanences, $storageInterval = 1, $storageTimeout = 0) {
+	static function storeLulls($table, $values, $timeField, $foreignKeys, $permanences, $storageInterval = 1, $storageTimeout = 0) {
 	
 		while (list($foreignKey, $foreignTable) = each($foreignKeys)) {
 			
