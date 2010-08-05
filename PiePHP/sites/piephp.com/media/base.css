@@ -1,0 +1,218 @@
+body {
+	background: #dde;
+}
+
+body,
+td {
+	color: #333;
+}
+
+body,
+div,
+ul,
+ol,
+li,
+td,
+th,
+h1,
+h2,
+h3,
+h4,
+fieldset {
+	margin: 0;
+	border: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+var {
+	display: none;
+}
+
+a {
+	color: #44a;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover {
+	color: #b90;
+}
+
+fieldset {
+	position: relative;
+	padding: 4px;
+}
+
+fieldset:hover {
+	background: #ffd;
+}
+
+fieldset.on {
+	background: #f0f0f6;
+}
+
+fieldset label {
+	float: left;
+	display: block;
+	width: 200px;
+	height: 100%;
+	text-align: right;
+	padding: 5px;
+	
+}
+
+h1,
+h2,
+h3
+{
+	font-family: Tahoma, Verdana, sans-serif;
+}
+
+h1 {
+	font-size: 24px;
+}
+
+h2 {
+	font-size: 20px;
+}
+
+h3 {
+	font-size: 16px;
+}
+
+#head,
+#body,
+#foot {
+	text-align: center;
+}
+
+div.section {
+	width: 990px;
+	margin: 0 auto;
+	text-align: left;
+	position: relative;
+	padding: 0 20px;
+}
+
+#head {
+	height: 39px;
+	position: relative;
+	background: #600 url(head.gif) repeat-x bottom left;
+	border-bottom: 1px solid #200;
+}
+
+#home #head {
+	height: 79px;
+}
+
+#logo {
+	position: absolute;
+	display: block;
+	left: 20;
+	top: 6px;
+	width: 117px;
+	height: 30px;
+	background: transparent url(logo.gif) no-repeat;
+	overflow: hidden;
+	text-indent: -100px;
+}
+
+#head ul,
+#foot ul {
+	display: block;
+}
+
+#head li,
+#foot li {
+	display: block;
+	float: left;
+}
+
+#head ul {
+	position: absolute;
+	right: 20px;
+	top: 16px;
+}
+
+#head li {
+	background: #99b url(tab.png) no-repeat top left;
+	margin-left: 2px;
+	text-shadow: #556 1px 1px 2px;
+	border-bottom: 1px solid #200;
+}
+
+#head li a {
+	background: transparent url(tab.png) no-repeat bottom right;
+	display: block;
+	height: 13px;
+	padding: 5px 12px;
+	line-height: 13px;
+	font-size: 13px;
+	color: #fff;
+}
+
+#head li:hover {
+	background-color: #b91;
+	text-shadow: #000 1px 1px 2px;
+}
+
+#head li.on {
+	background-color: #fff;
+	border-bottom: 1px solid #fff;
+}
+
+#head li.on a,
+#head li.on a:hover {
+	color: #333;
+	text-shadow: none;
+}
+
+#foot ul {
+	margin-left: -10px;
+}
+
+#foot li a {
+	padding: 0 10px;
+}
+
+#home #logo {
+	background-image: url(logo-big.gif);
+	top: 12px;
+	width: 234px;
+	height: 60px;
+}
+
+#home #head ul {
+	top: 56px;
+}
+
+#body {
+	background: #fff;
+}
+
+#body div.section {
+	padding: 20px 20px;
+	min-height: 200px;
+}
+
+#body div.loading {
+	background: url(loading.gif) no-repeat 2px 26px;
+}
+
+#foot {
+	border-top: 1px solid #99a;
+	background: #dde url(foot.gif) repeat-x top left;
+	padding: 10px 0;
+	height: 37px;
+}
+
+#loading {
+	background-image: url(/loading.gif);
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	left: 445px;
+	top: 20px;
+}

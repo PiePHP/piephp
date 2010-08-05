@@ -1,0 +1,136 @@
+body {
+	background: #dde;
+}
+
+body,
+div,
+ul,
+ol,
+li,
+td,
+th,
+h1,
+h2,
+h3,
+h4 {
+	margin: 0;
+	border: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+a {
+	color: #44a;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+h1,
+h2,
+h3
+{
+	font-family: Tahoma, Verdana, sans-serif;
+}
+
+h1 {
+	font-size: 20px;
+}
+
+h2 {
+	font-size: 16px;
+}
+
+h3 {
+	font-size: 13px;
+}
+
+div.section {
+	text-align: left;
+	position: relative;
+	padding: 0 10px;
+}
+
+#head {
+	height: 44px;
+	position: relative;
+	background: #600 url(head.gif) repeat-x bottom;
+	border-bottom: 1px solid #200;
+}
+
+#logo {
+	position: absolute;
+	display: block;
+	left: 10;
+	top: 6px;
+	width: 117px;
+	height: 30px;
+	background: transparent url(logo.gif) no-repeat;
+	color: #c93;
+	overflow: hidden;
+	text-indent: -100px;
+}
+
+#head ul {
+	position: absolute;
+	display: block;
+	right: 10px;
+	top: 21px;
+}
+
+#head li {
+	display: block;
+	float: left;
+	background: transparent url(tab.gif) no-repeat top left;
+	margin-left: 2px;
+	text-shadow: #556 1px 1px 2px;
+}
+
+#head li a {
+	background: transparent url(tab2.gif) no-repeat top right;
+	display: block;
+	height: 14px;
+	padding: 5px 8px;
+	line-height: 14px;
+	font-size: 13px;
+	color: #fff;
+}
+
+#head li.on {
+	background-position: center left;
+	text-shadow: none;
+}
+
+#head li.on a {
+	color: #000;
+	background-position: center right;
+}
+
+#foot ul {
+	margin-left: -10px;
+}
+
+#foot li a {
+	padding: 0 10px;
+}
+
+#body {
+	padding: 10px 0;
+	background: #fff;
+}
+
+#foot {
+	border-top: 1px solid #99a;
+	background: #dde url(foot.gif) repeat-x top;
+	padding: 10px 0;
+	height: 37px;
+}
+
+/*#loading {
+	background-image: url(/loading.gif);
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	left: 445px;
+	top: 20px;
+}*/
