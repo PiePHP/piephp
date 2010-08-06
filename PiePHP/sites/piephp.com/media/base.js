@@ -58,8 +58,6 @@
 		$('#head li a').each(function(linkIndex, link) {
 			var light = 0;
 			var linkPath = getPath(link.href);
-      console.log('linkPath' + noIndex(linkPath));
-      console.log('currentPath' + noIndex(currentPath));
 			if (noIndex(linkPath) == '/') {
 				if (noIndex(currentPath) == '/') {
 					light = 1;
@@ -96,11 +94,11 @@
 			$(this).removeClass('on');
 		})
 		.delegate('input,select,textarea,submit', 'click', function(event) {
-			console.log('input click');
+			//console.log('input click');
 			event.stopImmediatePropagation();
 		})
 		.delegate('fieldset', 'click', function(event) {
-			console.log('fieldset click');
+			//console.log('fieldset click');
 			$(this).find('input,select,textarea,submit').eq(0).focus();
 		});
 
