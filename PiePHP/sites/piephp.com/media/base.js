@@ -8,6 +8,10 @@
 		return href.substring(base.length).replace(/^\/#/, '');
 	};
 
+	var noIndex = function(href) {
+		return href.replace(/\/index\.php/, '');
+	};
+
 	var loadUrl = function(href) {
 		var bodySectionQuery = $('#body .section');
 		bodySectionQuery.css({opacity: 0.25});
@@ -38,7 +42,7 @@
 		document.title = $('#body var').text();
 		$('#loading').remove();
 		bodySectionQuery.css({opacity: 1});
-		$('body')[0].id = (path == '/' ? 'home' : '');
+		$('body')[0].id = (noIndex(path) == '/' ? 'home' : '');
 		lightTab();
 	};
 
@@ -54,8 +58,10 @@
 		$('#head li a').each(function(linkIndex, link) {
 			var light = 0;
 			var linkPath = getPath(link.href);
-			if (linkPath == '/') {
-				if (currentPath == '/') {
+      console.log('linkPath' + noIndex(linkPath));
+      console.log('currentPath' + noIndex(currentPath));
+			if (noIndex(linkPath) == '/') {
+				if (noIndex(currentPath) == '/') {
 					light = 1;
 				}
 			}

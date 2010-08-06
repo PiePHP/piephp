@@ -1,15 +1,5 @@
 <?php
 
-define('PIE_ROOT', 'C:/Frameworks/PiePHP/');
-define('APP_ROOT', 'C:/Frameworks/PiePHP/sites/piephp.com/');
-
-$CLASS_DIRS = array(
-	'*' => PIE_ROOT . 'libraries/',
-	'Controller' => APP_ROOT . 'controllers/',
-	'Model' => APP_ROOT . 'models/',
-	'Scaffold' => APP_ROOT . 'scaffolds/'
-);
-
 $DATABASES = array(
 	'default' => array(
 		'type' => 'mysql',
@@ -38,13 +28,27 @@ $CACHES = array(
 	)
 );
 
-$VIEW_PARAMS = array(
-	'is_ajax' => strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest',
-	'is_mobile' => strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false,
-	'is_localhost' => $_SERVER['REMOTE_ADDR'] == '127.0.0.1'
-);
+$URL_ROOT = '/';
+$SERVER_NAME = 'pie';
 
 @include 'config_local.php';
+
+define('PIE_ROOT', 'C:/Frameworks/PiePHP/');
+define('APP_ROOT', 'C:/Frameworks/PiePHP/sites/piephp.com/');
+
+$CLASS_DIRS = array(
+	'*' => PIE_ROOT . 'libraries/',
+	'Controller' => APP_ROOT . 'controllers/',
+	'Model' => APP_ROOT . 'models/',
+	'Scaffold' => APP_ROOT . 'scaffolds/'
+);
+
+$VIEW_PARAMS = array(
+  'is_https' => $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off',
+	'is_ajax' => strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest',
+	'is_localhost' => $_SERVER['REMOTE_ADDR'] == '127.0.0.1',
+	'is_mobile' => strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false
+);
 
 
 function __autoload($class_name) {
@@ -80,8 +84,9 @@ function separate($camel, $separator = '_') {
 	return strtolower($separated);
 }
 
+$page_path = $_SERVER['QUERY_STRING'] ? $_SERVER['QUERY_STRING'] : $_SERVER['PATH_INFO'];
 
-$page_path = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : $_SERVER['PATH_INFO'];
+//echo '"' . $page_path . '"';
 
 if (false && isset($CACHES['pages'])) {
 	if (preg_match($CACHES['pages']['pattern'], $page_path)) {
@@ -99,6 +104,10 @@ if (false && isset($CACHES['pages'])) {
 		
 	}
 }
+
+define('HTTP_ROOT', $VIEW_PARAMS['is_https'] ? 'http://' . $SERVER_NAME . $URL_ROOT : $URL_ROOT);
+define('HTTPS_ROOT', $VIEW_PARAMS['is_https'] ? $URL_ROOT : 'https://' . $SERVER_NAME . $URL_ROOT);
+
 
 $parameters = explode('/', substr($page_path, 1));
 

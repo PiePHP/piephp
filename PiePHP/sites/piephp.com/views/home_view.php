@@ -14,8 +14,6 @@ foreach ($posts as $post) {
 	<?=$post['body']?>,
 	<?=$post['created']?>,
 	<?=$post['modified']?>,
-	<?=$post['id']?>,
-	<?=$post['id']?>,
 	<?
 }
 ?>

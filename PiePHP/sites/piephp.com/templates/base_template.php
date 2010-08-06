@@ -27,23 +27,23 @@ else {
 <body id="<?php echo $is_mobile ? 'mobile' : ($view_name == 'home_view' ? 'home' : ''); ?>" class="">
 	<div id="head">
 		<div class="section">
-			<a href="/" id="logo">PiePHP</a>
+			<a href="<?php echo HTTP_ROOT; ?>" id="logo">PiePHP</a>
 			<ul>
 				<?php
 				if ($is_mobile) {
 					?>
-					<li><a href="/user_guide/">User Guide</a></li>
-					<li><a href="/forums/">Forums</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>user_guide/">User Guide</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>forums/">Forums</a></li>
 					<?php
 				}
 				else {
 					?>
-					<li><a href="/">Home</a></li>
-					<li><a href="/downloads/">Downloads</a></li>
-					<li><a href="/tutorials/">Tutorials</a></li>
-					<li><a href="/documentation/">Documentation</a></li>
-					<li><a href="/forums/">Forums</a></li>
-					<li><a href="/community/">Community</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>">Home</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>downloads/">Downloads</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>tutorials/">Tutorials</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>documentation/">Documentation</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>forums/">Forums</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>community/">Community</a></li>
 					<?php
 				}
 				?>
@@ -65,16 +65,16 @@ else {
 			if (!$is_mobile) {
 				?>
 				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/downloads/">Downloads</a></li>
-					<li><a href="/tutorials/">Tutorials</a></li>
-					<li><a href="/documentation/">Documentation</a></li>
-					<li><a href="/forums/">Forums</a></li>
-					<li><a href="/community/">Community</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>">Home</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>downloads/">Downloads</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>tutorials/">Tutorials</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>documentation/">Documentation</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>forums/">Forums</a></li>
+					<li><a href="<?php echo HTTP_ROOT; ?>community/">Community</a></li>
 					<?php
 					if ($is_localhost || substr($_SERVER['REMOTE_ADDR'], 0, 7) == '192.168') {
 						?>
-						<li><a href="/code_generator/">Code Generator</a></li>
+						<li><a href="<?php echo HTTP_ROOT; ?>code_generator/">Code Generator</a></li>
 						<?php
 					}
 					?>
@@ -87,7 +87,7 @@ else {
 	<?php
 	if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || substr($_SERVER['REMOTE_ADDR'], 0, 7) == '192.168') {
 		?>
-		<iframe src="/refresher" style="display:none"></iframe>
+		<iframe src="<?php echo HTTP_ROOT; ?>refresher" style="display:none"></iframe>
 		<?php
 	}
 ?>
