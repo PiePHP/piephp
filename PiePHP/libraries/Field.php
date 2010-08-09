@@ -6,9 +6,12 @@ class Field {
 
 	var $value = '';
 
-	function __construct($value = '') {
-		//die('construct Field');
-		$this->value = $value;
+	function __construct($settings) {
+		reset($settings);
+		unset($settings['type']);
+		while (list($setting, $value) = each($settings)) {
+			$this->$setting = $value;
+		}
 	}
 
 	function renderFormField() {
@@ -38,9 +41,7 @@ class Field {
 	}
 
 	function renderClass() {
-		if ($this->required) {
-			echo ' class="required"';
-		}
+		echo ' class="' . ($this->required ? 'required ' : '') . $this->type . '"';
 	}
 
 	function renderTip() {

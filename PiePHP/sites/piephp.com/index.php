@@ -24,7 +24,7 @@ $CACHES = array(
 		'port' => '11211',
 		'prefix' => 'piephp_pages_',
 		'expire' => '60',
-		'pattern' => '/^\/(?!(user|refresher).*).*/i'
+		'pattern' => '/^\/(?!(user|refresher|admin).*).*/i'
 	)
 );
 
@@ -44,7 +44,7 @@ $CLASS_DIRS = array(
 );
 
 $VIEW_PARAMS = array(
-  'is_https' => $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off',
+	'is_https' => $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off',
 	'is_ajax' => strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest',
 	'is_localhost' => $_SERVER['REMOTE_ADDR'] == '127.0.0.1',
 	'is_mobile' => strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false

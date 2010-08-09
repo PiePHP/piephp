@@ -2,6 +2,8 @@
 
 class NameField extends Field {
 
-	var $length = 255;
+	var $length = 50;
+
+	var $type = 'name';
 
 }

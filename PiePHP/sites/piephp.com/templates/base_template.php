@@ -7,7 +7,7 @@ else {
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
 <html>
 <head>
-    <title>PiePHP - <?php echo $title; ?></title>
+	<title>PiePHP - <?php echo $title; ?></title>
 	<?php
 	if ($is_mobile) {
 		?>
@@ -24,7 +24,7 @@ else {
 	<script type="text/javascript" src="/media/base.js"></script>
 	<link rel="shortcut icon" href="/favicon.ico" />
 </head>
-<body id="<?php echo $is_mobile ? 'mobile' : ($view_name == 'home_view' ? 'home' : ''); ?>" class="">
+<body id="<?php echo $is_mobile ? 'mobile' : ($view_name == 'home' ? 'home' : ''); ?>" class="">
 	<div id="head">
 		<div class="section">
 			<a href="<?php echo HTTP_ROOT; ?>" id="logo">PiePHP</a>
@@ -74,6 +74,7 @@ else {
 					<?php
 					if ($is_localhost || substr($_SERVER['REMOTE_ADDR'], 0, 7) == '192.168') {
 						?>
+						<li><a href="<?php echo HTTP_ROOT; ?>admin/">Admin</a></li>
 						<li><a href="<?php echo HTTP_ROOT; ?>code_generator/">Code Generator</a></li>
 						<?php
 					}

@@ -1,21 +1,24 @@
 <?php
 
-class FirstAndLastNameField extends Field {
+class FirstAndLastNameField extends MultiField {
 
-	var $value = array('first' => '', 'last' => '');
+	function __construct($settings) {
 
-	function renderInput() {
-		$attributes = ' maxlength="32"' . ($this->required ? ' class="required"' : '');
-		echo '<input type="text" name="first_' . $this->name . '"' . $attributes;
-		if ($this->value['first']) {
-			echo ' value="' . htmlentities($this->value['first']) . '"';
-		}
-		echo '>';
-		echo '<input type="text" name="last_' . $this->name . '"' . $attributes;
-		if ($this->value['last']) {
-			echo ' value="' . htmlentities($this->value['last']) . '"';
-		}
-		echo '>';
+		parent::__construct($settings);
+
+		$firstNameSettings = array(
+			'name' => 'first_' . $settings['name'],
+			'type' => 'Name'
+		);
+		$firstName = new NameField($firstNameSettings);
+
+		$lastNameSettings = array(
+			'name' => 'last_' . $settings['name'],
+			'type' => 'Name'
+		);
+		$lastName = new NameField($lastNameSettings);
+		
+		$this->fields = array($firstName, $lastName);
 	}
 
 }

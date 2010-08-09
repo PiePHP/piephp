@@ -153,20 +153,19 @@ div.section {
 	color: #fff;
 }
 
-#head li:hover {
+#head ul.hover li {
 	background-color: #b91;
 	text-shadow: #000 1px 1px 2px;
 }
 
-#head li.on {
+#head ul.on li {
 	background-color: #fff;
 	border-bottom: 1px solid #fff;
+	text-shadow: none;
 }
 
-#head li.on a,
-#head li.on a:hover {
+#head ul.on a {
 	color: #333;
-	text-shadow: none;
 }
 
 #foot ul {

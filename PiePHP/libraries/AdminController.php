@@ -10,12 +10,10 @@ class AdminController extends Controller {
 				$scaffold->renderForm();
 				$data = ob_get_clean();
 				$this->renderView('echo', $data);
-			}
-			else {
-				die('invalid admin section');
+				return;
 			}
 		}
-		die('index');
+		$this->renderView('admin/admin');
 	}
 
 }

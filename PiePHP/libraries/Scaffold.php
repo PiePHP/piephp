@@ -12,12 +12,8 @@ class Scaffold {
 		reset($this->fields);
 		while (list($field_name, $settings) = each($this->fields)) {
 			$class_name = $settings['type'] . 'Field';
-			$field = new $class_name();
-			$field->name = $field_name;
-			unset($settings['type']);
-			while (list($setting, $value) = each($settings)) {
-				$this->$field_name->$setting = $value;
-			}
+			$settings['name'] = $field_name;
+			$field = new $class_name($settings);
 			$fields[] = $this->$field_name = $field;
 		}
 		$this->fields = $fields;
@@ -25,10 +21,11 @@ class Scaffold {
 
 	function renderForm($action = 'add', $formStyle = 'form') {
 		reset($this->fields);
-		echo '<form action="' . $action . '">';
+		$html = '<form action="' . $action . '">';
 		while (list(, $field) = each($this->fields)) {
-			$field->renderFormField($formStyle);
+			$html .= $field->renderFormField($formStyle);
 		}
-		echo '</form>';
+		$html .= '</form>';
+		return $html;
 	}
 }

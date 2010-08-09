@@ -1,5 +1,15 @@
 (function() {
 
+	var log = function(message) {
+		if (window.console) {
+			console.log(message);
+		}
+	};
+	
+	var time = function() {
+		return (new Date()).getTime();
+	};
+
 	var base = location.protocol + '//' + location.host;
 	var currentPath = '/';
 	var loadCount = 0;
@@ -52,12 +62,29 @@
 			loadUrl(location.href.replace(/\/#/, ''));
 		}
 	};
+	
+	$(function() {
+		var headSectionQuery = $('#head .section');
+		var navQuery = headSectionQuery.find('ul');
+		navQuery.clone().addClass('hover').appendTo(headSectionQuery).find('li').css({opacity: 0});
+		navQuery.clone().addClass('on').appendTo(headSectionQuery).find('li').css({opacity: 0});
+		headSectionQuery
+			.delegate('li', 'mouseenter', function() {
+				var index = $(this).index();
+				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 1}, 'fast');
+			})
+			.delegate('li', 'mouseleave', function() {
+				var index = $(this).index();
+				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 0}, 'slow');
+			});
+	});
 
 	var lightTab = function() {
-		$('#head li.on').removeClass('on');
-		$('#head li a').each(function(linkIndex, link) {
+		$('#head li.on').removeClass('on').stop().animate({opacity: 0});
+		$('#head ul.on a').each(function(linkIndex, link) {
 			var light = 0;
 			var linkPath = getPath(link.href);
+			log(linkPath);
 			if (noIndex(linkPath) == '/') {
 				if (noIndex(currentPath) == '/') {
 					light = 1;
@@ -67,7 +94,7 @@
 				light = 1;
 			}
 			if (light) {
-				$(link).parent().addClass('on');
+				$(link).parent().addClass('on').stop().animate({opacity: 1});
 			}
 		});
 	};
