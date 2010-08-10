@@ -60,7 +60,6 @@ fieldset label {
 	height: 100%;
 	text-align: right;
 	padding: 5px;
-	
 }
 
 h1,
@@ -115,6 +114,7 @@ div.section {
 	width: 117px;
 	height: 30px;
 	background: transparent url(logo.gif) no-repeat;
+	background-size: 100%;
 	overflow: hidden;
 	text-indent: -100px;
 }

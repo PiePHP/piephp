@@ -28,10 +28,15 @@
 		$('#body>div').addClass('loading');
 		var path = getPath(href);
 		var currentLoad = ++loadCount;
+		var isHome = noIndex(path) == '/';
+		$('#head').stop().animate({height: isHome ? 79 : 39});
+		$('#logo').stop().animate({width: isHome ? 234 : 117, height: isHome ? 60 : 30, top: isHome ? 12 : 6});
+		$('#head ul').stop().animate({top: isHome ? 56 : 16});
+
 		$.get(href, {}, function(html) {
 			if (currentLoad == loadCount) {
 				var load = function() {
-					loadContent(path, html);
+					loadContent(path, html, isHome);
 				};
 				if (bodySectionQuery.html()) {
 					load()
@@ -43,7 +48,7 @@
 		});
 	};
 
-	var loadContent = function(path, html) {
+	var loadContent = function(path, html, isHome) {
 		var bodySectionQuery = $('#body .section');
 		currentPath = path;
 		$('#body>div').removeClass('loading');
@@ -52,7 +57,7 @@
 		document.title = $('#body var').text();
 		$('#loading').remove();
 		bodySectionQuery.css({opacity: 1});
-		$('body')[0].id = (noIndex(path) == '/' ? 'home' : '');
+		$('body')[0].id = isHome ? 'home' : '';
 		lightTab();
 	};
 
