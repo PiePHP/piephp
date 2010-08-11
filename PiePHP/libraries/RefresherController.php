@@ -4,7 +4,7 @@ class RefresherController extends Controller {
 
 	function index()
 	{
-		$file = 'C:/Program Files/Macromedia/HomeSite+/AutoBackup/AutoBackup.ini';
+		$file = $GLOBALS['REFRESHER_FILE'];
 
 		$handle = fopen($file, 'r');
 		$stat = fstat($handle);

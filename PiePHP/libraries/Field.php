@@ -38,7 +38,7 @@ class Field {
 			echo ' value="' . htmlentities($this->value) . '"';
 		}
     else if ($this->hint) {
-			echo ' value="' . htmlentities($this->hint) . '"';
+			echo ' title="' . htmlentities($this->hint) . '"';
     }
 		echo '>';
 	}
@@ -47,9 +47,6 @@ class Field {
     $class = $this->type;
     if ($this->required) {
       $class = 'required ' . $class;
-    }
-    if ($this->hint && !$this->value) {
-      $class .= ' hint';
     }
 		echo ' class="' . $class . '"';
 	}

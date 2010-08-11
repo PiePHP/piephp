@@ -1,14 +1,8 @@
-(function() {
+(function(window) {
 
-	var log = function(message, value) {
-		if (window.console) {
-			console.log(message + (value ? ': ' + value : ''));
-		}
-	};
-	
-	var time = function() {
-		return (new Date()).getTime();
-	};
+  var document = window.document;
+
+  var location = window.location;
 
 	var base = location.protocol + '//' + location.host;
 
@@ -18,6 +12,16 @@
 
 	var formElementsSelector = 'input,select,textarea,button';
 
+	var log = function(message, value) {
+		if (window.console) {
+			console.log(message + (value ? ': ' + value : ''));
+		}
+	};
+
+	var time = function() {
+		return (new Date()).getTime();
+	};
+
 	var getPath = function(href) {
 		return href.substring(base.length).replace(/^\/#/, '');
 	};
@@ -25,6 +29,19 @@
 	var noIndex = function(href) {
 		return href.replace(/\/index\.php/, '');
 	};
+
+  var wire = function(selector) {
+    var query = $(selector);
+
+    query.find('[title]')
+      .addClass('hint')
+      .each(function(elementIndex, element) {
+        element.value = element.HINT = element.title;
+        element.title = '';
+      });
+
+    return query;
+  };
 
 	var loadUrl = function(href) {
 		var bodySectionQuery = $('#body .section');
@@ -56,7 +73,7 @@
 		var bodySectionQuery = $('#body .section');
 		currentPath = path;
 		$('#body>div').removeClass('loading');
-		bodySectionQuery.html(html);
+		bodySectionQuery.html(wire(html));
 		document.location = base + '/#' + path;
 		document.title = $('#body var').text();
 		$('#loading').remove();
@@ -99,7 +116,7 @@
 		return false;
 	};
 
-	$('body')
+	$(document)
 		.delegate('a', 'click', function() {
 			var link = this;
 			var href = link.href;
@@ -112,35 +129,26 @@
 				return false;
 			}
 		})
-		.delegate('.hint', 'focus', function(event) {
-      var element = this;
-      element.HINT = element.value;
-      $(element).removeClass('hint').addClass('hinted').val('');
-		})
-		.delegate('.hinted', 'blur', function(event) {
-      var element = this;
-      if (!element.value) {
-        $(element).removeClass('hinted').addClass('hint').val(element.HINT);
-      }
-		})
 		.delegate('fieldset>div', 'focus', function(event) {
-      log('fieldset>div', 'focus');
+			$('fieldset>div.on').removeClass('on');
 			$(this).addClass('on');
-			return stopImmediatePropagation(event);
 		})
 		.delegate('fieldset>div', 'blur', function(event) {
-      log('fieldset>div', 'blur');
 			$(this).removeClass('on');
-			return stopImmediatePropagation(event);
 		})
 		.delegate('fieldset>div', 'click', function(event) {
-      log('fieldset>div', 'click');
 			$(this).find(formElementsSelector).eq(0).focus();
-			return stopImmediatePropagation(event);
 		})
 		.delegate(formElementsSelector, 'click', function(event) {
-      log(formElementsSelector, 'click');
 			return stopImmediatePropagation(event);
+		})
+		.delegate('.hint', 'focus', function() {
+      $(this).removeClass('hint').addClass('hinted').val('');
+		})
+		.delegate('.hinted', 'blur', function() {
+      if (!this.value) {
+        $(this).removeClass('hinted').addClass('hint').val(this.HINT);
+      }
 		});
 
 	$(function() {
@@ -158,6 +166,7 @@
 				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 0}, 'slow');
 			});
 		lightTab();
+    wire(document);
 	});
 
-})();
+})(window);
