@@ -15,13 +15,13 @@ class Field {
 	}
 
 	function renderFormField() {
-		echo '<fieldset>';
+		echo '<div>';
 			echo '<label>';
 				$this->renderLabel();
 			echo '</label>';
 			$this->renderInput();
 			$this->renderTip();
-		echo '</fieldset>';
+		echo '</div>';
 	}
 
 	function renderLabel() {

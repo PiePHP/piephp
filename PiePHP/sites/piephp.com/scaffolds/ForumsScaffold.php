@@ -3,7 +3,12 @@
 class ForumsScaffold extends Scaffold {
 
 	var $fields = array(
-		'name' => array(
+		'forumDescriptiveName' => array(
+			'type' => 'Name',
+			'length' => 255,
+			'required' => true
+		),
+		'forumPostStuff' => array(
 			'type' => 'Name',
 			'length' => 255,
 			'required' => true

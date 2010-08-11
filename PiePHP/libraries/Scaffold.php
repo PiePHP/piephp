@@ -2,9 +2,41 @@
 
 class Scaffold {
 
-	var $tableName = '';
+	var $type;
 
-	function __construct($record = array()) {
+	var $table;
+
+	var $singular;
+	
+	var $plural;
+
+	var $category;
+
+	var $fields = array();
+	
+	var $fieldsets;
+
+	var $action;
+
+	var $id;
+
+	function __construct($name, $action, $id) {
+
+		if (!$this->table) {
+			$this->table = strtolower(separate($name, '_'));
+		}
+		if (!$this->type) {
+			$this->type = substr($this->table, 0, -1);
+		}
+		if (!$this->singular) {
+			$this->singular = str_replace('_', ' ', $this->type);
+		}
+		if (!$this->plural) {
+			$this->plural = str_replace('_', ' ', $this->table);
+		}
+		$this->action = $action;
+		$this->id = $id;
+
 		$fields = array();
 		$this->fields['id'] = array(
 			'type' => 'Id'
@@ -14,18 +46,50 @@ class Scaffold {
 			$class_name = $settings['type'] . 'Field';
 			$settings['name'] = $field_name;
 			$field = new $class_name($settings);
-			$fields[] = $this->$field_name = $field;
+			$fields[$field_name] = $this->$field_name = $field;
 		}
 		$this->fields = $fields;
 	}
-
-	function renderForm($action = 'add', $formStyle = 'form') {
-		reset($this->fields);
-		$html = '<form action="' . $action . '">';
-		while (list(, $field) = each($this->fields)) {
-			$html .= $field->renderFormField($formStyle);
+	
+	function getTitle() {
+		if ($this->action == 'add') {
+			return 'Add a ' . $this->singular;
 		}
-		$html .= '</form>';
-		return $html;
+		else if ($this->action == 'change') {
+			return 'Change a ' . $this->singular;
+		}
+		else if ($this->action == 'remove') {
+			return 'Remove a ' . $this->singular;
+		}
+		else {
+			return ucfirst($this->plural);
+		}
+	}
+
+	function renderForm() {
+		echo '<form enctype="multipart/form-data" action="' . $action . '">';
+		if (!$this->fieldsets) {
+			$this->fieldsets = array('' => array_keys($this->fields));
+		}
+		reset($this->fieldsets);
+		while (list($legend, $field_names) = each($this->fieldsets)) {
+			echo '<fieldset>';
+			if ($legend) {
+				echo '<h2>' . htmlentities($legend) . '</h2>';
+			}
+			reset($field_names);
+			while (list(, $field_name) = each($field_names)) {
+				$this->fields[$field_name]->renderFormField($formStyle);
+			}
+			echo '</fieldset>';
+		}
+	
+		echo '</form>';
+	}
+
+	function renderList() {
+		echo '<table>';
+		echo 'table';
+		echo '</table>';
 	}
 }

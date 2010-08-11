@@ -41,25 +41,65 @@ a:hover {
 }
 
 fieldset {
+	border: 1px solid #dde;
+	margin-bottom: 4px;
+}
+
+fieldset h2 {
+	font: bold 13px Arial;
+	padding: 4px 6px;
+	background: #dde;
+	border-bottom: 1px solid #dde;
+}
+
+fieldset div {
+	clear: all;
 	position: relative;
 	padding: 4px;
 }
 
-fieldset:hover {
+fieldset div:hover {
 	background: #ffd;
 }
 
-fieldset.on {
-	background: #f0f0f6;
+fieldset div.on {
+	background: #ffc;
 }
 
 fieldset label {
 	float: left;
 	display: block;
-	width: 200px;
+	width: 100px;
 	height: 100%;
 	text-align: right;
 	padding: 5px;
+	color: #666;
+}
+
+input,
+textarea,
+select,
+button {
+	margin-right: 2px;
+}
+
+input.name {
+	width: 150px;
+}
+
+input.email {
+	width: 250px;
+}
+
+input.username,
+input.password {
+	width: 200px;
+}
+
+a.add {
+	background: transparent url(icons/add.png) no-repeat;
+	padding: 0 0 0 18px;
+	line-height: 16px;
 }
 
 h1,

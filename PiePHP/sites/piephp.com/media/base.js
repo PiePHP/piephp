@@ -11,8 +11,12 @@
 	};
 
 	var base = location.protocol + '//' + location.host;
+
 	var currentPath = '/';
+
 	var loadCount = 0;
+
+	var formElementsSelector = 'input,select,textarea,button';
 
 	var getPath = function(href) {
 		return href.substring(base.length).replace(/^\/#/, '');
@@ -67,29 +71,12 @@
 			loadUrl(location.href.replace(/\/#/, ''));
 		}
 	};
-	
-	$(function() {
-		var headSectionQuery = $('#head .section');
-		var navQuery = headSectionQuery.find('ul');
-		navQuery.clone().addClass('hover').appendTo(headSectionQuery).find('li').css({opacity: 0});
-		navQuery.clone().addClass('on').appendTo(headSectionQuery).find('li').css({opacity: 0});
-		headSectionQuery
-			.delegate('li', 'mouseenter', function() {
-				var index = $(this).index();
-				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 1}, 'fast');
-			})
-			.delegate('li', 'mouseleave', function() {
-				var index = $(this).index();
-				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 0}, 'slow');
-			});
-	});
 
 	var lightTab = function() {
 		$('#head li.on').removeClass('on').stop().animate({opacity: 0});
 		$('#head ul.on a').each(function(linkIndex, link) {
 			var light = 0;
 			var linkPath = getPath(link.href);
-			log(linkPath);
 			if (noIndex(linkPath) == '/') {
 				if (noIndex(currentPath) == '/') {
 					light = 1;
@@ -105,6 +92,12 @@
 	};
 
 	checkUrl();
+	setInterval(checkUrl, 100);
+
+	var stopImmediatePropagation = function(event) {
+		event.stopImmediatePropagation();
+		return false;
+	};
 
 	$('body')
 		.delegate('a', 'click', function() {
@@ -119,23 +112,37 @@
 				return false;
 			}
 		})
-		.delegate('fieldset', 'focus', function() {
+		.delegate('fieldset>div', 'focus', function(event) {
 			$(this).addClass('on');
+			return stopImmediatePropagation(event);
 		})
-		.delegate('fieldset', 'blur', function() {
+		.delegate('fieldset>div', 'blur', function(event) {
 			$(this).removeClass('on');
+			return stopImmediatePropagation(event);
 		})
-		.delegate('input,select,textarea,submit', 'click', function(event) {
-			//console.log('input click');
-			event.stopImmediatePropagation();
+		.delegate('fieldset>div', 'click', function(event) {
+			$(this).find(formElementsSelector).eq(0).focus();
+			return stopImmediatePropagation(event);
 		})
-		.delegate('fieldset', 'click', function(event) {
-			//console.log('fieldset click');
-			$(this).find('input,select,textarea,submit').eq(0).focus();
+		.delegate(formElementsSelector, 'click', function(event) {
+			return stopImmediatePropagation(event);
 		});
 
-	setInterval(checkUrl, 100);
-
-	$(lightTab);
+	$(function() {
+		var headSectionQuery = $('#head .section');
+		var navQuery = headSectionQuery.find('ul');
+		navQuery.clone().addClass('hover').appendTo(headSectionQuery).find('li').css({opacity: 0});
+		navQuery.clone().addClass('on').appendTo(headSectionQuery).find('li').css({opacity: 0});
+		headSectionQuery
+			.delegate('li', 'mouseenter', function() {
+				var index = $(this).index();
+				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 1}, 'fast');
+			})
+			.delegate('li', 'mouseleave', function() {
+				var index = $(this).index();
+				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 0}, 'slow');
+			});
+		lightTab();
+	});
 
 })();
