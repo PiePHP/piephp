@@ -37,11 +37,21 @@ class Field {
 		if ($this->value) {
 			echo ' value="' . htmlentities($this->value) . '"';
 		}
+    else if ($this->hint) {
+			echo ' value="' . htmlentities($this->hint) . '"';
+    }
 		echo '>';
 	}
 
 	function renderClass() {
-		echo ' class="' . ($this->required ? 'required ' : '') . $this->type . '"';
+    $class = $this->type;
+    if ($this->required) {
+      $class = 'required ' . $class;
+    }
+    if ($this->hint && !$this->value) {
+      $class .= ' hint';
+    }
+		echo ' class="' . $class . '"';
 	}
 
 	function renderTip() {

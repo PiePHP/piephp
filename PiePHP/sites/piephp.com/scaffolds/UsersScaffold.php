@@ -25,7 +25,7 @@ class UsersScaffold extends Scaffold {
 		'Personal information' => array('name', 'email'),
 		'Authentication' => array('username', 'password'),
 	);
-	
+
 	var $listFields = array('username', 'email', 'name');
 
 }

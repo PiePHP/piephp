@@ -1,8 +1,8 @@
 (function() {
 
-	var log = function(message) {
+	var log = function(message, value) {
 		if (window.console) {
-			console.log(message);
+			console.log(message + (value ? ': ' + value : ''));
 		}
 	};
 	
@@ -112,19 +112,34 @@
 				return false;
 			}
 		})
+		.delegate('.hint', 'focus', function(event) {
+      var element = this;
+      element.HINT = element.value;
+      $(element).removeClass('hint').addClass('hinted').val('');
+		})
+		.delegate('.hinted', 'blur', function(event) {
+      var element = this;
+      if (!element.value) {
+        $(element).removeClass('hinted').addClass('hint').val(element.HINT);
+      }
+		})
 		.delegate('fieldset>div', 'focus', function(event) {
+      log('fieldset>div', 'focus');
 			$(this).addClass('on');
 			return stopImmediatePropagation(event);
 		})
 		.delegate('fieldset>div', 'blur', function(event) {
+      log('fieldset>div', 'blur');
 			$(this).removeClass('on');
 			return stopImmediatePropagation(event);
 		})
 		.delegate('fieldset>div', 'click', function(event) {
+      log('fieldset>div', 'click');
 			$(this).find(formElementsSelector).eq(0).focus();
 			return stopImmediatePropagation(event);
 		})
 		.delegate(formElementsSelector, 'click', function(event) {
+      log(formElementsSelector, 'click');
 			return stopImmediatePropagation(event);
 		});
 

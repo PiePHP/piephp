@@ -96,6 +96,12 @@ input.password {
 	width: 200px;
 }
 
+input.hint,
+textarea.hint
+{
+  color: #aaa;
+}
+
 a.add {
 	background: transparent url(icons/add.png) no-repeat;
 	padding: 0 0 0 18px;
