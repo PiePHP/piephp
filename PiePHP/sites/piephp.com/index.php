@@ -52,9 +52,9 @@ $VIEW_PARAMS = array(
 
 set_error_handler($ERROR_HANDLER = 'error_handler');
 
-$page_path = $_SERVER['QUERY_STRING'] ? $_SERVER['QUERY_STRING'] : $_SERVER['PATH_INFO'];
+$page_path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
 
-if (false && isset($CACHES['pages'])) {
+if (false && !count($_POST) && isset($CACHES['pages'])) {
 	if (preg_match($CACHES['pages']['pattern'], $page_path)) {
 		$page_model = new Model();
 		$page_model->cacheConfigKey = 'pages';
@@ -67,7 +67,6 @@ if (false && isset($CACHES['pages'])) {
 		else {
 			ob_start();
 		}
-		
 	}
 }
 
@@ -81,6 +80,7 @@ $controller_name = upper_camel($parameters[0]) . 'Controller';
 
 // If the URL is /hello and there's no Hello controller, then hello can be
 // treated as a Home controller method.
+//die('"' . $controller_name . '"');
 if ($controller_name == 'Controller' || !class_exists($controller_name, true)) {
 	$controller_name = 'HomeController';
 }
@@ -146,6 +146,9 @@ function separate($camel, $separator = '_') {
 
 
 function error_handler($level, $message, $file, $line_number, $context) {
+	if ($level == 2 && isset($context['autoload_file'])) {
+		return true;
+	}
 	global $ERROR_CONTROLLER;
 	if (!$ERROR_CONTROLLER) {
 		$ERROR_CONTROLLER = new ErrorController();

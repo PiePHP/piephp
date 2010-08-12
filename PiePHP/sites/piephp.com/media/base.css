@@ -80,6 +80,24 @@ div.error {
 	border: 1px solid #ee6;
 	background: #ffc url(icons/error.png) no-repeat 8px 8px;
 	padding: 8px 8px 8px 28px;
+	position: relative;
+}
+
+div.error textarea {
+	position: absolute;
+	display: none;
+	z-index: 1;
+}
+
+div.error textarea.submitting {
+	background: #fff url(loading.gif) no-repeat 4px 4px;
+	color: #ccc;
+}
+
+div.error textarea,
+code,
+pre {
+	font: normal 12px monospace;
 }
 
 div.error blockquote {
@@ -134,7 +152,7 @@ input.password {
 input.hint,
 textarea.hint
 {
-  color: #aaa;
+	color: #aaa;
 }
 
 a.add {
@@ -289,7 +307,7 @@ div.section {
 }
 
 #loading {
-	background-image: url(/loading.gif);
+	background-image: url(loading.gif);
 	width: 80px;
 	height: 80px;
 	position: absolute;

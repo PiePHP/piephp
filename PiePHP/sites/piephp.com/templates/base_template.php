@@ -11,12 +11,12 @@ else {
 	<?php
 	if ($is_mobile) {
 		?>
-		<link rel="stylesheet" href="/media/mobile.css" type="text/css" />
+		<link rel="stylesheet" href="/media/mobile.css" type="text/css">
 		<?php
 	}
 	else {
 		?>
-		<link rel="stylesheet" href="/media/base.css" type="text/css" />
+		<link rel="stylesheet" href="/media/base.css" type="text/css">
 		<?php
 	}
 	?>

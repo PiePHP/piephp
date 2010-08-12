@@ -52,7 +52,7 @@ class Scaffold {
 		}
 		$this->fields = $fields;
 	}
-	
+
 	function getTitle() {
 		if ($this->action == 'add') {
 			return 'Add a ' . $this->singular;

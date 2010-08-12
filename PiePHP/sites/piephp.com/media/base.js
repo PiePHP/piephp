@@ -1,8 +1,8 @@
-(function(window) {
+if (!window.log) (function(window) {
 
-  var document = window.document;
+	var document = window.document;
 
-  var location = window.location;
+	var location = window.location;
 
 	var base = location.protocol + '//' + location.host;
 
@@ -30,18 +30,18 @@
 		return href.replace(/\/index\.php/, '');
 	};
 
-  var wire = function(selector) {
-    var query = $(selector);
+	var wire = function(selector) {
+		var query = $(selector);
 
-    query.find('[title]')
-      .addClass('hint')
-      .each(function(elementIndex, element) {
-        element.value = element.HINT = element.title;
-        element.title = '';
-      });
+		query.find('[title]')
+			.addClass('hint')
+			.each(function(elementIndex, element) {
+				element.value = element.HINT = element.title;
+				element.title = '';
+			});
 
-    return query;
-  };
+		return query;
+	};
 
 	var loadUrl = function(href) {
 		var bodySectionQuery = $('#body .section');
@@ -143,12 +143,12 @@
 			return stopImmediatePropagation(event);
 		})
 		.delegate('.hint', 'focus', function() {
-      $(this).removeClass('hint').addClass('hinted').val('');
+			$(this).removeClass('hint').addClass('hinted').val('');
 		})
 		.delegate('.hinted', 'blur', function() {
-      if (!this.value) {
-        $(this).removeClass('hinted').addClass('hint').val(this.HINT);
-      }
+			if (!this.value) {
+				$(this).removeClass('hinted').addClass('hint').val(this.HINT);
+			}
 		});
 
 	$(function() {
@@ -166,7 +166,7 @@
 				headSectionQuery.find('ul.hover li').eq(index).stop().animate({opacity: 0}, 'slow');
 			});
 		lightTab();
-    wire(document);
+		wire(document);
 	});
 
 })(window);
