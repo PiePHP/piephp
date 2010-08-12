@@ -2,7 +2,7 @@
 
 class Controller {
 
-	var $defaultTemplateName = 'base';
+	public $defaultTemplateName = 'base';
 
 	function renderView($view_name, $data = array(), $template_name = false) {
 
@@ -41,7 +41,7 @@ class Controller {
 
 	}
 
-	function loadModel($property_name) {
+	function loadModel($property_name = 'model') {
 		$class_name = ucfirst($property_name);
 		$this->$property_name = new $class_name();
 	}

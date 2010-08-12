@@ -2,7 +2,7 @@
 
 class Database {
 
-	var $connection;
+	public $connection;
 
 	/**
 	 * Show or log an error.

@@ -76,6 +76,41 @@ fieldset label {
 	color: #666;
 }
 
+div.error {
+	border: 1px solid #ee6;
+	background: #ffc url(icons/error.png) no-repeat 8px 8px;
+	padding: 8px 8px 8px 28px;
+}
+
+div.error blockquote {
+	border: 1px solid #666;
+	margin: 0;
+	padding: 0;
+	background: #fff;
+	color: #000;
+	width: 100%;
+	max-height: 200px;
+	overflow: scroll;
+	position: relative;
+}
+
+div.error blockquote i {
+	background: #eee;
+	color: #999;
+	font-style: normal;
+}
+
+div.error blockquote code {
+	display: block;
+	white-space: nowrap;
+}
+
+div.error code.error {
+	background: #fee;
+	border-top: 1px solid #f99;
+	border-bottom: 1px solid #f99;
+}
+
 input,
 textarea,
 select,

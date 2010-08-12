@@ -2,8 +2,8 @@
 
 class EmailField extends Field {
 
-	var $length = 254;
+	public $length = 254;
 
-	var $type = 'email';
+	public $type = 'email';
 
 }

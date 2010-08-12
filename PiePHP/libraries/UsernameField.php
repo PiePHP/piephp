@@ -2,8 +2,8 @@
 
 class UsernameField extends Field {
 
-	var $length = 32;
+	public $length = 32;
 
-	var $type = 'username';
+	public $type = 'username';
 
 }

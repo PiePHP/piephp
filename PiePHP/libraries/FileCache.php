@@ -2,9 +2,9 @@
 
 class FileCache {
 
-	var $prefix = '';
+	public $prefix = '';
 
-	var $expire = 3600;
+	public $expire = 3600;
 
 	/**
 	 * Point to the default cache and/or cache configuration.

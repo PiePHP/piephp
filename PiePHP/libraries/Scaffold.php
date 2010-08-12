@@ -2,24 +2,26 @@
 
 class Scaffold {
 
-	var $type;
+	public $type;
 
-	var $table;
+	public $table;
 
-	var $singular;
+	public $singular;
 	
-	var $plural;
+	public $plural;
 
-	var $category;
+	public $category;
 
-	var $fields = array();
+	public $fields = array();
 	
-	var $fieldsets;
+	public $fieldsets;
 
-	var $action;
+	public $action;
 
-	var $id;
-
+	public $id;
+	
+	public $databaseConfigKey = 'default';
+	
 	function __construct($name, $action, $id) {
 
 		if (!$this->table) {

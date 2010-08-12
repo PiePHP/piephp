@@ -2,11 +2,11 @@
 
 class MemcacheCache {
 
-	var $connection;
+	public $connection;
 
-	var $prefix = '';
+	public $prefix = '';
 
-	var $expire = 3600;
+	public $expire = 3600;
 
 	/**
 	 * Point to the default cache and/or cache configuration.
@@ -45,8 +45,8 @@ class MemcacheCache {
 	/**
 	 * Store a value in Memcache.
 	 */
-	function set($cache_key, $value, $time = $this->expire) {
-		$this->connection->set($this->prefix . $cache_key, $value, 0, $time);
+	function set($cache_key, $value, $expire = NULL) {
+		$this->connection->set($this->prefix . $cache_key, $value, 0, $expire === NULL ? $this->expire : $expire);
 	}
 
 }

@@ -2,9 +2,11 @@
 
 class Field {
 
-	var $required = false;
+	public $required = false;
 
-	var $value = '';
+	public $value = '';
+
+	public $hint = '';
 
 	function __construct($settings) {
 		reset($settings);
@@ -37,17 +39,17 @@ class Field {
 		if ($this->value) {
 			echo ' value="' . htmlentities($this->value) . '"';
 		}
-    else if ($this->hint) {
+		else if ($this->hint) {
 			echo ' title="' . htmlentities($this->hint) . '"';
-    }
+		}
 		echo '>';
 	}
 
 	function renderClass() {
-    $class = $this->type;
-    if ($this->required) {
-      $class = 'required ' . $class;
-    }
+		$class = $this->type;
+		if ($this->required) {
+			$class = 'required ' . $class;
+		}
 		echo ' class="' . $class . '"';
 	}
 

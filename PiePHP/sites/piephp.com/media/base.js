@@ -12,7 +12,7 @@
 
 	var formElementsSelector = 'input,select,textarea,button';
 
-	var log = function(message, value) {
+	var log = window.log = function(message, value) {
 		if (window.console) {
 			console.log(message + (value ? ': ' + value : ''));
 		}

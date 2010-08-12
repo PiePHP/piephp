@@ -2,7 +2,7 @@
 
 class MultiField extends Field {
 
-	var $fields = array();
+	public $fields = array();
 
 	function renderInput() {
 		reset($this->fields);

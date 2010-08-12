@@ -2,11 +2,11 @@
 
 class Model {
 
-	var $databaseConfigKey = 'default';
-	var $database = NULL;
+	public $databaseConfigKey = 'default';
+	public $database = NULL;
 
-	var $cacheConfigKey = 'default';
-	var $cache = NULL;
+	public $cacheConfigKey = 'default';
+	public $cache = NULL;
 
 	/**
 	 * Connect to the database if a connection has not already been made.

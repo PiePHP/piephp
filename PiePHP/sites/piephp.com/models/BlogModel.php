@@ -2,7 +2,7 @@
 
 class BlogModel extends Model {
 
-	var $cacheConfigKey = '';
+	public $cacheConfigKey = '';
 
 	function posts() {
 		return $this->select('* FROM posts', 60);

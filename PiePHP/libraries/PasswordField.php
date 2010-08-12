@@ -2,8 +2,8 @@
 
 class PasswordField extends Field {
 
-	var $length = 32;
+	public $length = 32;
 
-	var $type = 'password';
+	public $type = 'password';
 
 }

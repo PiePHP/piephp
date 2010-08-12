@@ -2,7 +2,7 @@
 
 class UsersScaffold extends Scaffold {
 
-	var $fields = array(
+	public $fields = array(
 		'name' => array(
 			'type' => 'FirstAndLastName',
 			'required' => true
@@ -21,11 +21,11 @@ class UsersScaffold extends Scaffold {
 		)
 	);
 
-	var $fieldsets = array(
+	public $fieldsets = array(
 		'Personal information' => array('name', 'email'),
 		'Authentication' => array('username', 'password'),
 	);
 
-	var $listFields = array('username', 'email', 'name');
+	public $listFields = array('username', 'email', 'name');
 
 }

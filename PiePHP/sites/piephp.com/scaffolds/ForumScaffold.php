@@ -2,7 +2,7 @@
 
 class ForumsScaffold extends Scaffold {
 
-	var $fields = array(
+	public $fields = array(
 		'name' => array(
 			'type' => 'Name',
 			'length' => 255,

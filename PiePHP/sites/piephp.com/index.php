@@ -50,43 +50,9 @@ $VIEW_PARAMS = array(
 	'is_mobile' => strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false
 );
 
-
-function __autoload($class_name) {
-	global $CLASS_DIRS;
-	$suffix = preg_replace('/.*([A-Z])/', '$1', $class_name);
-	if ($suffix != $class_name && ($directory = $CLASS_DIRS[$suffix])) {
-		if (@include($directory . $class_name . '.php')) {
-			return;
-		}
-	}
-	$directory = $CLASS_DIRS['*'];
-	@include $directory . $class_name . '.php';
-}
-
-
-function upper_camel($underscored) {
-	$spaced = preg_replace('/[^A-Za-z0-9]+/', ' ', $underscored);
-	$cased = ucwords($spaced);
-	$camel = str_replace(' ', '', $cased);
-	return $camel ? $camel : '';
-}
-
-
-function lower_camel($underscored) {
-	$method_name = upper_camel($underscored);
-	$method_name[0] = strtolower($method_name[0]);
-	return $method_name;
-}
-
-
-function separate($camel, $separator = '_') {
-	$separated = preg_replace('/([a-z])([A-Z])/', '$1' . $separator . '$2', $camel);
-	return strtolower($separated);
-}
+set_error_handler($ERROR_HANDLER = 'error_handler');
 
 $page_path = $_SERVER['QUERY_STRING'] ? $_SERVER['QUERY_STRING'] : $_SERVER['PATH_INFO'];
-
-//echo '"' . $page_path . '"';
 
 if (false && isset($CACHES['pages'])) {
 	if (preg_match($CACHES['pages']['pattern'], $page_path)) {
@@ -123,7 +89,7 @@ else {
 }
 $controller = new $controller_name();
 
-$method_name = lower_camel($parameters[0]);
+$method_name = $parameters ? lower_camel($parameters[0]) : '';
 
 // If the URL is /controller/hello and there's no hello method on the
 // controller, hello can be treated as a parameter of the default method.
@@ -141,4 +107,49 @@ if (isset($page_model)) {
 	$page_model->cache->set($page_cache_key, $contents, 60);
 }
 
-ob_flush();
+
+function __autoload($class_name) {
+	global $CLASS_DIRS;
+	$suffix = preg_replace('/.*([A-Z])/', '$1', $class_name);
+	$autoload_file = $class_name . '.php';
+	if ($suffix != $class_name && isset($CLASS_DIRS[$suffix]) && ($directory = $CLASS_DIRS[$suffix])) {
+		if (@include($directory . $autoload_file)) {
+			return;
+		}
+	}
+	$directory = $CLASS_DIRS['*'];
+	@include $directory . $autoload_file;
+}
+
+
+function upper_camel($underscored) {
+	$spaced = preg_replace('/[^A-Za-z0-9]+/', ' ', $underscored);
+	$cased = ucwords($spaced);
+	$camel = str_replace(' ', '', $cased);
+	return $camel ? $camel : '';
+}
+
+
+function lower_camel($underscored) {
+	$method_name = upper_camel($underscored);
+	if ($method_name) {
+		$method_name[0] = strtolower($method_name[0]);
+	}
+	return $method_name;
+}
+
+
+function separate($camel, $separator = '_') {
+	$separated = preg_replace('/([a-z])([A-Z])/', '$1' . $separator . '$2', $camel);
+	return strtolower($separated);
+}
+
+
+function error_handler($level, $message, $file, $line_number, $context) {
+	global $ERROR_CONTROLLER;
+	if (!$ERROR_CONTROLLER) {
+		$ERROR_CONTROLLER = new ErrorController();
+	}
+	$ERROR_CONTROLLER->handle($level, $message, $file, $line_number, $context);
+	return true;
+}

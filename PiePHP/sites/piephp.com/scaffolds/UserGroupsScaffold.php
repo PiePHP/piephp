@@ -2,7 +2,7 @@
 
 class UserGroupsScaffold extends Scaffold {
 
-	var $fields = array(
+	public $fields = array(
 		'name' => array(
 			'type' => 'Name',
 			'required' => true
