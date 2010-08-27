@@ -2,7 +2,7 @@
 
 class DownloadsController extends Controller {
 
-	function index() {
+	function indexAction() {
 		$data = array(
 			'title' => 'Downloads'
 		);

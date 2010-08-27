@@ -6,7 +6,7 @@
 <h2><br>Status</h2>
 <p>PiePHP is in alpha!</p>
 
-<?
+<p><?
 foreach ($posts as $post) {
 	?>
 	<?=$post['id']?>,
@@ -16,4 +16,4 @@ foreach ($posts as $post) {
 	<?=$post['modified']?>,
 	<?
 }
-?>
+?></p>

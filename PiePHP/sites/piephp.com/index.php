@@ -1,124 +1,110 @@
 <?php
 
+ob_start('ob_gzhandler');
+error_reporting(E_ALL);
+set_error_handler($ERROR_HANDLER = 'error_handler', E_ALL);
+
 $DATABASES = array(
-	'default' => array(
-		'type' => 'mysql',
-		'host' => 'localhost',
-		'username' => 'piephp',
-		'password' => '',
-		'database' => 'piephp'
-	)
+	'default' => 'mysql:host=localhost username=piephp password= database=piephp'
 );
 
 $CACHES = array(
-	'default' => array(
-		'type' => 'memcache',
-		'host' => 'localhost',
-		'port' => '11211',
-		'prefix' => 'piephp_',
-		'expire' => '60'
-	),
-	'pages' => array(
-		'type' => 'memcache',
-		'host' => 'localhost',
-		'port' => '11211',
-		'prefix' => 'piephp_pages_',
-		'expire' => '60',
-		'pattern' => '/^\/(?!(user|refresher|admin).*).*/i'
-	)
+	'default' => 'memcache:host=localhost port=11211 prefix=piephp_ expire=60',
+	'pages' => 'memcache:host=localhost port=11211 prefix=piephp_pages_ expire=60'
 );
 
-$URL_ROOT = '/';
+$PAGE_CACHE_PATTERN = '/^\/(?!(user|refresher|admin).*).*/i';
+
 $SERVER_NAME = 'pie';
+$URL_ROOT = '/';
+$PIE_ROOT = "C:/Frameworks/PiePHP/";
+$APP_ROOT = "C:/Frameworks/PiePHP/sites/piephp.com/";
 
 @include 'config_local.php';
 
-define('PIE_ROOT', 'C:/Frameworks/PiePHP/');
-define('APP_ROOT', 'C:/Frameworks/PiePHP/sites/piephp.com/');
-
 $CLASS_DIRS = array(
-	'*' => PIE_ROOT . 'libraries/',
-	'Controller' => APP_ROOT . 'controllers/',
-	'Model' => APP_ROOT . 'models/',
-	'Scaffold' => APP_ROOT . 'scaffolds/'
+	'*' => $PIE_ROOT . 'libraries/',
+	'Controller' => $APP_ROOT . 'controllers/',
+	'Model' => $APP_ROOT . 'models/',
+	'Scaffold' => $APP_ROOT . 'scaffolds/'
 );
 
-$VIEW_PARAMS = array(
-	'is_https' => $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off',
-	'is_ajax' => strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest',
-	'is_localhost' => $_SERVER['REMOTE_ADDR'] == '127.0.0.1',
-	'is_mobile' => strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false
-);
+$PAGE_PATH = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
 
-set_error_handler($ERROR_HANDLER = 'error_handler');
-
-$page_path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
-
-if (false && !count($_POST) && isset($CACHES['pages'])) {
-	if (preg_match($CACHES['pages']['pattern'], $page_path)) {
-		$page_model = new Model();
-		$page_model->cacheConfigKey = 'pages';
-		$page_model->cacheConnect();
-		$page_cache_key = $page_path . join(',', array_values($VIEW_PARAMS));
-		$contents = $page_model->cache->get($page_cache_key);
+if (!count($_POST) && isset($PAGE_CACHE_PATTERN)) {
+	if (preg_match($PAGE_CACHE_PATTERN, $PAGE_PATH)) {
+		$pageModel = new Model();
+		$pageModel->cacheConfigName = 'pages';
+		$pageModel->cacheConnect();
+		$pageCacheKey = $PAGE_PATH . ' ' . (is_ajax() ? 'a' : 0) . (is_https() ? 'h' : 0) . (is_localhost() ? 'l' : 0) . (is_mobile() ? 'm' : 0);
+		$contents = $pageModel->cache->get($pageCacheKey);
 		if ($contents) {
-			die($contents);
+			echo $contents;
+			exit;
 		}
 		else {
-			ob_start();
+			$FLUSHED_CONTENTS = '';
 		}
 	}
 }
 
-define('HTTP_ROOT', $VIEW_PARAMS['is_https'] ? 'http://' . $SERVER_NAME . $URL_ROOT : $URL_ROOT);
-define('HTTPS_ROOT', $VIEW_PARAMS['is_https'] ? $URL_ROOT : 'https://' . $SERVER_NAME . $URL_ROOT);
+$HTTP_BASE = 'http://' . $SERVER_NAME;
+$HTTPS_BASE = 'https://' . $SERVER_NAME;
+if (is_https()) {
+	$HTTP_ROOT = $HTTP_BASE . $URL_ROOT;
+	$HTTPS_ROOT = $URL_ROOT;
+}
+else {
+	$HTTP_ROOT = $URL_ROOT;
+	$HTTPS_ROOT = $HTTPS_BASE . $URL_ROOT;
+}
 
 
-$parameters = explode('/', substr($page_path, 1));
+$parameters = explode('/', substr($PAGE_PATH, 1));
 
-$controller_name = upper_camel($parameters[0]) . 'Controller';
+$controllerName = upper_camel($parameters[0]) . 'Controller';
 
-// If the URL is /hello and there's no Hello controller, then hello can be
-// treated as a Home controller method.
-//die('"' . $controller_name . '"');
-if ($controller_name == 'Controller' || !class_exists($controller_name, true)) {
-	$controller_name = 'HomeController';
+// If the URL is /hello and there's no Hello controller, then hello can be treated as a Home controller method.
+if ($controllerName == 'Controller' || !class_exists($controllerName, true)) {
+	$controllerName = 'HomeController';
 }
 else {
 	array_shift($parameters);
 }
-$controller = new $controller_name();
+$controller = new $controllerName();
 
-$method_name = $parameters ? lower_camel($parameters[0]) : '';
+$actionName = (count($parameters) ? lower_camel($parameters[0]) : '') . 'Action';
 
-// If the URL is /controller/hello and there's no hello method on the
-// controller, hello can be treated as a parameter of the default method.
-if (!$method_name || !method_exists($controller, $method_name)) {
-	$method_name = 'index';
+// If the URL is /controller/hello and there's no hello method, hello is a parameter of the index method.
+if ($actionName == 'Action') {
+	$actionName = 'indexAction';
+}
+if (!method_exists($controller, $actionName)) {
+	$actionName = 'catchAllAction';
 }
 else {
 	array_shift($parameters);
 }
 
-call_user_func_array(array(&$controller, $method_name), $parameters);
+call_user_func_array(array(&$controller, $actionName), $parameters);
 
-if (isset($page_model)) {
-	$contents = ob_get_contents();
-	$page_model->cache->set($page_cache_key, $contents, 60);
+if (isset($pageModel)) {
+	$contents = $FLUSHED_CONTENTS . ob_get_contents();
+	$pageModel->cache->set($pageCacheKey, $contents, 60);
 }
 
 
-function __autoload($class_name) {
+function __autoload($className) {
 	global $CLASS_DIRS;
-	$suffix = preg_replace('/.*([A-Z])/', '$1', $class_name);
-	$autoload_file = $class_name . '.php';
-	if ($suffix != $class_name && isset($CLASS_DIRS[$suffix]) && ($directory = $CLASS_DIRS[$suffix])) {
-		if (@include($directory . $autoload_file)) {
+	$suffix = preg_replace('/.*([A-Z])/', '$1', $className);
+	$autoloadFile = $className . '.php';
+	if ($suffix != $className && isset($CLASS_DIRS[$suffix]) && ($directory = $CLASS_DIRS[$suffix])) {
+		if (@include($directory . $autoloadFile)) {
 			return;
 		}
 	}
 	$directory = $CLASS_DIRS['*'];
-	@include $directory . $autoload_file;
+	@include $directory . $autoloadFile;
 }
 
 
@@ -131,28 +117,61 @@ function upper_camel($underscored) {
 
 
 function lower_camel($underscored) {
-	$method_name = upper_camel($underscored);
-	if ($method_name) {
-		$method_name[0] = strtolower($method_name[0]);
+	$actionName = upper_camel($underscored);
+	if ($actionName) {
+		$actionName[0] = strtolower($actionName[0]);
 	}
-	return $method_name;
+	return $actionName;
 }
 
 
 function separate($camel, $separator = '_') {
+	$camel = preg_replace('/[^a-zA-Z0-9]+/', $separator, $camel);
 	$separated = preg_replace('/([a-z])([A-Z])/', '$1' . $separator . '$2', $camel);
 	return strtolower($separated);
 }
 
 
-function error_handler($level, $message, $file, $line_number, $context) {
-	if ($level == 2 && isset($context['autoload_file'])) {
-		return true;
+function error_handler($level, $message, $file, $lineNumber, $context) {
+	// Ignore certain warnings.
+	if ($level == 2) {
+		// We failed to find a class file, but we might have just been checking if a class exists.
+		if (isset($context['autoloadFile'])) {
+			return;
+		}
 	}
-	global $ERROR_CONTROLLER;
-	if (!$ERROR_CONTROLLER) {
-		$ERROR_CONTROLLER = new ErrorController();
+	global $ERRORS_CONTROLLER;
+	if (!$ERRORS_CONTROLLER) {
+		$ERRORS_CONTROLLER = new ErrorsController();
 	}
-	$ERROR_CONTROLLER->handle($level, $message, $file, $line_number, $context);
+	$ERRORS_CONTROLLER->handleError($level, $message, $file, $lineNumber, $context);
 	return true;
 }
+
+function is_ajax() {
+	return isset($_REQUEST['is_ajax']) || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+}
+
+function is_https() {
+	return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
+}
+
+function is_localhost() {
+	return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
+}
+
+function is_mobile() {
+	strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
+}
+
+function p($var) {
+	echo '<pre>';
+	print_r($var);
+	echo '</pre>';
+}
+
+function d($var) {
+	p($var);
+	exit;
+}
+

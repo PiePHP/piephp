@@ -2,26 +2,24 @@
 
 class AdminController extends Controller {
 
-	function index($section = '', $action = '', $id = 0) {
-		if ($section) {
-			$section_camel = upper_camel($section);
-			$scaffold_name = $section_camel . 'Scaffold';
-			if (class_exists($scaffold_name, true)) {
-				$scaffold = new $scaffold_name($section_camel, $action, $id);
-				$data = array(
-					'title' => $scaffold->getTitle(),
-					'section' => $section,
-					'scaffold' => $scaffold
-				);
-				if ($action == 'add' || $action == 'change') {
-					return $this->renderView('admin/form', $data);
-				}
-				else {
-					return $this->renderView('admin/list', $data);
-				}
-			}
+	function indexAction($section = '', $action = '', $id = 0) {
+		$data = array('title' => 'Admin');
+		$this->renderView('admin/admin', $data);
+	}
+
+	function catchAllAction($section = '', $action = '', $id = 0) {
+		$sectionCamel = upper_camel($section);
+		$scaffoldName = $sectionCamel . 'Scaffold';
+		if (class_exists($scaffoldName, true)) {
+			$scaffold = new $scaffoldName($sectionCamel, $action, $id);
+			$data = array(
+				'title' => $scaffold->getTitle(),
+				'section' => $section,
+				'scaffold' => $scaffold
+			);
+			$scaffold->processPost();
+			return $this->renderView('admin/' . $scaffold->action, $data);
 		}
-		$this->renderView('admin/admin');
 	}
 
 }

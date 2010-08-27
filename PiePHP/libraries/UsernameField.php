@@ -2,8 +2,10 @@
 
 class UsernameField extends Field {
 
-	public $length = 32;
+	public $maxlength = 32;
 
-	public $type = 'username';
+	function getDefaultAdvice() {
+		return parent::getDefaultAdvice() . '<br>It can only have letters, numbers and ".", "-" or "_".';
+	}
 
 }

@@ -2,7 +2,7 @@
 
 class PhpinfoController extends Controller {
 
-	function index() {
+	function indexAction() {
 		phpinfo();
 	}
 }

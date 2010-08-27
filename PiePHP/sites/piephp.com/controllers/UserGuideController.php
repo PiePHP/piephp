@@ -2,7 +2,7 @@
 
 class UserGuideController extends Controller {
 
-	function index() {
+	function indexAction() {
 		$this->renderView('user_guide/user_guide');
 	}
 }

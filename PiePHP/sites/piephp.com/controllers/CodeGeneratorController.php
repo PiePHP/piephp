@@ -2,7 +2,10 @@
 
 class CodeGeneratorController extends Controller {
 
-	function index() {
-		$this->renderView('code_generator/code_generator');
+	function indexAction() {
+		$data = array(
+			'title' => 'Code generator';
+		);
+		$this->renderView('code_generator/code_generator', $data);
 	}
 }

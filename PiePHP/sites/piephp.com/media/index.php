@@ -1,4 +1,4 @@
-<?
+<?php
 $urls = array(
 	'google' => 'http://www.google.com/',
 	'facebook' => 'http://www.facebook.com/',
@@ -18,22 +18,22 @@ $urls = array(
 	<title>Where have you been?</title>
 </head>
 <style>
-<?
+<?php
 reset($urls);
 while (list($id, $url) = each($urls)) {
 	?>
-	#<?=$id?>:visited{background-image:url(bg.php?id=<?=$id?>)}
-	<?
+	<?php echo '#' . $id; ?>:visited{background-image:url(bg.php?id=<?php $id; ?>)}
+	<?php
 }
 ?>
 </style>
 <body>
-<?
+<?php
 reset($urls);
 while (list($id, $url) = each($urls)) {
 	?>
-	<a href="<?=$url?>" id="<?=$id?>"><?=$id?></a>
-	<?
+	<a href="<?php $url; ?>" id="<?php $id; ?>"><?php $id; ?></a>
+	<?php
 }
 ?>
 </body>

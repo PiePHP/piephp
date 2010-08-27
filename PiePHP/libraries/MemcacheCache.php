@@ -11,9 +11,9 @@ class MemcacheCache {
 	/**
 	 * Point to the default cache and/or cache configuration.
 	 */
-	function __construct($config, $configKey = 'default') {
+	function __construct($config, $configName = 'default') {
 		$this->connection = memcache_pconnect($config['host'], $config['port'])
-			or $this->error('Could not connect to ' . $configKey . ' cache.');
+			or $this->triggerError('Could not connect to ' . $configName . ' cache.');
 		if (isset($config['prefix'])) {
 			$this->prefix = $config['prefix'];
 		}
@@ -25,28 +25,23 @@ class MemcacheCache {
 	/**
 	 * Show or log an error.
 	 */
-	function error($message) {
-		if (ini_get('display_errors')) {
-			die($message);
-		}
-		else {
-			error_log($sql) and die();
-		}
+	function triggerError($message) {
+		trigger_error($message, E_USER_ERROR);
 	}
 
 	/**
 	 * Get a value from Memcache by its key.
 	 */
-	function get($cache_key) {
-		$value = $this->connection->get($this->prefix . $cache_key);
+	function get($cacheKey) {
+		$value = $this->connection->get($this->prefix . $cacheKey);
 		return $value;
 	}
 
 	/**
 	 * Store a value in Memcache.
 	 */
-	function set($cache_key, $value, $expire = NULL) {
-		$this->connection->set($this->prefix . $cache_key, $value, 0, $expire === NULL ? $this->expire : $expire);
+	function set($cacheKey, $value, $expire = NULL) {
+		$this->connection->set($this->prefix . $cacheKey, $value, 0, $expire === NULL ? $this->expire : $expire);
 	}
 
 }

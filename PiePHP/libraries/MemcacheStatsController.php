@@ -2,13 +2,12 @@
 
 class MemcacheStatsController extends Controller {
 
-	function index()
-	{
-		$page_model = new Model();
-		$page_model->cacheConfigKey = 'default';
-		$page_model->cacheConnect();
+	function indexAction() {
+		$pageModel = new Model();
+		$pageModel->cacheConfigName = 'default';
+		$pageModel->cacheConnect();
 		echo '<pre>';
-		print_r($page_model->cache->connection->getStats());
+		print_r($pageModel->cache->connection->getStats());
 		echo '</pre>';
 	}
 }

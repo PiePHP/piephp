@@ -4,16 +4,16 @@ class Database {
 
 	public $connection;
 
+	public $insertId;
+
 	/**
 	 * Show or log an error.
 	 */
-	function error($message) {
-		if (ini_get('display_errors')) {
-			die($message);
+	function triggerError($message, $sql = '') {
+		if ($sql) {
+			$message .= '<br><kbd>' . $sql . '</kbd>';
 		}
-		else {
-			error_log($sql) and die();
-		}
+		trigger_error($message, E_USER_ERROR);
 	}
 
 }

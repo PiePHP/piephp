@@ -4,7 +4,17 @@ class Controller {
 
 	public $defaultTemplateName = 'base';
 
-	function renderView($view_name, $data = array(), $template_name = false) {
+	public $model;
+
+	public $defaultModelClassName = 'Model';
+
+	function catchAllAction() {
+		$errorsController = new ErrorsController();
+		$errorsController->processError(404);
+	}
+
+	function renderView($viewName, $data = array(), $templateName = false) {
+		global $APP_ROOT, $HTTP_ROOT, $HTTPS_ROOT;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {
@@ -14,36 +24,51 @@ class Controller {
 			}
 		}
 
-		// Put the default view parameters into the scope of the template and view.
-		global $VIEW_PARAMS;
-		if (is_array($VIEW_PARAMS)) {
-			reset($VIEW_PARAMS);
-			while (list($key, $value) = each($VIEW_PARAMS)) {
-				$$key = $value;
-			}
-		}
-
 		// Pass the view path in so that it can be used by a template if necessary.
-		$view_path = APP_ROOT . 'views/' . $view_name . '_view.php';
+		$viewPath = $APP_ROOT . 'views/' . $viewName . '_view.php';
 
 		// If no template name was passed in, use the controller's default.
-		if ($template_name === false) {
-			$template_name = $this->defaultTemplateName;
+		if ($templateName === false) {
+			$templateName = $this->defaultTemplateName;
 		}
 
 		// If there's a template, include it and let it include the view, otherwise, just include the view.
-		if ($template_name) {
-			include APP_ROOT . 'templates/' . $template_name . '_template.php';
+		if ($templateName) {
+			include $APP_ROOT . 'templates/' . $templateName . '_template.php';
 		}
 		else {
-			include $view_path;
+			include $viewPath;
 		}
 
 	}
 
-	function loadModel($property_name = 'model') {
-		$class_name = ucfirst($property_name);
-		$this->$property_name = new $class_name();
+	function loadModel($propertyName = NULL, $className = NULL) {
+		if ($propertyName) {
+			$className = ucfirst($propertyName);
+		}
+		else {
+			$propertyName = 'model';
+			$className = $this->defaultModelClassName;
+		}
+		if (!isset($this->$propertyName)) {
+			$className = ucfirst($propertyName);
+			$this->$propertyName = new $className();
+		}
+	}
+
+	function sendRedirect($url, $moved = false) {
+		header($moved ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
+		header('Location: ' . $url);
+		exit;
+	}
+
+	function renderRefresher() {
+		global $HTTP_ROOT;
+		if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || substr($_SERVER['REMOTE_ADDR'], 0, 7) == '192.168') {
+			?>
+			<iframe src="<?php echo $HTTP_ROOT; ?>refresher" style="display:none"></iframe>
+			<?php
+		}
 	}
 
 }
