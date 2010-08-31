@@ -98,9 +98,9 @@ if (!window.log) (function(window) {
 		var currentLoad = ++loadCount;
 		var isHome = noIndex(path) == '/';
 		if ($.support.opacity && loadedInitialPath) {
-			$('#logo').stop().animate({width: isHome ? 234 : 117, height: isHome ? 60 : 30, top: isHome ? 12 : 6});
-			$('#head ul').stop().animate({top: isHome ? 56 : 16});
-			$('#head').stop().animate({height: isHome ? 79 : 39});
+			$('#logo').stop().animate({width: isHome ? 234 : 117, height: isHome ? 60 : 40, top: isHome ? 12 : 11});
+			$('#head ul').stop().animate({top: isHome ? 56 : 26});
+			$('#head').stop().animate({height: isHome ? 79 : 49});
 		}
 
 		if (!isForm) {
@@ -265,6 +265,31 @@ if (!window.log) (function(window) {
 		}
 	};
 
+	var showVeil = window.showVeil = function(href) {
+		$('#veil')
+			.css({opacity: 0})
+			.show()
+			.animate({opacity: 1})
+			.html('<div class="veil"/><div id="dialog"/>')
+			.find('.veil')
+				.css({opacity: 0.8});
+		$.get(href, {is_ajax: 1}, function(html) {
+			var dialogQuery = $('#dialog').html(html).css({opacity: 1});
+			dialogQuery
+				.css({marginLeft: -dialogQuery.width() / 2})
+				.find('br:last').remove();
+			$('#veil')
+				.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
+			focusFirst(dialogQuery);
+		});
+	};
+
+	var hideVeil = window.hideVeil = function() {
+		$('#veil').animate({opacity: 0}, function() {
+			$(this).html('').hide();
+		});
+	};
+
 	wire(function() {
 		$('form').not('.hasValidation')
 			.addClass('hasValidation')
@@ -292,22 +317,34 @@ if (!window.log) (function(window) {
 			.delegate('fieldset>div', 'click blur mouseup keyup change', validateFieldDiv);
 	});
 
+	var focusFirst = function(selector) {
+		var focusableQuery = $(selector).find(focusableSelector);
+		if (!focusableQuery.filter('.focused').size()) {
+			focusableQuery.eq(0).focus();
+		}
+	};
+
 	$(document)
 		.delegate('a', 'click', function() {
 			var link = this;
 			var href = link.href;
-			if (href.charAt(0) == '/') {
-				href = base + href;
-			}
-			if (href.substring(0, base.length) == base) {
-				loadUrl(href);
-				$(link).blur();
+			if ($(this).hasClass('veil')) {
+				showVeil(href);
 				return false;
+			}
+			else {
+				if (href.charAt(0) == '/') {
+					href = base + href;
+				}
+				if (href.substring(0, base.length) == base) {
+					loadUrl(href);
+					$(link).blur();
+					return false;
+				}
 			}
 		})
 		.delegate('form', 'submit', function(event) {
 			// Mimic AJAX posting by submitting the form through the "submitter" iframe
-			log('submitting');
 			if ($('#submitter').size()) {
 				var form = this;
 				var action = form.action;
@@ -341,10 +378,7 @@ if (!window.log) (function(window) {
 			$(this).removeClass('on');
 		})
 		.delegate('fieldset>div', 'click', function(event) {
-			var focusableQuery = $(this).find(focusableSelector);
-			if (!focusableQuery.filter('.focused').size()) {
-				focusableQuery.eq(0).focus();
-			}
+			focusFirst(this);
 		})
 		.delegate('.hint', 'focus', function() {
 			$(this).removeClass('hint').addClass('hinted').val('');
@@ -359,6 +393,11 @@ if (!window.log) (function(window) {
 		})
 		.delegate('.password.new', 'focus keypress keyup mouseup', function() {
 			
+		})
+		.keydown(function(event) {
+			if (event.keyCode == 27) {
+				hideVeil();
+			}
 		});
 
 	$().ajaxError(function(event, request, options, error) {
@@ -373,8 +412,11 @@ if (!window.log) (function(window) {
 			.appendTo('body')
 			.load(function() {
 				var doc = this.contentWindow.document;
-				var path = getPath(doc.location.href).replace(/[\?&]is_ajax=[01]/, '');
-				loadContent(path, doc.body.innerHTML);
+				var href = doc.location.href;
+				if (href != 'about:blank') {
+					var path = getPath(href).replace(/[\?&]is_ajax=[01]/, '');
+					loadContent(path, doc.body.innerHTML);
+				}
 			});
 		checkUrl();
 		var headSectionQuery = $('#head .section');

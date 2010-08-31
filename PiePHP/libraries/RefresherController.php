@@ -15,14 +15,14 @@ class RefresherController extends Controller {
 			$stat = fstat($handle);
 			$new = $stat['mtime'];
 			if ($new > $old) {
-				$this->refresh('parent');
+				$this->renderRefreshScript('parent');
 			}
 		}
 
-		$this->refresh('window');
+		$this->renderRefreshScript('window');
 	}
 
-	function refreshAction($scope) {
+	function renderRefreshScript($scope) {
 		?>
 		<html>
 		<head><title>Refresher</title></head>

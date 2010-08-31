@@ -31,7 +31,7 @@ $CLASS_DIRS = array(
 
 $PAGE_PATH = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
 
-if (!count($_POST) && isset($PAGE_CACHE_PATTERN)) {
+if (false && !count($_POST) && isset($PAGE_CACHE_PATTERN)) {
 	if (preg_match($PAGE_CACHE_PATTERN, $PAGE_PATH)) {
 		$pageModel = new Model();
 		$pageModel->cacheConfigName = 'pages';
@@ -42,14 +42,11 @@ if (!count($_POST) && isset($PAGE_CACHE_PATTERN)) {
 			echo $contents;
 			exit;
 		}
-		else {
-			$FLUSHED_CONTENTS = '';
-		}
 	}
 }
 
 $HTTP_BASE = 'http://' . $SERVER_NAME;
-$HTTPS_BASE = 'https://' . $SERVER_NAME;
+$HTTPS_BASE = 'http://' . $SERVER_NAME;
 if (is_https()) {
 	$HTTP_ROOT = $HTTP_BASE . $URL_ROOT;
 	$HTTPS_ROOT = $URL_ROOT;
@@ -89,10 +86,11 @@ else {
 call_user_func_array(array(&$controller, $actionName), $parameters);
 
 if (isset($pageModel)) {
-	$contents = $FLUSHED_CONTENTS . ob_get_contents();
-	$pageModel->cache->set($pageCacheKey, $contents, 60);
+	$contents = ob_get_contents();
+	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
+	$contents = preg_replace('/\\s+/ms', ' ', $contents);
+	$pageModel->cache->set($pageCacheKey, $contents, isset($PAGE_CACHE_TIME) ? $PAGE_CACHE_TIME : 60);
 }
-
 
 function __autoload($className) {
 	global $CLASS_DIRS;

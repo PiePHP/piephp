@@ -1,5 +1,7 @@
 <h1>PiePHP is the simplest Web Application Framework on the planet</h1>
 
+<p><?=hexdec(dechex(time()))?></p>
+
 <h2><br>Why use PiePHP?</h2>
 <p>You won't find a faster framework anywhere.</p>
 

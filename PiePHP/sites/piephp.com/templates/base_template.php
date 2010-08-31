@@ -1,6 +1,6 @@
 <?php
 if (is_ajax()) {
-?><var>PiePHP - <?php echo $title; ?></var><?php
+?><var title="title">PiePHP - <?php echo $title; ?></var><?php
 }
 else {
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
@@ -21,9 +21,10 @@ else {
 	?>
 	<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="/media/base.js"></script>
-	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="shortcut icon" href="/favicon.ico">
 </head>
-<body id="<?php echo is_mobile() ? 'mobile' : ($viewName == 'home' ? 'home' : ''); ?>" class="">
+<body id="<?php echo is_mobile() ? 'mobile' : ($viewName == 'home' ? 'home' : ''); ?>">
+	<form id="veil"></form>
 	<div id="head">
 		<div class="section">
 			<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
@@ -38,6 +39,7 @@ else {
 				else {
 					?>
 					<li><a href="<?php echo $HTTP_ROOT; ?>admin/users/">Users</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>sign_in/" class="veil">Sign In</a></li>
 					<li><a href="<?php echo $HTTP_ROOT; ?>">Home</a></li>
 					<li><a href="<?php echo $HTTP_ROOT; ?>downloads/">Downloads</a></li>
 					<li><a href="<?php echo $HTTP_ROOT; ?>tutorials/">Tutorials</a></li>
@@ -54,11 +56,6 @@ else {
 		<div class="section">
 			<?php
 			}
-
-			// Flush the head so the browser can start downloading CSS and such.
-			$GLOBALS['FLUSHED_CONTENTS'] = ob_get_contents();
-			ob_flush();
-
 			include $viewPath;
 			?>
 			<br id="bodyEnd">
