@@ -37,9 +37,9 @@ class MultiField extends Field {
 		}
 	}
 
-	function setColumnValue(&$columnValues) {
+	function setColumnValueOnScaffold() {
 		foreach ($this->fields as $field) {
-			$field->setColumnValue($columnValues);
+			$field->setColumnValueOnScaffold();
 		}
 	}
 

@@ -17,6 +17,10 @@ else {
 	<label>Password</label><input type="password" name="password" class="required password" value="">
 	<div class="advice">Please enter your password</div>
 </div>
+<div>
+	<label></label>
+	<label class="for"><input type="checkbox" name="keepSignedIn">Keep me signed in</label>
+</div>
 <div class="actions">
 	<div>
 		<button type="submit" class="main"><b>Sign In</b></button>

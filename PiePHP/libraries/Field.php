@@ -4,6 +4,8 @@ class Field {
 
 	public $name = '';
 
+	public $column = '';
+
 	public $type = 'Field';
 
 	public $required = false;
@@ -26,7 +28,9 @@ class Field {
 		foreach ($settings as $settingName => $value) {
 			$this->$settingName = $value;
 		}
-		$this->column = separate($this->name, '_');
+		if (!$this->column) {
+			$this->column = separate($this->name, '_');
+		}
 		$this->scaffold = $scaffold;
 	}
 
@@ -49,7 +53,7 @@ class Field {
 			echo ' maxlength="' . $this->maxlength . '"';
 		}
 		$this->renderInputClass();
-		echo ' value="' . htmlentities($this->getValue()) . '"';
+		echo ' value="' . htmlentities($this->type == 'password' ? '' : $this->getValue()) . '"';
 		if ($this->hint) {
 			echo ' title="' . htmlentities($this->hint) . '"';
 		}
@@ -66,8 +70,8 @@ class Field {
 		return '';
 	}
 
-	function setColumnValue(&$columnValues) {
-		$columnValues[$this->column] = $this->getValue();
+	function setColumnValueOnScaffold() {
+		$this->scaffold->columnValues[$this->column] = $this->getValue();
 	}
 
 	function renderInputClass() {

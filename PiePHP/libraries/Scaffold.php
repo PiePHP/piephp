@@ -61,6 +61,11 @@ class Scaffold extends Controller {
 	/**
 	 *
 	 */
+	public $columnValues;
+
+	/**
+	 *
+	 */
 	public $hasValidationErrors = false;
 
 	function __construct($name, $action = 'list', $id = 0) {
@@ -150,11 +155,11 @@ class Scaffold extends Controller {
 	}
 
 	function getPostedColumnValues() {
-		$columnValues = array();
+		$this->columnValues = array();
 		foreach ($this->fields as $field) {
-			$field->setColumnValue($columnValues);
+			$field->setColumnValueOnScaffold();
 		}
-		return $columnValues;
+		return $this->columnValues;
 	}
 
 	function getRedirectUrl() {

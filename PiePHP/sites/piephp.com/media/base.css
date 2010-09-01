@@ -65,9 +65,9 @@ fieldset h2 {
 }
 
 fieldset div {
-	clear: all;
+	clear: both;
 	position: relative;
-	padding: 4px;
+	padding: 6px;
 }
 
 fieldset div:hover {
@@ -93,6 +93,18 @@ fieldset label {
 	text-align: right;
 	padding: 5px;
 	color: #666;
+}
+
+fieldset label.for {
+	float: none;
+	width: auto;
+	text-align: left;
+	padding: 0 0 0 4px;
+	color: #000;
+}
+
+label.for input {
+	margin: 0 6px 0 0;
 }
 
 input,
@@ -527,4 +539,8 @@ div.section {
 	margin: 0;
 }
 
-
+#dialog .loading {
+	padding: 16px 20px 16px 40px;
+	background: url(loading.gif) no-repeat 20px 16px;
+	font-weight: bold;
+}

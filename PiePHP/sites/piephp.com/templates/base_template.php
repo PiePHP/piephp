@@ -19,8 +19,6 @@ else {
 		<?php
 	}
 	?>
-	<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="/media/base.js"></script>
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body id="<?php echo is_mobile() ? 'mobile' : ($viewName == 'home' ? 'home' : ''); ?>">
@@ -93,6 +91,8 @@ else {
 	</div>
 	<?php $this->renderRefresher() ?>
 </body>
+<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="/media/base.js"></script>
 </html>
 <?php
 }

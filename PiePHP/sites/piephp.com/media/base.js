@@ -123,6 +123,7 @@ if (!window.log) (function(window) {
 	};
 
 	var loadContent = function(path, html, isHome) {
+		hideVeil();
 		window.scrollTo(0, 0);
 		var bodySectionQuery = $('#body .section');
 		currentPath = path;
@@ -202,7 +203,7 @@ if (!window.log) (function(window) {
 		minlength: function(v, d) { return v.length >= d; },
 		maxlength: function(v, d) { return v.length <= d; },
 		test: function(v, d) { return d.test(v); },
-		username: {test: /^[a-zA-Z0-9_\.]+$/},
+		username: {test: /^[a-zA-Z0-9_\.-]+$/},
 		password: {minlength: 4},
 		newPassword: {isNotEmpty: 'password2'},
 		passwordConfirm: {isNotEmpty: 'password1', same: 'password1'},
@@ -267,26 +268,31 @@ if (!window.log) (function(window) {
 
 	var showVeil = window.showVeil = function(href) {
 		$('#veil')
-			.css({opacity: 0})
-			.show()
-			.animate({opacity: 1})
+			.fadeIn()
 			.html('<div class="veil"/><div id="dialog"/>')
 			.find('.veil')
 				.css({opacity: 0.8});
-		$.get(href, {is_ajax: 1}, function(html) {
-			var dialogQuery = $('#dialog').html(html).css({opacity: 1});
-			dialogQuery
-				.css({marginLeft: -dialogQuery.width() / 2})
-				.find('br:last').remove();
-			$('#veil')
-				.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
-			focusFirst(dialogQuery);
-		});
+		veilLoading();
+		$.get(href, {is_ajax: 1}, loadVeil);
+	};
+
+	var loadVeil = window.loadVeil = function(html) {
+		var dialogQuery = $('#dialog').html(html).css({opacity: 1});
+		dialogQuery
+			.css({marginLeft: -dialogQuery.width() / 2})
+			.find('br:last').remove();
+		$('#veil')
+			.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
+		focusFirst(dialogQuery);
+	};
+	
+	var veilLoading = function() {
+		loadVeil('<div class="loading">Loading</div>');
 	};
 
 	var hideVeil = window.hideVeil = function() {
-		$('#veil').animate({opacity: 0}, function() {
-			$(this).html('').hide();
+		$('#veil').fadeOut(function() {
+			$(this).empty();
 		});
 	};
 
@@ -307,6 +313,9 @@ if (!window.log) (function(window) {
 					var isValid = this.validate();
 					if (!isValid) {
 						event.stopImmediatePropagation();
+					}
+					else if (this.id == 'veil') {
+						setTimeout(veilLoading, 1);
 					}
 					return isValid;
 				}
@@ -345,6 +354,7 @@ if (!window.log) (function(window) {
 		})
 		.delegate('form', 'submit', function(event) {
 			// Mimic AJAX posting by submitting the form through the "submitter" iframe
+			//alert('submit');
 			if ($('#submitter').size()) {
 				var form = this;
 				var action = form.action;
@@ -355,7 +365,6 @@ if (!window.log) (function(window) {
 					var target = form.target;
 					form.target = 'submitter';
 					form.action += (action.has('?') ? '&' : '?') + 'is_ajax=1';
-					log('target', form.target);
 					setTimeout(function() {
 						form.action = action;
 						form.target = target;
@@ -407,34 +416,32 @@ if (!window.log) (function(window) {
 		log('error', error);
 	});
 
-	$(function() {
-		$('<iframe name="submitter" id="submitter" style="display:none"/>')
-			.appendTo('body')
-			.load(function() {
-				var doc = this.contentWindow.document;
-				var href = doc.location.href;
-				if (href != 'about:blank') {
-					var path = getPath(href).replace(/[\?&]is_ajax=[01]/, '');
-					loadContent(path, doc.body.innerHTML);
-				}
-			});
-		checkUrl();
-		var headSectionQuery = $('#head .section');
-		var navQuery = headSectionQuery.find('ul');
-		navQuery.clone().addClass('hover').appendTo(headSectionQuery).find('li').css({opacity: 0});
-		navQuery.clone().addClass('on').appendTo(headSectionQuery).find('li').css({opacity: 0});
-		var animateHover = function(event) {
-			var isEnter = event.type.has('over');
-			headSectionQuery.find('ul.hover li').eq($(this).index())
-				.stop()
-				.animate({opacity: isEnter ? 1 : 0}, isEnter ? 'fast' : 'slow');
-		};
-		headSectionQuery
-			.delegate('li', 'mouseenter', animateHover)
-			.delegate('li', 'mouseleave', animateHover);
-		loadedInitialPath = 1;
-		lightTab();
-		wire(document);
-	});
+	$('<iframe name="submitter" id="submitter" style="display:none"/>')
+		.appendTo('body')
+		.load(function() {
+			var doc = this.contentWindow.document;
+			var href = doc.location.href;
+			if (href != 'about:blank') {
+				var path = getPath(href).replace(/[\?&]is_ajax=[01]/, '');
+				loadContent(path, doc.body.innerHTML);
+			}
+		});
+	checkUrl();
+	var headSectionQuery = $('#head .section');
+	var navQuery = headSectionQuery.find('ul');
+	navQuery.clone().addClass('hover').appendTo(headSectionQuery).find('li').css({opacity: 0});
+	navQuery.clone().addClass('on').appendTo(headSectionQuery).find('li').css({opacity: 0});
+	var animateHover = function(event) {
+		var isEnter = event.type.has('over');
+		headSectionQuery.find('ul.hover li').eq($(this).index())
+			.stop()
+			.animate({opacity: isEnter ? 1 : 0}, isEnter ? 'fast' : 'slow');
+	};
+	headSectionQuery
+		.delegate('li', 'mouseenter', animateHover)
+		.delegate('li', 'mouseleave', animateHover);
+	loadedInitialPath = 1;
+	lightTab();
+	wire(document);
 
 })(window);

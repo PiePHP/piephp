@@ -48,9 +48,14 @@ class PasswordField extends MultiField {
 
 	}
 
-	function setColumnValue(&$columnValues) {
-		if ($this->newPassword->getValue()) {
-			$columnValues[$this->column] = $this->newPassword->getValue();
+	function hash($password) {
+		return md5($password . $this->scaffold->id);
+	}
+
+	function setColumnValueOnScaffold() {
+		$value = $this->newPassword->getValue();
+		if ($value) {
+			$this->scaffold->columnValues[$this->column] = $this->hash($value);
 		}
 	}
 
@@ -60,28 +65,25 @@ class PasswordField extends MultiField {
 
 		// If we're changing a password and we're not an administrator, the current password is required.
 		if ($this->scaffold->action == 'change') {
-			$hash = md5($this->currentPassword->getValue() . $this->scaffold->id);
+			$hash = $this->hash($this->currentPassword->getValue());
 			$sql = '
-				SELECT ' . $this->currentPassword->name . '
+				SELECT ' . $this->column . '
 				FROM ' . $this->scaffold->table . '
 				WHERE id = ' . $this->scaffold->id;
 			$result = $this->scaffold->model->result($sql);
-			if ($hash != $result[$this->currentPassword->name]) {
+			/*if ($hash != $result[$this->column]) {
 				$isValid = false;
-			}
+				$this->currentPassword->hasValidationErrors = true;
+				$this->currentPassword->advice = 'The password was incorrect.';
+			}*/
 		}
 		return $isValid;
 	}
 
 	function processAfterScaffold() {
-		if ($this->currentPassword->getValue()) {
-			$hash = md5($this->currentPassword->getValue() . $this->scaffold->id);
-			$sql = '
-				UPDATE ' . $this->scaffold->table . '
-				SET ' . $this->currentPassword->column . " = '$hash'" . '
-				WHERE id = ' . $this->scaffold->id;
-			$this->scaffold->model->execute($sql);
-		}
+		$this->scaffold->columnValues = array();
+		$this->setColumnValueOnScaffold();
+		$this->model->update($this->table, $this->scaffold->columnValues);
 	}
 
 }
