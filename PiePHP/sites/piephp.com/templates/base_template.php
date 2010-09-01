@@ -93,6 +93,8 @@ else {
 </body>
 <script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
 <script type="text/javascript" src="/media/base.js"></script>
+<script type="text/javascript" src="/media/uservoice.js"></script>
+<script type="text/javascript" src="/media/google_analytics.js"></script>
 </html>
 <?php
 }

@@ -341,6 +341,9 @@ if (!window.log) (function(window) {
 				showVeil(href);
 				return false;
 			}
+			else if (this.id.has('uservoice')) {
+				return true;
+			}
 			else {
 				if (href.charAt(0) == '/') {
 					href = base + href;
@@ -443,5 +446,12 @@ if (!window.log) (function(window) {
 	loadedInitialPath = 1;
 	lightTab();
 	wire(document);
+
+  var appendScript = window.appendScript = function(src) {
+    var scriptQuery = $('<' + 'script type="text/javascript" src="' + src + '"/>');
+    scriptQuery[0].async = true;
+    $('head').append(scriptQuery);
+  };
+
 
 })(window);
