@@ -1,6 +1,8 @@
 <?php
 
 class MemcacheStatsController extends Controller {
+	
+	public $isCacheable = false;
 
 	function indexAction() {
 		$pageModel = new Model();

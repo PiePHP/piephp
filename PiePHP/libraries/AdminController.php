@@ -1,6 +1,8 @@
 <?php
 
 class AdminController extends Controller {
+	
+	public $isCacheable = false;
 
 	function indexAction($section = '', $action = '', $id = 0) {
 		$data = array('title' => 'Admin');

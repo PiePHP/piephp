@@ -5,6 +5,8 @@ class ErrorsController extends Controller {
 	public $errorCount = 0;
 
 	public $uniqueErrors = array();
+	
+	public $isCacheable = false;
 
 	function indexAction($errorCode = '500') {
 		$this->renderError($errorCode);
@@ -26,7 +28,7 @@ class ErrorsController extends Controller {
 	}
 
 	function renderSourceCode($file, $lineNumber, $className = '') {
-		$source = show_source($file, true);
+		$source = highlight_file($file, true);
 		preg_match('/<span([^>]+)>/', $source, $match);
 		$span = $match[0];
 		$source = trim(preg_replace('/(^<code>\\s*<span[^>]*>|<\/span>\\s*<\/code>$)/', '', $source));
@@ -197,7 +199,7 @@ class ErrorsController extends Controller {
 			if (strlen($converted) > strlen($code)) {
 				$code = $converted;
 			}
-	    }
+		}
 		$code = str_replace('  ' . '  ', '	', $code);
 		file_put_contents(str_replace('.php', '.backup.php', $file), file_get_contents($file));
 		file_put_contents($file, $code);

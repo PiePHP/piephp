@@ -1,12 +1,2 @@
 <h1>Forums</h1>
-<?
-
-$i = 1 / 0;
-
-while (list(, $row) = each($forums)) {
-	?>
-	<p><?=$row['id']?>: <?=$row['name']?></p>
-	<?
-}
-
-?>
+<p>Forums are a great way to ask questions and exchange information about a framework.  For now, please use <a href="http://piephp.uservoice.com/" id="uservoice" target="_blank">our feedback forum on UserVoice</a>.</p>

@@ -229,8 +229,9 @@ form.code textarea.submitting {
 
 form.code textarea,
 code,
-pre {
-	font: normal 12px monospace;
+pre,
+textarea.code {
+	font: normal 12px monospace, Courier new;
 }
 
 form.code blockquote {
@@ -523,7 +524,7 @@ div.section {
 	z-index: 10;
 	width: 100%;
 	height: 100%;
-	background: #000;
+	background: #fff;
 }
 
 #dialog {

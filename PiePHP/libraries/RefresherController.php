@@ -1,6 +1,8 @@
 <?php
 
 class RefresherController extends Controller {
+	
+	public $isCacheable = false;
 
 	function indexAction() {
 		$file = $GLOBALS['REFRESHER_FILE'];
@@ -15,6 +17,9 @@ class RefresherController extends Controller {
 			$stat = fstat($handle);
 			$new = $stat['mtime'];
 			if ($new > $old) {
+				$this->loadModel();
+				$this->model->cacheConnect();
+				$this->model->cache->flush();
 				$this->renderRefreshScript('parent');
 			}
 		}

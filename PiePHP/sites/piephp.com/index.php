@@ -9,11 +9,9 @@ $DATABASES = array(
 );
 
 $CACHES = array(
-	'default' => 'memcache:host=localhost port=11211 prefix=piephp_ expire=60',
-	'pages' => 'memcache:host=localhost port=11211 prefix=piephp_pages_ expire=60'
+	'default' => 'memcache:host=localhost port=11211 prefix=piephp_ expire=600',
+	'pages' => 'memcache:host=localhost port=11211 prefix=piephp_pages_ expire=600'
 );
-
-$PAGE_CACHE_PATTERN = '/^\/(?!(user|refresher|admin).*).*/i';
 
 $SERVER_NAME = 'pie';
 $URL_ROOT = '/';
@@ -31,17 +29,15 @@ $CLASS_DIRS = array(
 
 $PAGE_PATH = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
 
-if (false && !count($_POST) && isset($PAGE_CACHE_PATTERN)) {
-	if (preg_match($PAGE_CACHE_PATTERN, $PAGE_PATH)) {
-		$pageModel = new Model();
-		$pageModel->cacheConfigName = 'pages';
-		$pageModel->cacheConnect();
-		$pageCacheKey = $PAGE_PATH . ' ' . (is_ajax() ? 'a' : 0) . (is_https() ? 'h' : 0) . (is_localhost() ? 'l' : 0) . (is_mobile() ? 'm' : 0);
-		$contents = $pageModel->cache->get($pageCacheKey);
-		if ($contents) {
-			echo $contents;
-			exit;
-		}
+if (!count($_POST)) {
+	$pageModel = new Model();
+	$pageModel->cacheConfigName = 'pages';
+	$pageModel->cacheConnect();
+	$pageCacheKey = $PAGE_PATH . ' ' . (is_ajax() ? 'a' : 0) . (is_https() ? 'h' : 0) . (is_localhost() ? 'l' : 0) . (is_mobile() ? 'm' : 0);
+	$contents = $pageModel->cache->get($pageCacheKey);
+	if ($contents) {
+		echo $contents;
+		exit;
 	}
 }
 
@@ -55,7 +51,6 @@ else {
 	$HTTP_ROOT = $URL_ROOT;
 	$HTTPS_ROOT = $HTTPS_BASE . $URL_ROOT;
 }
-
 
 $parameters = explode('/', substr($PAGE_PATH, 1));
 
@@ -85,7 +80,7 @@ else {
 
 call_user_func_array(array(&$controller, $actionName), $parameters);
 
-if (isset($pageModel)) {
+if ($controller->isCacheable) {
 	$contents = ob_get_contents();
 	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
 	$contents = preg_replace('/\\s+/ms', ' ', $contents);

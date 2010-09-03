@@ -7,6 +7,8 @@ class Controller {
 	public $model;
 
 	public $defaultModelClassName = 'Model';
+	
+	public $isCacheable = true;
 
 	function catchAllAction() {
 		$errorsController = new ErrorsController();
