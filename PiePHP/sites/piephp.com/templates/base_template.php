@@ -26,24 +26,26 @@ else {
 	<div id="head">
 		<div class="section">
 			<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
+			<div id="user">
+				<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><span>Sign Up</span></a>
+				<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><span>Sign In</span></a>
+			</div>
 			<ul>
 				<?php
 				if (is_mobile()) {
 					?>
-					<li><a href="<?php echo $HTTP_ROOT; ?>user_guide/">User Guide</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>forums/">Forums</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>user_guide">User Guide</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a></li>
 					<?php
 				}
 				else {
 					?>
-					<li><a href="<?php echo $HTTP_ROOT; ?>admin/users/">Users</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>sign_in/" class="veil">Sign In</a></li>
 					<li><a href="<?php echo $HTTP_ROOT; ?>">Home</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>downloads/">Downloads</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>tutorials/">Tutorials</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>documentation/">Documentation</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>forums/">Forums</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>community/">Community</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>downloads">Downloads</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>tutorials">Tutorials</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>community">Community</a></li>
 					<?php
 				}
 				?>
@@ -69,17 +71,15 @@ else {
 				?>
 				<ul>
 					<li><a href="<?php echo $HTTP_ROOT; ?>">Home</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>downloads/">Downloads</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>tutorials/">Tutorials</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>documentation/">Documentation</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>forums/">Forums</a></li>
-					<li><a href="<?php echo $HTTP_ROOT; ?>community/">Community</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>downloads">Downloads</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>tutorials">Tutorials</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>community">Community</a></li>
 					<?php
 					if (is_localhost()) {
 						?>
-						<li><a href="<?php echo $HTTP_ROOT; ?>code_generator/">Code Generator</a></li>
-						<li><a href="<?php echo $HTTP_ROOT; ?>admin/">Admin</a></li>
-						<li><a href="<?php echo $HTTP_ROOT; ?>phpinfo/">PHPinfo</a></li>
+						<li><a href="<?php echo $HTTP_ROOT; ?>admin">Admin</a></li>
 						<?php
 					}
 					?>
@@ -89,7 +89,11 @@ else {
 			?>
 		</div>
 	</div>
-	<?php $this->renderRefresher() ?>
+	<?php
+	if ($GLOBALS['ENVIRONMENT'] == 'development') {
+		$this->renderRefresher();
+	}
+	?>
 </body>
 <script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
 <script type="text/javascript" src="/media/base.js"></script>

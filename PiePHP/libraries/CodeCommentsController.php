@@ -6,6 +6,8 @@ class CodeCommentsController extends Controller {
 
 	function indexAction() {
 
+		$GLOBALS['controller'] = $this;
+
 		function show($path) {
 			if (substr($path, -4, 4) == '.php') {
 				if (showCommentsFormIfNecessaryOrReturnFalse($path)) {
@@ -65,19 +67,19 @@ class CodeCommentsController extends Controller {
 						}
 					}
 					$valueLineCount = count(explode("\n", $value));
+					$fieldName = $section['name'] . '_' . $section['type'];
 					$replacement = '<br>'
+						. ($section['type'] == 'class' ? '<br>' : '')
 						. str_repeat('&nbsp;', $indentSpaces)
 						. '<textarea class="code" cols="' . (120 - $indentSpaces) . '" rows="' . ($valueLineCount) . '">'
 						. $value
 						. '</textarea><br>';
-					if ($section['type'] == 'class') {
-					}
-					else {
-						$replacement = '<br>' . $replacement;
-					}
 					$source = str_replace($match[0], $replacement, $source);
 				}
-				echo $source;
+				$GLOBALS['controller']->renderView('admin/code_comments', array(
+					'title' => 'Code comments',
+					'source' => $source
+				));
 				return true;
 			}
 			return false;

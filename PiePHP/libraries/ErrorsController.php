@@ -77,7 +77,7 @@ class ErrorsController extends Controller {
 			$file = str_replace('\\', '/', $file);
 			?>
 			</var></form>
-			<form class="code" method="post" action="<?php echo $HTTP_ROOT; ?>errors/rewrite">
+			<form class="code" method="post" action="<?php echo $HTTP_ROOT; ?>errors/rewrite" target="submitter">
 				<h3><?php echo $message; ?></h3>
 				<h4><br><?php $this->renderPath($file); ?><i>, line</i> <?php echo $lineNumber; ?></h4>
 				<?php
@@ -206,6 +206,8 @@ class ErrorsController extends Controller {
 		if (isset($GLOBALS['REFRESHER_FILE'])) {
 			touch($GLOBALS['REFRESHER_FILE']);
 		}
+		echo '<script>parent.location = "" + parent.location.href;</script>';
+		exit;
 	}
 
 }

@@ -23,6 +23,9 @@ class Controller {
 			reset($data);
 			while (list($key, $value) = each($data)) {
 				$$key = $value;
+				if ($key == 'data') {
+					break;
+				}
 			}
 		}
 

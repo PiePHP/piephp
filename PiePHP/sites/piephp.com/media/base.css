@@ -410,6 +410,26 @@ div.section {
 	text-indent: -100px;
 }
 
+#user {
+	position: absolute;
+	right: 20px;
+}
+
+#user a {
+	float: left;
+	display: block;
+	padding: 4px 8px;
+}
+
+#user,
+#user a {
+	color: #99d;
+}
+
+#user a:hover {
+	color: #fff;
+}
+
 #head ul,
 #foot ul {
 	display: block;

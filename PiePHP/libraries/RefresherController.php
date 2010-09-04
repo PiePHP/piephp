@@ -14,6 +14,14 @@ class RefresherController extends Controller {
 		for ($i = 0; $i < 25; $i++) {
 			sleep(1);
 			$handle = fopen($file, 'r');
+			if (!$handle) {
+				?>
+				<script type="text/javascript">
+					alert('"<?php echo addslashes($file) ?>" is not a valid refresher file.');
+				</script>
+				<?php
+				exit;
+			}
 			$stat = fstat($handle);
 			$new = $stat['mtime'];
 			if ($new > $old) {

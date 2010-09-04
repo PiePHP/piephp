@@ -130,7 +130,10 @@ if (!window.log) (function(window) {
 		$('#body>div').removeClass('loading');
 		wire(bodySectionQuery.html(html));
 		document.location = base + '/#' + path;
-		document.title = $('#body var').text();
+		document.title = $('#body var').filter(function() {
+			log('var', $(this).attr('title'));
+			return this.title == 'title';
+		}).text();
 		$('#loading').remove();
 		$('body')[0].id = isHome ? 'home' : '';
 		lightTab();
@@ -357,7 +360,7 @@ if (!window.log) (function(window) {
 		})
 		.delegate('form', 'submit', function(event) {
 			// Mimic AJAX posting by submitting the form through the "submitter" iframe
-			//alert('submit');
+			alert('submit');
 			if ($('#submitter').size()) {
 				var form = this;
 				var action = form.action;
@@ -424,7 +427,7 @@ if (!window.log) (function(window) {
 		.load(function() {
 			var doc = this.contentWindow.document;
 			var href = doc.location.href;
-			if (href != 'about:blank') {
+			if (href != 'about:blank' && !href.has('errors/rewrite')) {
 				var path = getPath(href).replace(/[\?&]is_ajax=[01]/, '');
 				loadContent(path, doc.body.innerHTML);
 			}

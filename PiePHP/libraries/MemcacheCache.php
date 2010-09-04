@@ -44,4 +44,11 @@ class MemcacheCache {
 		$this->connection->set($this->prefix . $cacheKey, $value, 0, $expire === NULL ? $this->expire : $expire);
 	}
 
+	/**
+	 * Store a value in Memcache.
+	 */
+	function flush() {
+		$this->connection->flush();
+	}
+
 }

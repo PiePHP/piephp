@@ -10,11 +10,12 @@ else {
 <h2>Sign In</h2>
 <div>
 	<label>Username</label>
-	<input type="Username" name="username" maxlength="32" class="required username" value="">
+	<input type="text" name="username" maxlength="32" class="required username" value="">
 	<div class="advice">Please enter your username.</div>
 </div>
 <div>
-	<label>Password</label><input type="password" name="password" class="required password" value="">
+	<label>Password</label>
+	<input type="password" name="password" class="required password" value="">
 	<div class="advice">Please enter your password</div>
 </div>
 <div>
