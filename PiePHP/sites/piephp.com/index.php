@@ -17,6 +17,8 @@ $SERVER_NAME = 'pie';
 $URL_ROOT = '/';
 $PIE_ROOT = "C:/Frameworks/PiePHP/";
 $APP_ROOT = "C:/Frameworks/PiePHP/sites/piephp.com/";
+$ENVIRONMENT = 'production';
+$VERSION = '0.0.0';
 
 @include 'config_local.php';
 

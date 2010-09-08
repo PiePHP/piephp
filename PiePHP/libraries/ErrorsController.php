@@ -1,19 +1,45 @@
 <?php
+/**
+ * Handle errors within a page and display pages for common error codes.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 class ErrorsController extends NonCachingController {
 
+	/**
+	 * The number of errors that have been handled in the page.
+	 */
 	public $errorCount = 0;
 
+	/**
+	 * A hash of errors, keyed for uniqueness by level, message, file and line.
+	 */
 	public $uniqueErrors = array();
 
+	/**
+	 * Display an error page.
+	 * @param  $errorCode: the HTTP error code.
+	 */
 	public function indexAction($errorCode = '500') {
 		$this->renderError($errorCode);
 	}
 
+	/**
+	 * Do what needs to be done when a specified error has occurred.
+	 * @param  $errorCode:
+	 */
 	public function processError($errorCode) {
 		$this->renderView('errors/error_' . $errorCode, array('title' => $errorCode . ' Error'));
 	}
 
+	/**
+	 * Handle a fatal error that has sent its error message back to the server via error prepend and append.
+	 */
 	public function fatalAction() {
 		$error = trim($_REQUEST['error']);
 		if (preg_match('/^(Fatal|Parse) error: (.*) in (.*) on line (.*)$/', $error, $match)) {
@@ -25,6 +51,12 @@ class ErrorsController extends NonCachingController {
 		}
 	}
 
+	/**
+	 * Show color-coded PHP which can become editable on hover.
+	 * @param  $file: the path of the file we want to show.
+	 * @param  $lineNumber: the line number to highlight.
+	 * @param  $className: the CSS class for the block that will display the code.
+	 */
 	public function renderSourceCode($file, $lineNumber, $className = '') {
 		$source = highlight_file($file, true);
 		preg_match('/<span([^>]+)>/', $source, $match);
@@ -51,6 +83,11 @@ class ErrorsController extends NonCachingController {
 		<?php
 	}
 
+	/**
+	 * Track a specific error so we can know if it's the first one in the page or the first of its kind.
+	 * @param  $concatenatedErrorInfo:
+	 * @return
+	 */
 	public function countErrorAndReturnStats($concatenatedErrorInfo) {
 		$this->errorCount++;
 		if (isset($this->uniqueErrors[$concatenatedErrorInfo])) {
@@ -67,6 +104,15 @@ class ErrorsController extends NonCachingController {
 		);
 	}
 
+	/**
+	 * Handle an error that has been triggered without exception handling.
+	 * @param  $level: the PHP error level.
+	 * @param  $message: the PHP error message for the error that is being handled.
+	 * @param  $file: the file in which the error occurred.
+	 * @param  $lineNumber: the line on which the error occurred.
+	 * @param  $context: the variables that were in the local scope when the error occurred.
+	 * @param  $showStackTrace: the stack trace at the point where the error occurred.
+	 */
 	public function handleError($level, $message, $file, $lineNumber, $context = NULL, $showStackTrace = true) {
 		global $HTTP_ROOT;
 
@@ -166,6 +212,10 @@ class ErrorsController extends NonCachingController {
 		}
 	}
 
+	/**
+	 * Get HTML for a stack trace entry with APP_ROOT and PIE_ROOT replaced.
+	 * @param  $path: the file path for the stack trace entry.
+	 */
 	public function renderPath($path) {
 		global $APP_ROOT, $PIE_ROOT;
 		if (strpos($path, $APP_ROOT) === 0) {
@@ -177,6 +227,10 @@ class ErrorsController extends NonCachingController {
 		echo $path;
 	}
 
+	/**
+	 * Show the value of a variable in a stack trace or the last context.
+	 * @param  $value: the value to be shown.
+	 */
 	public function renderValue($value) {
 		//TODO: make a fancier display for function argument values and context variable values.
 		if (is_string($value)) {
@@ -187,6 +241,9 @@ class ErrorsController extends NonCachingController {
 		}
 	}
 
+	/**
+	 * Rewrite a file using text that was posted through the error handler.
+	 */
 	public function rewriteAction() {
 		global $APP_ROOT;
 		$file = $_REQUEST['file'];

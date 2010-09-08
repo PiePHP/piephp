@@ -8,4 +8,12 @@ class DownloadsController extends Controller {
 		);
 		$this->renderView('downloads/downloads', $data);
 	}
+
+	function latestAction() {
+		$data = array(
+			'title' => 'Latest stable build!'
+		);
+		$this->defaultTemplateName = 'veil';
+		$this->renderView('downloads/latest', $data);
+	}
 }
