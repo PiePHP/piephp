@@ -2,14 +2,14 @@
 
 class SignInController extends Controller {
 
-	function indexAction() {
+	public function indexAction() {
 		if (count($_POST)) {
 			$this->processSignIn();
 		}
 		$this->renderView('sign_in/sign_in', array('title' => 'Sign In'));
 	}
-	
-	function processSignIn() {
+
+	public function processSignIn() {
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		$this->loadModel();
@@ -30,15 +30,15 @@ class SignInController extends Controller {
 			$this->signInFailed();
 		}
 	}
-	
-	function signInSucceeded($userId, $username) {
+
+	public function signInSucceeded($userId, $username) {
 		$session = new Session();
 		$session->start($userId);
 		echo "<script>alert('succeeded')</script>";
 		exit;
 	}
-	
-	function signInFailed() {
+
+	public function signInFailed() {
 		echo "<script>alert('failed')</script>";
 		exit;
 	}

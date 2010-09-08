@@ -1,7 +1,22 @@
 <?php
+/**
+ * Helper methods for dealing with directories.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 class DirectoryUtility {
 
+	/**
+	 * Walk through a directory and its subdirectories calling a given function on each file.
+	 * @param  $directoryPath: the parent path to start walking from.
+	 * @param  $callbackName: the function to call on each file.
+	 * @return true if we can keep on walking through the directory (because the callback function has been returning true).
+	 */
 	public static function walk($directoryPath, $callbackName) {
 		$directoryPath = rtrim($directoryPath, '/') . '/';
 		$directoryHandle = opendir($directoryPath);

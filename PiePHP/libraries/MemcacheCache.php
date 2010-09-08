@@ -11,7 +11,7 @@ class MemcacheCache {
 	/**
 	 * Point to the default cache and/or cache configuration.
 	 */
-	function __construct($config, $configName = 'default') {
+	public function __construct($config, $configName = 'default') {
 		$this->connection = memcache_pconnect($config['host'], $config['port'])
 			or $this->triggerError('Could not connect to ' . $configName . ' cache.');
 		if (isset($config['prefix'])) {
@@ -25,14 +25,14 @@ class MemcacheCache {
 	/**
 	 * Show or log an error.
 	 */
-	function triggerError($message) {
+	public function triggerError($message) {
 		trigger_error($message, E_USER_ERROR);
 	}
 
 	/**
 	 * Get a value from Memcache by its key.
 	 */
-	function get($cacheKey) {
+	public function get($cacheKey) {
 		$value = $this->connection->get($this->prefix . $cacheKey);
 		return $value;
 	}
@@ -40,14 +40,14 @@ class MemcacheCache {
 	/**
 	 * Store a value in Memcache.
 	 */
-	function set($cacheKey, $value, $expire = NULL) {
+	public function set($cacheKey, $value, $expire = NULL) {
 		$this->connection->set($this->prefix . $cacheKey, $value, 0, $expire === NULL ? $this->expire : $expire);
 	}
 
 	/**
 	 * Store a value in Memcache.
 	 */
-	function flush() {
+	public function flush() {
 		$this->connection->flush();
 	}
 

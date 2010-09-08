@@ -1,10 +1,8 @@
 <?php
 
-class PhpinfoController extends Controller {
-	
-	public $isCacheable = false;
+class PhpinfoController extends NonCachingController {
 
-	function indexAction() {
+	public function indexAction() {
 		phpinfo();
 	}
 }

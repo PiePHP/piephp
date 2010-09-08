@@ -2,7 +2,7 @@
 
 class ForumsController extends Controller {
 
-	function indexAction() {
+	public function indexAction() {
 		//$forum = new ForumScaffold();
 		//$this->loadModel('forumsModel');
 		$data = array(

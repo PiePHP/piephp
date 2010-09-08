@@ -2,7 +2,7 @@
 
 class HomeController extends Controller {
 
-	function indexAction() {
+	public function indexAction() {
 		$this->loadModel('blogModel');
 		$data = array(
 			'title' => 'Blog',

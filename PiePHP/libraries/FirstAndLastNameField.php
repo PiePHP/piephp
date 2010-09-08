@@ -4,7 +4,7 @@ class FirstAndLastNameField extends MultiField {
 
 	public $inline = true;
 
-	function __construct($settings, $scaffold) {
+	public function __construct($settings, $scaffold) {
 
 		parent::__construct($settings, $scaffold);
 

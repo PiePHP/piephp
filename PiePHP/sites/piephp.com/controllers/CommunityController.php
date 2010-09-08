@@ -2,7 +2,7 @@
 
 class CommunityController extends Controller {
 
-	function indexAction() {
+	public function indexAction() {
 		$data = array(
 			'title' => 'Community'
 		);

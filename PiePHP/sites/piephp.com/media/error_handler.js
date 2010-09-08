@@ -1,6 +1,6 @@
 
 if (!window.errorHandling) {
-	
+
 	window.errorHandling = 1;
 
 	var setBlockQueryScrollTop = function(blockQuery) {

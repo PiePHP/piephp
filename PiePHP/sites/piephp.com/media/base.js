@@ -288,7 +288,7 @@ if (!window.log) (function(window) {
 			.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
 		focusFirst(dialogQuery);
 	};
-	
+
 	var veilLoading = function() {
 		loadVeil('<div class="loading">Loading</div>');
 	};
@@ -360,7 +360,6 @@ if (!window.log) (function(window) {
 		})
 		.delegate('form', 'submit', function(event) {
 			// Mimic AJAX posting by submitting the form through the "submitter" iframe
-			alert('submit');
 			if ($('#submitter').size()) {
 				var form = this;
 				var action = form.action;
@@ -407,7 +406,7 @@ if (!window.log) (function(window) {
 			$(this).find('.hint').val('');
 		})
 		.delegate('.password.new', 'focus keypress keyup mouseup', function() {
-			
+
 		})
 		.keydown(function(event) {
 			if (event.keyCode == 27) {

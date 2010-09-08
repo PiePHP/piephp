@@ -6,7 +6,7 @@ class MultiField extends Field {
 
 	public $inline = false;
 
-	function renderFormField() {
+	public function renderFormField() {
 		if ($this->inline) {
 			parent::renderFormField();
 		}
@@ -19,31 +19,31 @@ class MultiField extends Field {
 		}
 	}
 
-	function renderInput() {
+	public function renderInput() {
 		foreach ($this->fields as $field) {
 			$field->renderInput();
 		}
 	}
 
-	function renderListHeading() {
+	public function renderListHeading() {
 		foreach ($this->fields as $field) {
 			$field->renderListHeading();
 		}
 	}
 
-	function renderListCell($isFirst) {
+	public function renderListCell($isFirst) {
 		foreach ($this->fields as $field) {
 			$field->renderListCell($isFirst);
 		}
 	}
 
-	function setColumnValueOnScaffold() {
+	public function setColumnValueOnScaffold() {
 		foreach ($this->fields as $field) {
 			$field->setColumnValueOnScaffold();
 		}
 	}
 
-	function isValid() {
+	public function isValid() {
 		$isValid = true;
 		foreach ($this->fields as $field) {
 			if (!$field->isValid()) {

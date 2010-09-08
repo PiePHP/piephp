@@ -1,22 +1,20 @@
 <?php
 
-class ErrorsController extends Controller {
+class ErrorsController extends NonCachingController {
 
 	public $errorCount = 0;
 
 	public $uniqueErrors = array();
-	
-	public $isCacheable = false;
 
-	function indexAction($errorCode = '500') {
+	public function indexAction($errorCode = '500') {
 		$this->renderError($errorCode);
 	}
 
-	function processError($errorCode) {
+	public function processError($errorCode) {
 		$this->renderView('errors/error_' . $errorCode, array('title' => $errorCode . ' Error'));
 	}
 
-	function fatalAction() {
+	public function fatalAction() {
 		$error = trim($_REQUEST['error']);
 		if (preg_match('/^(Fatal|Parse) error: (.*) in (.*) on line (.*)$/', $error, $match)) {
 			$this->handleError($match[1], $match[2], $match[3], $match[4], NULL, false);
@@ -27,7 +25,7 @@ class ErrorsController extends Controller {
 		}
 	}
 
-	function renderSourceCode($file, $lineNumber, $className = '') {
+	public function renderSourceCode($file, $lineNumber, $className = '') {
 		$source = highlight_file($file, true);
 		preg_match('/<span([^>]+)>/', $source, $match);
 		$span = $match[0];
@@ -53,7 +51,7 @@ class ErrorsController extends Controller {
 		<?php
 	}
 
-	function countErrorAndReturnStats($concatenatedErrorInfo) {
+	public function countErrorAndReturnStats($concatenatedErrorInfo) {
 		$this->errorCount++;
 		if (isset($this->uniqueErrors[$concatenatedErrorInfo])) {
 			++$this->uniqueErrors[$concatenatedErrorInfo];
@@ -69,7 +67,7 @@ class ErrorsController extends Controller {
 		);
 	}
 
-	function handleError($level, $message, $file, $lineNumber, $context = NULL, $showStackTrace = true) {
+	public function handleError($level, $message, $file, $lineNumber, $context = NULL, $showStackTrace = true) {
 		global $HTTP_ROOT;
 
 		$errorStats = $this->countErrorAndReturnStats($level . $message . $file . $lineNumber);
@@ -168,7 +166,7 @@ class ErrorsController extends Controller {
 		}
 	}
 
-	function renderPath($path) {
+	public function renderPath($path) {
 		global $APP_ROOT, $PIE_ROOT;
 		if (strpos($path, $APP_ROOT) === 0) {
 			$path = str_replace($APP_ROOT, '<i title="' . $APP_ROOT . '">APP_ROOT.</i>', $path);
@@ -179,7 +177,7 @@ class ErrorsController extends Controller {
 		echo $path;
 	}
 
-	function renderValue($value) {
+	public function renderValue($value) {
 		//TODO: make a fancier display for function argument values and context variable values.
 		if (is_string($value)) {
 			echo "'" . addslashes($value) . "'";
@@ -189,7 +187,7 @@ class ErrorsController extends Controller {
 		}
 	}
 
-	function rewriteAction() {
+	public function rewriteAction() {
 		global $APP_ROOT;
 		$file = $_REQUEST['file'];
 		$code = '';

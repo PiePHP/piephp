@@ -24,7 +24,7 @@ class Field {
 
 	public $hasValidationErrors = false;
 
-	function __construct($settings, $scaffold = NULL) {
+	public function __construct($settings, $scaffold = NULL) {
 		foreach ($settings as $settingName => $value) {
 			$this->$settingName = $value;
 		}
@@ -34,7 +34,7 @@ class Field {
 		$this->scaffold = $scaffold;
 	}
 
-	function renderFormField() {
+	public function renderFormField() {
 		echo '<div>';
 			echo '<label>' . $this->getLabel() . '</label>';
 			$this->renderInput();
@@ -43,11 +43,11 @@ class Field {
 		echo '</div>';
 	}
 
-	function getLabel() {
+	public function getLabel() {
 		return $this->label ? $this->label : ucfirst(separate($this->name, ' '));
 	}
 
-	function renderInput() {
+	public function renderInput() {
 		echo '<input type="' . $this->type . '" name="' . $this->name . '"';
 		if ($this->maxlength) {
 			echo ' maxlength="' . $this->maxlength . '"';
@@ -60,7 +60,7 @@ class Field {
 		echo '>';
 	}
 
-	function getValue() {
+	public function getValue() {
 		if (isset($_POST[$this->column])) {
 			return $_POST[$this->column];
 		}
@@ -70,11 +70,11 @@ class Field {
 		return '';
 	}
 
-	function setColumnValueOnScaffold() {
+	public function setColumnValueOnScaffold() {
 		$this->scaffold->columnValues[$this->column] = $this->getValue();
 	}
 
-	function renderInputClass() {
+	public function renderInputClass() {
 		$className = lower_camel($this->type);
 		if ($this->required) {
 			$className = 'required ' . $className;
@@ -82,10 +82,10 @@ class Field {
 		echo ' class="' . $className . '"';
 	}
 
-	function renderTip() {
+	public function renderTip() {
 	}
 
-	function renderAdvice() {
+	public function renderAdvice() {
 		$className = 'advice';
 		if ($this->hasValidationErrors) {
 			$className .= ' error';
@@ -95,11 +95,11 @@ class Field {
 		echo '</div>';
 	}
 
-	function getAdvice() {
+	public function getAdvice() {
 		return $this->advice ? $this->advice : $this->getDefaultAdvice();
 	}
 
-	function getDefaultAdvice() {
+	public function getDefaultAdvice() {
 		$advice = 'Please enter a valid ' . separate($this->type, ' ') . '.';
 		if ($this->minlength) {
 			$advice .= '<br>It must be at least ' . $this->minlength . ' characters long.';
@@ -107,13 +107,13 @@ class Field {
 		return $advice;
 	}
 
-	function renderListHeading() {
+	public function renderListHeading() {
 		echo '<th>';
 		echo $this->getLabel();
 		echo '</th>';
 	}
 
-	function renderListCell($isFirst = false) {
+	public function renderListCell($isFirst = false) {
 		echo '<td>';
 		if ($isFirst) {
 			echo '<a href="' . $this->scaffold->path . 'change/' . $this->scaffold->result['id'] . '">';
@@ -125,12 +125,12 @@ class Field {
 		echo '</td>';
 	}
 
-	function renderListCellValue() {
+	public function renderListCellValue() {
 		$value = $this->scaffold->result[$this->column];
 		echo htmlentities($value);
 	}
 
-	function validate() {
+	public function validate() {
 		if ($this->isValid()) {
 			$this->hasValidationErrors = false;
 		}
@@ -140,17 +140,17 @@ class Field {
 		}
 	}
 
-	function isValid() {
+	public function isValid() {
 		return !$this->required || !$this->isEmpty();
 	}
 
-	function isEmpty() {
+	public function isEmpty() {
 		return !$this->getValue();
 	}
 
-	function processBeforeScaffold() {
+	public function processBeforeScaffold() {
 	}
 
-	function processAfterScaffold() {
+	public function processAfterScaffold() {
 	}
 }

@@ -68,7 +68,7 @@ class Scaffold extends Controller {
 	 */
 	public $hasValidationErrors = false;
 
-	function __construct($name, $action = 'list', $id = 0) {
+	public function __construct($name, $action = 'list', $id = 0) {
 		if (!$this->table) {
 			$this->table = strtolower(separate($name, '_'));
 		}
@@ -101,7 +101,7 @@ class Scaffold extends Controller {
 		$this->getResult();
 	}
 
-	function processPost() {
+	public function processPost() {
 		if (count($_POST)) {
 
 			$this->validate();
@@ -134,27 +134,27 @@ class Scaffold extends Controller {
 		}
 	}
 
-	function validate() {
+	public function validate() {
 		foreach ($this->fields as $field) {
 			$field->validate();
 		}
 	}
 
-	function processInsert() {
+	public function processInsert() {
 		$columnValues = $this->getPostedColumnValues();
 		$this->model->insert($this->table, $columnValues);
 	}
 
-	function processUpdate() {
+	public function processUpdate() {
 		$columnValues = $this->getPostedColumnValues();
 		$this->model->update($this->table, $columnValues, $this->id);
 	}
 
-	function processDelete() {
+	public function processDelete() {
 		$this->model->delete($this->table, $this->id);
 	}
 
-	function getPostedColumnValues() {
+	public function getPostedColumnValues() {
 		$this->columnValues = array();
 		foreach ($this->fields as $field) {
 			$field->setColumnValueOnScaffold();
@@ -162,7 +162,7 @@ class Scaffold extends Controller {
 		return $this->columnValues;
 	}
 
-	function getRedirectUrl() {
+	public function getRedirectUrl() {
 		$redirectUrl = $GLOBALS['HTTP_BASE'] . $this->path;
 
 		// If the user selected to save and add another, then take them to an add page.
@@ -176,14 +176,14 @@ class Scaffold extends Controller {
 		return $redirectUrl;
 	}
 
-	function getResult() {
+	public function getResult() {
 		if ($this->id) {
 			$this->loadModel();
 			$this->result = $this->model->result("SELECT * FROM $this->table WHERE id = " . ($this->id * 1));
 		}
 	}
 
-	function getTitle() {
+	public function getTitle() {
 		if ($this->action == 'add') {
 			return 'Add a ' . $this->singular;
 		}
@@ -203,11 +203,11 @@ class Scaffold extends Controller {
 		}
 	}
 
-	function renderAddForm() {
+	public function renderAddForm() {
 		$this->renderForm();
 	}
 
-	function renderChangeForm() {
+	public function renderChangeForm() {
 		if (!$this->result) {
 			$this->renderDoesntExistMessage();
 		}
@@ -216,13 +216,13 @@ class Scaffold extends Controller {
 		}
 	}
 
-	function renderForm() {
+	public function renderForm() {
 		$this->renderFormStart();
 		$this->renderFormFieldsets();
 		$this->renderFormEnd();
 	}
 
-	function renderList() {
+	public function renderList() {
 		$this->renderFormStart();
 		echo '<table>';
 		echo '<tr>';
@@ -247,7 +247,7 @@ class Scaffold extends Controller {
 		$this->renderFormEnd();
 	}
 
-	function renderRemovalConfirmation() {
+	public function renderRemovalConfirmation() {
 		if (!$this->result) {
 			$this->renderDoesntExistMessage();
 		}
@@ -261,11 +261,11 @@ class Scaffold extends Controller {
 		}
 	}
 
-	function renderDoesntExistMessage() {
+	public function renderDoesntExistMessage() {
 		echo "The " . $this->singular . " you're trying to " . $this->action . " doesn't exist.";
 	}
 
-	function renderFormStart() {
+	public function renderFormStart() {
 		$action = $this->path . $this->action . '/';
 		if ($this->id) {
 			$action .= $this->id . '/';
@@ -273,7 +273,7 @@ class Scaffold extends Controller {
 		echo '<form enctype="multipart/form-data" action="' . $action . '" method="post" class="scaffold">';
 	}
 
-	function renderFormEnd() {
+	public function renderFormEnd() {
 		echo '<div class="actions">';
 		if ($this->action == 'remove') {
 			echo '<div>';
@@ -299,7 +299,7 @@ class Scaffold extends Controller {
 		echo '</form>';
 	}
 
-	function renderFormFieldsets() {
+	public function renderFormFieldsets() {
 		if (!isset($this->fieldsets)) {
 			$this->fieldsets = array('' => array_keys($this->fields));
 		}

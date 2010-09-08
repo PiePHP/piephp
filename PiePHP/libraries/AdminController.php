@@ -1,22 +1,39 @@
 <?php
+/**
+ * Handle all admin URLs by using scaffolds for view/add/change/remove operations.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
-class AdminController extends Controller {
-	
-	public $isCacheable = false;
+class AdminController extends NonCachingController {
 
-	function indexAction($section = '', $action = '', $id = 0) {
+	/**
+	 * Show a list of links to available admin sections.
+	 */
+	public function indexAction() {
 		$data = array('title' => 'Admin');
 		$this->renderView('admin/admin', $data);
 	}
 
-	function catchAllAction($section = '', $action = '', $id = 0) {
-		$sectionCamel = upper_camel($section);
-		$scaffoldName = $sectionCamel . 'Scaffold';
+	/**
+	 * Use a scaffold to show an admin page.
+	 * For example, "/admin/users/change/3" would show the page that allows you to edit user #3.
+	 * @param  $sectionName: the name of the scaffold.
+	 * @param  $action: the action the scaffold will perform e.g. "add", "change", "remove".
+	 * @param  $id: the ID of the record on which the scaffold will operate.
+	 */
+	public function catchAllAction($sectionName = '', $action = '', $id = 0) {
+		$sectionNameCamel = upper_camel($sectionName);
+		$scaffoldName = $sectionNameCamel . 'Scaffold';
 		if (class_exists($scaffoldName, true)) {
-			$scaffold = new $scaffoldName($sectionCamel, $action, $id);
+			$scaffold = new $scaffoldName($sectionNameCamel, $action, $id);
 			$data = array(
 				'title' => $scaffold->getTitle(),
-				'section' => $section,
+				'section' => $sectionName,
 				'scaffold' => $scaffold
 			);
 			$scaffold->processPost();

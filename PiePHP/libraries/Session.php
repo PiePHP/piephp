@@ -8,7 +8,7 @@ class Session {
 
 	public $rememberUserIdDurationInDays = 3650;
 
-	function start($userId, $keepUserSignedIn = false) {
+	public function start($userId, $keepUserSignedIn = false) {
 		$userHash = md5($userId . time() . $GLOBALS['SALT']);
 		$cookieValue = $userHash . '-' . $userId . '-' . time();
 
@@ -20,11 +20,11 @@ class Session {
 		else {
 			// Use a session cookie.
 			$expire = 0;
-		}	
+		}
 		setcookie($this->sessionCookieKey, $cookieValue, $expire);
 	}
 
-	function authenticate() {
+	public function authenticate() {
 	}
 
 }

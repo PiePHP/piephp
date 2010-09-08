@@ -4,7 +4,7 @@ class BlogModel extends Model {
 
 	public $cacheConfigName = '';
 
-	function posts() {
+	public function posts() {
 		return $this->results('SELECT * FROM posts', 60);
 	}
 

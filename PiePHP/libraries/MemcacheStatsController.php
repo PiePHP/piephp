@@ -1,10 +1,8 @@
 <?php
 
-class MemcacheStatsController extends Controller {
-	
-	public $isCacheable = false;
+class MemcacheStatsController extends NonCachingController {
 
-	function indexAction() {
+	public function indexAction() {
 		$pageModel = new Model();
 		$pageModel->cacheConfigName = 'default';
 		$pageModel->cacheConnect();

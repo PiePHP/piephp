@@ -12,7 +12,7 @@ class PasswordField extends MultiField {
 
 	public $confirmPassword;
 
-	function __construct($settings, $scaffold) {
+	public function __construct($settings, $scaffold) {
 
 		$this->fields = array();
 
@@ -48,18 +48,18 @@ class PasswordField extends MultiField {
 
 	}
 
-	function hash($password) {
+	public function hash($password) {
 		return md5($password . $this->scaffold->id);
 	}
 
-	function setColumnValueOnScaffold() {
+	public function setColumnValueOnScaffold() {
 		$value = $this->newPassword->getValue();
 		if ($value) {
 			$this->scaffold->columnValues[$this->column] = $this->hash($value);
 		}
 	}
 
-	function isValid() {
+	public function isValid() {
 		// Whether we're adding or changing, the newPassword value must match the confirmPassword value.
 		$isValid = ($this->newPassword->getValue() == $this->confirmPassword->getValue());
 
@@ -80,7 +80,7 @@ class PasswordField extends MultiField {
 		return $isValid;
 	}
 
-	function processAfterScaffold() {
+	public function processAfterScaffold() {
 		$this->scaffold->columnValues = array();
 		$this->setColumnValueOnScaffold();
 		$this->model->update($this->table, $this->scaffold->columnValues);

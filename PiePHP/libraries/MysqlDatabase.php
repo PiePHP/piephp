@@ -5,7 +5,7 @@ class MysqlDatabase extends Database {
 	/**
 	 * Connect to MySQL, using the configuration parameters provided.
 	 */
-	function __construct($config, $configName = 'default') {
+	public function __construct($config, $configName = 'default') {
 		$this->connection = mysql_pconnect($config['host'], $config['username'], $config['password'])
 			or $this->triggerError('Could not connect to ' . $configName . ' database.');
 		mysql_select_db($config['database'])
@@ -15,28 +15,28 @@ class MysqlDatabase extends Database {
 	/**
 	 * Begin a database transaction.
 	 */
-	function beginTransaction() {
+	public function beginTransaction() {
 		//$this->query('BEGIN TRANSACTION');
 	}
 
 	/**
 	 * Roll back the current database transaction.
 	 */
-	function rollbackTransaction() {
+	public function rollbackTransaction() {
 		//$this->query('ROLLBACK TRANSACTION');
 	}
 
 	/**
 	 * Commit the current database transaction.
 	 */
-	function commitTransaction() {
+	public function commitTransaction() {
 		//$this->query('COMMIT TRANSACTION');
 	}
 
 	/**
 	 * Do a query with the SQL provided, and return a recordset resource.
 	 */
-	function query($sql) {
+	public function query($sql) {
 		$sql = trim($sql);
 		$resource = mysql_query($sql, $this->connection)
 			or $this->triggerError(mysql_error(), $sql);
@@ -49,7 +49,7 @@ class MysqlDatabase extends Database {
 	/**
 	 * Do a query with the SQL provided, and return an array of associative arrays.
 	 */
-	function results($sql) {
+	public function results($sql) {
 		$resource = $this->query($sql);
 		$results = array();
 		if ($resource) {
@@ -63,7 +63,7 @@ class MysqlDatabase extends Database {
 	/**
 	 * Get a SQL statement for inserting a record into a table, given an associative array of values.
 	 */
-	function getInsertSql($table, $columnValues) {
+	public function getInsertSql($table, $columnValues) {
 		$columns = array_keys($columnValues);
 		$values = array_values($columnValues);
 		for ($i = 0; $i < count($values); $i++) {
@@ -78,7 +78,7 @@ class MysqlDatabase extends Database {
 	/**
 	 * Get a SQL statement for updating a record in a table, given an associative array of values and a record id.
 	 */
-	function getUpdateSql($table, $columnValues, $id) {
+	public function getUpdateSql($table, $columnValues, $id) {
 		$sets = array();
 		foreach ($columnValues as $column => $value) {
 			$sets[] = $column . "='" . addslashes($value) . "'";
@@ -92,7 +92,7 @@ class MysqlDatabase extends Database {
 	/**
 	 * Get a SQL statement for deleting a record from a table, given a record id.
 	 */
-	function getDeleteSql($table, $id) {
+	public function getDeleteSql($table, $id) {
 		$sql = 'DELETE FROM ' . $table
 			. ' WHERE id = ' . $id;
 		return $sql;

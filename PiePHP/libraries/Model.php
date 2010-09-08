@@ -11,7 +11,7 @@ class Model {
 	/**
 	 * Get the driver type and config array from a config string.
 	 */
-	function getTypeAndConfig($configString) {
+	public function getTypeAndConfig($configString) {
 		list($type, $string) = explode(':', $configString, 2);
 		$pairs = explode(' ', $string);
 		$config = array();
@@ -25,7 +25,7 @@ class Model {
 	/**
 	 * Connect to the database if a connection has not already been made.
 	 */
-	function databaseConnect() {
+	public function databaseConnect() {
 		global $DATABASES;
 		if (!$this->database && $this->databaseConfigName) {
 			$database = $DATABASES[$this->databaseConfigName];
@@ -49,7 +49,7 @@ class Model {
 	/**
 	 * Connect to the cache if a connection has not already been made.
 	 */
-	function cacheConnect() {
+	public function cacheConnect() {
 		global $CACHES;
 		if (!$this->cache && $this->cacheConfigName) {
 			$cache = $CACHES[$this->cacheConfigName];
@@ -76,7 +76,7 @@ class Model {
 	/**
 	 * Begin a database transaction.
 	 */
-	function beginTransaction() {
+	public function beginTransaction() {
 		$this->databaseConnect();
 		$this->database->beginTransaction();
 	}
@@ -84,7 +84,7 @@ class Model {
 	/**
 	 * Roll back the current database transaction.
 	 */
-	function rollbackTransaction() {
+	public function rollbackTransaction() {
 		$this->databaseConnect();
 		$this->database->commitTransaction();
 	}
@@ -92,7 +92,7 @@ class Model {
 	/**
 	 * Commit the current database transaction.
 	 */
-	function commitTransaction() {
+	public function commitTransaction() {
 		$this->databaseConnect();
 		$this->database->commitTransaction();
 	}
@@ -100,7 +100,7 @@ class Model {
 	/**
 	 * Execute some SQL in the database.
 	 */
-	function execute($sql) {
+	public function execute($sql) {
 		$this->databaseConnect();
 		$this->database->query($sql);
 	}
@@ -108,7 +108,7 @@ class Model {
 	/**
 	 * Insert a record into a table, given an associative array of values.
 	 */
-	function insert($table, $columnValues) {
+	public function insert($table, $columnValues) {
 		$this->databaseConnect();
 		$sql = $this->database->getInsertSql($table, $columnValues);
 		$this->execute($sql);
@@ -117,7 +117,7 @@ class Model {
 	/**
 	 * Update a record in a table, given an associative array of values and a record id.
 	 */
-	function update($table, $columnValues, $id) {
+	public function update($table, $columnValues, $id) {
 		$this->databaseConnect();
 		$sql = $this->database->getUpdateSql($table, $columnValues, $id);
 		$this->execute($sql);
@@ -126,7 +126,7 @@ class Model {
 	/**
 	 * Delete a record from a table, given a record id.
 	 */
-	function delete($table, $id) {
+	public function delete($table, $id) {
 		$this->databaseConnect();
 		$sql = $this->database->getDeleteSql($table, $id);
 		$this->execute($sql);
@@ -135,7 +135,7 @@ class Model {
 	/**
 	 * Query the cache and/or database, and return results as an array of associative arrays.
 	 */
-	function results($sql, $cacheTimeInSeconds = false) {
+	public function results($sql, $cacheTimeInSeconds = false) {
 		// Try getting cached results.
 		if ($cacheTimeInSeconds !== false && $this->cacheConnect()) {
 			$cacheKey = strlen($sql) < 255 ? $sql : md5($sql);
@@ -160,7 +160,7 @@ class Model {
 	/**
 	 * Query the cache and/or database for one row, and return an associative array.
 	 */
-	function result($sql, $cacheTimeInSeconds = false) {
+	public function result($sql, $cacheTimeInSeconds = false) {
 		$results = $this->results($sql, $cacheTimeInSeconds);
 		return count($results) ? $results[0] : NULL;
 	}
