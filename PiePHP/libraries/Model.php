@@ -1,11 +1,34 @@
 <?php
+/**
+ * A Model interacts with a Database and/or a Cache.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 class Model {
 
+	/**
+	 * The config name corresponds to a key in the $DATABASES array.
+	 */
 	public $databaseConfigName = 'default';
+
+	/**
+	 * After connecting to the database, we store the connection.
+	 */
 	public $database = NULL;
 
+	/**
+	 * The config name corresponds to a key in the $CACHES array.
+	 */
 	public $cacheConfigName = 'default';
+
+	/**
+	 * After connecting to the cache, we store the connection.
+	 */
 	public $cache = NULL;
 
 	/**
@@ -24,6 +47,7 @@ class Model {
 
 	/**
 	 * Connect to the database if a connection has not already been made.
+	 * @return the database connection.
 	 */
 	public function databaseConnect() {
 		global $DATABASES;
@@ -48,6 +72,7 @@ class Model {
 
 	/**
 	 * Connect to the cache if a connection has not already been made.
+	 * @return the cache connection.
 	 */
 	public function cacheConnect() {
 		global $CACHES;
@@ -99,6 +124,7 @@ class Model {
 
 	/**
 	 * Execute some SQL in the database.
+	 * @param  $sql: the SQL query to execute.
 	 */
 	public function execute($sql) {
 		$this->databaseConnect();
@@ -106,7 +132,9 @@ class Model {
 	}
 
 	/**
-	 * Insert a record into a table, given an associative array of values.
+	 * Insert a record into a database table.
+	 * @param  $table: the name of the table we wish to insert into.
+	 * @param  $columnValues: an associative array of column values.
 	 */
 	public function insert($table, $columnValues) {
 		$this->databaseConnect();
@@ -115,7 +143,10 @@ class Model {
 	}
 
 	/**
-	 * Update a record in a table, given an associative array of values and a record id.
+	 * Update a record in a database table.
+	 * @param  $table: the name of the table we wish to update.
+	 * @param  $columnValues: an associative array of column values.
+	 * @param  $id: the ID of the record we wish to update.
 	 */
 	public function update($table, $columnValues, $id) {
 		$this->databaseConnect();
@@ -124,7 +155,9 @@ class Model {
 	}
 
 	/**
-	 * Delete a record from a table, given a record id.
+	 * Delete a record from a database table.
+	 * @param  $table: the name of the table we wish to delete from.
+	 * @param  $id: the ID of the record we wish to delete.
 	 */
 	public function delete($table, $id) {
 		$this->databaseConnect();
@@ -133,7 +166,10 @@ class Model {
 	}
 
 	/**
-	 * Query the cache and/or database, and return results as an array of associative arrays.
+	 * Query the cache, or failing that, the database, and return results.
+	 * @param  $sql: the SQL query to execute.
+	 * @param  $cacheTimeInSeconds: the number of seconds to store these database results in the cache.
+	 * @return results as an array of associative arrays.
 	 */
 	public function results($sql, $cacheTimeInSeconds = false) {
 		// Try getting cached results.
@@ -158,7 +194,10 @@ class Model {
 	}
 
 	/**
-	 * Query the cache and/or database for one row, and return an associative array.
+	 * Query the cache, or failing that, the database, and return a result.
+	 * @param  $sql: the SQL query to execute.
+	 * @param  $cacheTimeInSeconds: the number of seconds to store this database result in the cache.
+	 * @return the result as an associative array.
 	 */
 	public function result($sql, $cacheTimeInSeconds = false) {
 		$results = $this->results($sql, $cacheTimeInSeconds);

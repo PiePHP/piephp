@@ -1,9 +1,20 @@
 <?php
+/**
+ * Database wrapper for a MySQL database.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 class MysqlDatabase extends Database {
 
 	/**
 	 * Connect to MySQL, using the configuration parameters provided.
+	 * @param  $config: an associative array of configuration parameters.
+	 * @param  $configName: the configuration comes from $DATABASES[$configName].
 	 */
 	public function __construct($config, $configName = 'default') {
 		$this->connection = mysql_pconnect($config['host'], $config['username'], $config['password'])
@@ -34,7 +45,9 @@ class MysqlDatabase extends Database {
 	}
 
 	/**
-	 * Do a query with the SQL provided, and return a recordset resource.
+	 * Do a query on the database, and return a recordset resource.
+	 * @param  $sql: a SQL query string.
+	 * @return a MySQL recordset resource.
 	 */
 	public function query($sql) {
 		$sql = trim($sql);
@@ -47,7 +60,9 @@ class MysqlDatabase extends Database {
 	}
 
 	/**
-	 * Do a query with the SQL provided, and return an array of associative arrays.
+	 * Do a query on the database, and return results.
+	 * @param  $sql: a SQL query string.
+	 * @return an array of associative arrays.
 	 */
 	public function results($sql) {
 		$resource = $this->query($sql);
@@ -61,7 +76,10 @@ class MysqlDatabase extends Database {
 	}
 
 	/**
-	 * Get a SQL statement for inserting a record into a table, given an associative array of values.
+	 * Get a SQL statement for inserting a record into a table.
+	 * @param  $table: the name of the table we wish to insert into.
+	 * @param  $columnValues: an associative array of column values.
+	 * @return a string containing a SQL insert statement.
 	 */
 	public function getInsertSql($table, $columnValues) {
 		$columns = array_keys($columnValues);
@@ -76,7 +94,11 @@ class MysqlDatabase extends Database {
 	}
 
 	/**
-	 * Get a SQL statement for updating a record in a table, given an associative array of values and a record id.
+	 * Get a SQL statement for updating a record in a table.
+	 * @param  $table: the name of the table we wish to update.
+	 * @param  $columnValues: an associative array of column values.
+	 * @param  $id: the ID of the record we wish to update.
+	 * @return a string containing a SQL update statement.
 	 */
 	public function getUpdateSql($table, $columnValues, $id) {
 		$sets = array();
@@ -90,7 +112,10 @@ class MysqlDatabase extends Database {
 	}
 
 	/**
-	 * Get a SQL statement for deleting a record from a table, given a record id.
+	 * Get a SQL statement for deleting a record from a table.
+	 * @param  $table: the name of the table we wish to delete from.
+	 * @param  $id: the ID of the record we wish to delete.
+	 * @return a string containing a SQL delete statement.
 	 */
 	public function getDeleteSql($table, $id) {
 		$sql = 'DELETE FROM ' . $table

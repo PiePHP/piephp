@@ -1,7 +1,19 @@
 <?php
+/**
+ * Allow pages to refresh themselves when changes are made in an IDE.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 class RefresherController extends NonCachingController {
 
+	/**
+	 * Process a request for the file that will call JavaScript to refresh the page.
+	 */
 	public function indexAction() {
 		$file = $GLOBALS['REFRESHER_FILE'];
 		if (!fopen($file, 'r')) {
@@ -28,6 +40,10 @@ class RefresherController extends NonCachingController {
 		$this->renderRefreshScript('window');
 	}
 
+	/**
+	 * Render a script that will reload or refresh.
+	 * @param  $scope: scope will reload the refresher if it is "window" or refresh the page if it is "parent".
+	 */
 	public function renderRefreshScript($scope) {
 		?>
 		<html>
