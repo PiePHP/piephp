@@ -76,6 +76,7 @@ else {
 					<li><a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a></li>
 					<li><a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a></li>
 					<li><a href="<?php echo $HTTP_ROOT; ?>community">Community</a></li>
+					<li><a href="<?php echo $HTTP_ROOT; ?>license">License</a></li>
 					<?php
 					if (is_localhost()) {
 						?>
