@@ -42,14 +42,17 @@ class FileCache {
 	 * @return the cached value if one was found.
 	 */
 	public function get($cacheKey) {
-		@$value = file_get_contents(APP_ROOT . 'cache/' . $this->prefix . md5($cacheKey));
-		if ($value) {
-			list($time, $value) = explode(':', $value, 2);
-			if (time() - $time > $this->expire) {
-				$value = '';
+		$path = $this->getPath($cacheKey);
+		if (file_exists($path)) {
+			@$value = file_get_contents($path);
+			if ($value) {
+				list($time, $value) = explode(':', $value, 2);
+				if (time() - $time > $this->expire) {
+					$value = '';
+				}
+				return $value;
 			}
 		}
-		return $value;
 	}
 
 	/**
@@ -58,8 +61,17 @@ class FileCache {
 	 * @param  $value: the value is written to the file, along with the current time for expiration purposes.
 	 */
 	public function set($cacheKey, $value) {
+		$path = $this->getPath($cacheKey);
+		file_put_contents($path, time() . ':' . $value);
+	}
+
+	/**
+	 * Get the file path for a cached item.
+	 * @param  $cacheKey: the key (in conjunction with the prefix) is used to name the file.
+	 */
+	public function getPath($cacheKey) {
 		global $APP_ROOT;
-		file_put_contents($APP_ROOT . 'cache/' . $this->prefix . md5($cacheKey), time() . ':' . $value);
+		return $APP_ROOT . 'cache/' . $this->prefix . md5($cacheKey) . '.html';
 	}
 
 }
