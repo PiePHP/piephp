@@ -29,13 +29,13 @@ $CLASS_DIRS = array(
 	'Scaffold' => $APP_ROOT . 'scaffolds/'
 );
 
-$PAGE_PATH = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
+$PAGE_URL_PATH = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
 
 if (!count($_POST)) {
 	$pageModel = new Model();
 	$pageModel->cacheConfigName = 'pages';
 	$pageModel->cacheConnect();
-	$pageCacheKey = $PAGE_PATH . ' ' . (is_ajax() ? 'a' : 0) . (is_https() ? 'h' : 0) . (is_localhost() ? 'l' : 0) . (is_mobile() ? 'm' : 0);
+	$pageCacheKey = $PAGE_URL_PATH . ' ' . (is_ajax() ? 'a' : 0) . (is_https() ? 'h' : 0) . (is_localhost() ? 'l' : 0) . (is_mobile() ? 'm' : 0);
 	$contents = $pageModel->cache->get($pageCacheKey);
 	if ($contents) {
 		echo $contents;
@@ -54,7 +54,7 @@ else {
 	$HTTPS_ROOT = $HTTPS_BASE . $URL_ROOT;
 }
 
-$parameters = explode('/', substr($PAGE_PATH, 1));
+$parameters = explode('/', substr($PAGE_URL_PATH, 1));
 
 $controllerName = upper_camel($parameters[0]) . 'Controller';
 
@@ -89,6 +89,10 @@ if ($controller->isCacheable && isset($pageModel)) {
 	$pageModel->cache->set($pageCacheKey, $contents, isset($PAGE_CACHE_TIME) ? $PAGE_CACHE_TIME : 60);
 }
 
+/**
+ * Check through the appropriate entries in $CLASS_DIRS to find the class that we're trying to use.
+ * @param  $className: the name of the class we're trying to use.
+ */
 function __autoload($className) {
 	global $CLASS_DIRS;
 	$suffix = preg_replace('/.*([A-Z])/', '$1', $className);
@@ -102,7 +106,11 @@ function __autoload($className) {
 	@include $directory . $autoloadFile;
 }
 
-
+/**
+ * Convert a name separated by underscores (or other non-alphanumerics) to UpperCamelCase.
+ * @param  $underscored: the name that is separated by underscores.
+ * @return the name in UpperCamelCase.
+ */
 function upper_camel($underscored) {
 	$spaced = preg_replace('/[^A-Za-z0-9]+/', ' ', $underscored);
 	$cased = ucwords($spaced);
@@ -110,7 +118,11 @@ function upper_camel($underscored) {
 	return $camel ? $camel : '';
 }
 
-
+/**
+ * Convert a name separated by underscores (or other non-alphanumerics) to lowerCamelCase.
+ * @param  $underscored: the name that is separated by underscores.
+ * @return the name in lowerCamelCase.
+ */
 function lower_camel($underscored) {
 	$actionName = upper_camel($underscored);
 	if ($actionName) {
@@ -119,14 +131,27 @@ function lower_camel($underscored) {
 	return $actionName;
 }
 
-
+/**
+ * Separate a camel case name into words using separators such as underscores.
+ * @param  $camel: the name in upper or lower camel case.
+ * @param  $separator: the separator that we want to insert between words.
+ * @return the separated words as a string.
+ */
 function separate($camel, $separator = '_') {
 	$camel = preg_replace('/[^a-zA-Z0-9]+/', $separator, $camel);
 	$separated = preg_replace('/([a-z])([A-Z])/', '$1' . $separator . '$2', $camel);
 	return strtolower($separated);
 }
 
-
+/**
+ * Handle PHP errors using the ErrorsController.
+ * @param  $level: the PHP error level.
+ * @param  $message: the message describing the error.
+ * @param  $file: the file in which the error occurred.
+ * @param  $lineNumber: the line number on which the error occurred.
+ * @param  $context: the values of local variables at the time when the error happened.
+ * @return true to prevent default error handling.
+ */
 function error_handler($level, $message, $file, $lineNumber, $context) {
 	// Ignore certain warnings.
 	if ($level == 2) {
@@ -143,28 +168,52 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
 	return true;
 }
 
+/**
+ * Whether a page was requested via AJAX
+ * @return true if the page was requested via AJAX.
+ */
 function is_ajax() {
 	return isset($_REQUEST['is_ajax']) || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 }
 
+/**
+ * Whether the protocol is HTTPS.
+ * @return true if the protocol is HTTPS.
+ */
 function is_https() {
 	return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
 }
 
+/**
+ * Whether the page is being viewed on the machine it is being served from.
+ * @return true if it's being viewed on localhost.
+ */
 function is_localhost() {
 	return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
 }
 
+/**
+ * Whether the page is being viewed on a mobile device.
+ * @return true if it is being viewed on a mobile device.
+ */
 function is_mobile() {
 	strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
 }
 
+/**
+ * Print a value to the page with formatting preserved.
+ * @param  $var: the value to print.
+ */
 function p($var) {
 	echo '<pre>';
 	print_r($var);
 	echo '</pre>';
 }
 
+/**
+ * Print a value to the page with formatting preserved, then exit.
+ * @param  $var: the value to print.
+ */
 function d($var) {
 	p($var);
 	exit;

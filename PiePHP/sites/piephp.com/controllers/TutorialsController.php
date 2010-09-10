@@ -1,7 +1,19 @@
 <?php
+/**
+ * PiePHP tutorials.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 class TutorialsController extends Controller {
 
+	/**
+	 * Show the list of tutorials.
+	 */
 	public function indexAction() {
 		$data = array(
 			'title' => 'Tutorials'

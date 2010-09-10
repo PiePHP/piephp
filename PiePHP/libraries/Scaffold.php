@@ -1,24 +1,33 @@
 <?php
+/**
+ * A Scaffold renders result lists and forms for view/add/change/delete actions on a database table.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
-class Scaffold extends Controller {
+abstract class Scaffold extends Controller {
 
 	/**
-	 * The type of data this scaffold manipulates. (e.g. 'blog_post')
+	 * The type of data this scaffold manipulates. (e.g. "blog_post")
 	 */
 	public $type;
 
 	/**
-	 * The database table corresponding to this scaffold's type. (e.g. 'blog_posts')
+	 * The database table corresponding to this scaffold's type. (e.g. "blog_posts")
 	 */
 	public $table;
 
 	/**
-	 * The user-facing word for one object of this type. (e.g. 'blog post')
+	 * The user-facing word for one object of this type. (e.g. "blog post")
 	 */
 	public $singular;
 
 	/**
-	 * The user-facing word for many objects of this type. (e.g. 'blog posts')
+	 * The user-facing word for many objects of this type. (e.g. "blog posts")
 	 */
 	public $plural;
 
@@ -29,45 +38,52 @@ class Scaffold extends Controller {
 	public $fields = array();
 
 	/**
-	 *
+	 * If forms need to be broken into multiple sets of fields, fieldsets should be populated as an associative array.
+	 * The array keys are fieldset legends, and the values are arrays of field names.
 	 */
 	public $fieldsets;
 
 	/**
-	 *
+	 * The action which the scaffold is currently performing. ("list" | "add" | "change" | "remove")
 	 */
 	public $action;
 
 	/**
-	 *
-	 */
-	public $submit;
-
-	/**
-	 *
+	 * The ID of the record that the scaffold is currently operating on.
 	 */
 	public $id;
 
 	/**
-	 *
-	 */
-	public $path;
-
-	/**
-	 *
+	 * The database record that the scaffold is currently operating on.
 	 */
 	public $result;
 
 	/**
-	 *
+	 * The value of the submit button that was pressed to submit the form (if it has been submitted).
+	 */
+	public $submitButtonValue;
+
+	/**
+	 * The URL path of this scaffold. (e.g. /admin/users/)
+	 */
+	public $urlPath;
+
+	/**
+	 * An associative array with database column names for keys and POST data for values.
 	 */
 	public $columnValues;
 
 	/**
-	 *
+	 * True if any of the scaffold's fields were found to be invalid upon validation.
 	 */
 	public $hasValidationErrors = false;
 
+	/**
+	 * Create a scaffold by name, and tell it what it's supposed to do in this request.
+	 * @param  $name: the name of the scaffold.
+	 * @param  $action: what it's supposed to do.
+	 * @param  $id: which record it's supposed to act on.
+	 */
 	public function __construct($name, $action = 'list', $id = 0) {
 		if (!$this->table) {
 			$this->table = strtolower(separate($name, '_'));
@@ -82,7 +98,7 @@ class Scaffold extends Controller {
 			$this->plural = separate($this->table, ' ');
 		}
 		$this->action = $action ? $action : 'list';
-		$this->submit = isset($_POST['submit']) ? $_POST['submit'] : NULL;
+		$this->submitButtonValue = isset($_POST['submit']) ? $_POST['submit'] : NULL;
 		$this->id = $id * 1;
 
 		if (!isset($this->listFields)) {
@@ -97,10 +113,13 @@ class Scaffold extends Controller {
 			$fields[$fieldName] = $field;
 		}
 		$this->fields = &$fields;
-		$this->path = preg_replace('/(add|change|remove)\/([0-9]+\/?)?$/', '', $GLOBALS['PAGE_PATH']);
+		$this->urlPath = preg_replace('/(add|change|remove)\/([0-9]+\/?)?$/', '', $GLOBALS['PAGE_URL_PATH']);
 		$this->getResult();
 	}
 
+	/**
+	 * If the form's data is valid, write it to the database.
+	 */
 	public function processPost() {
 		if (count($_POST)) {
 
@@ -115,7 +134,7 @@ class Scaffold extends Controller {
 			foreach ($this->fields as $field) {
 				$field->processBeforeScaffold();
 			}
-			if ($this->action == 'add' || $this->submit == 'new') {
+			if ($this->action == 'add' || $this->submitButtonValue == 'new') {
 				$this->processInsert();
 			}
 			else if ($this->action == 'change') {
@@ -134,26 +153,42 @@ class Scaffold extends Controller {
 		}
 	}
 
+	/**
+	 * Assess the validity of each of this scaffold's field.
+	 */
 	public function validate() {
 		foreach ($this->fields as $field) {
 			$field->validate();
 		}
 	}
 
+	/**
+	 * Use the model to perform a database insert.
+	 */
 	public function processInsert() {
 		$columnValues = $this->getPostedColumnValues();
 		$this->model->insert($this->table, $columnValues);
 	}
 
+	/**
+	 * Use the model to perform a database update.
+	 */
 	public function processUpdate() {
 		$columnValues = $this->getPostedColumnValues();
 		$this->model->update($this->table, $columnValues, $this->id);
 	}
 
+	/**
+	 * Use the model to perform a database delete.
+	 */
 	public function processDelete() {
 		$this->model->delete($this->table, $this->id);
 	}
 
+	/**
+	 * Get the posted values for each database column that this scaffold's fields represent.
+	 * @return
+	 */
 	public function getPostedColumnValues() {
 		$this->columnValues = array();
 		foreach ($this->fields as $field) {
@@ -162,11 +197,15 @@ class Scaffold extends Controller {
 		return $this->columnValues;
 	}
 
+	/**
+	 * Get the URL for the appropriate redirect location upon processing a submit.
+	 * @return the URL as a string.
+	 */
 	public function getRedirectUrl() {
-		$redirectUrl = $GLOBALS['HTTP_BASE'] . $this->path;
+		$redirectUrl = $GLOBALS['HTTP_BASE'] . $this->urlPath;
 
 		// If the user selected to save and add another, then take them to an add page.
-		if (strpos($this->submit, 'add') !== false) {
+		if (strpos($this->submitButtonValue, 'add') !== false) {
 			$redirectUrl .= 'add/';
 		}
 
@@ -176,6 +215,9 @@ class Scaffold extends Controller {
 		return $redirectUrl;
 	}
 
+	/**
+	 * If the scaffold was created with an ID, get the corresponding result from the database.
+	 */
 	public function getResult() {
 		if ($this->id) {
 			$this->loadModel();
@@ -183,6 +225,10 @@ class Scaffold extends Controller {
 		}
 	}
 
+	/**
+	 * Get the title for the page title for this scaffold and it's current action.
+	 * @return the title as a string.
+	 */
 	public function getTitle() {
 		if ($this->action == 'add') {
 			return 'Add a ' . $this->singular;
@@ -203,10 +249,16 @@ class Scaffold extends Controller {
 		}
 	}
 
+	/**
+	 * Render a form for inserting a record into the database.
+	 */
 	public function renderAddForm() {
 		$this->renderForm();
 	}
 
+	/**
+	 * Render a form for updating a record in the database.
+	 */
 	public function renderChangeForm() {
 		if (!$this->result) {
 			$this->renderDoesntExistMessage();
@@ -216,12 +268,18 @@ class Scaffold extends Controller {
 		}
 	}
 
+	/**
+	 * Render an add form or a change form.
+	 */
 	public function renderForm() {
 		$this->renderFormStart();
 		$this->renderFormFieldsets();
 		$this->renderFormEnd();
 	}
 
+	/**
+	 * Render a list of records and selected field values in a table.
+	 */
 	public function renderList() {
 		$this->renderFormStart();
 		echo '<table>';
@@ -247,6 +305,9 @@ class Scaffold extends Controller {
 		$this->renderFormEnd();
 	}
 
+	/**
+	 * Render a form for confirming that a record should be deleted.
+	 */
 	public function renderRemovalConfirmation() {
 		if (!$this->result) {
 			$this->renderDoesntExistMessage();
@@ -261,18 +322,27 @@ class Scaffold extends Controller {
 		}
 	}
 
+	/**
+	 * Render a message saying that a record you were trying to operate on does not exist, in case of concurrency issues.
+	 */
 	public function renderDoesntExistMessage() {
 		echo "The " . $this->singular . " you're trying to " . $this->action . " doesn't exist.";
 	}
 
+	/**
+	 * Render the form's start tag.
+	 */
 	public function renderFormStart() {
-		$action = $this->path . $this->action . '/';
+		$action = $this->urlPath . $this->action . '/';
 		if ($this->id) {
 			$action .= $this->id . '/';
 		}
 		echo '<form enctype="multipart/form-data" action="' . $action . '" method="post" class="scaffold">';
 	}
 
+	/**
+	 * Render the form's submit buttons and end tag.
+	 */
 	public function renderFormEnd() {
 		echo '<div class="actions">';
 		if ($this->action == 'remove') {
@@ -281,11 +351,11 @@ class Scaffold extends Controller {
 			echo '</div>';
 		}
 		else if ($this->action == 'list') {
-			echo '<a href="' . $this->path . 'add/" class="add">Add a ' . $this->singular . '</a>';
+			echo '<a href="' . $this->urlPath . 'add/" class="add">Add a ' . $this->singular . '</a>';
 		}
 		else {
 			if ($this->action == 'change') {
-				echo '<a href="' . $this->path . 'remove/' . $this->id . '/" class="remove">Remove</a>';
+				echo '<a href="' . $this->urlPath . 'remove/' . $this->id . '/" class="remove">Remove</a>';
 			}
 			echo '<div>';
 				if ($this->action == 'change') {
@@ -299,6 +369,9 @@ class Scaffold extends Controller {
 		echo '</form>';
 	}
 
+	/**
+	 * Render the fieldsets that make up a form.
+	 */
 	public function renderFormFieldsets() {
 		if (!isset($this->fieldsets)) {
 			$this->fieldsets = array('' => array_keys($this->fields));
