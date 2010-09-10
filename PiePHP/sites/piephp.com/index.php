@@ -1,4 +1,15 @@
 <?php
+/**
+ * This is the dispatcher file, which is called at the beginning of every request.
+ * If it can find a response in the cache, it will show it.
+ * Otherwise, it determines which Controller and Action should be used to process the request.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
 ob_start('ob_gzhandler');
 error_reporting(E_ALL);
