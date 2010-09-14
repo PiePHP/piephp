@@ -26,8 +26,8 @@ $CACHES = array(
 
 $SERVER_NAME = 'pie';
 $URL_ROOT = '/';
-$PIE_ROOT = "C:/Frameworks/PiePHP/";
-$APP_ROOT = "C:/Frameworks/PiePHP/sites/piephp.com/";
+$APP_ROOT = str_replace('\\', '/', dirname(__FILE__)) . '/';
+$PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
 $ENVIRONMENT = 'production';
 $VERSION = '0.0.0';
 
@@ -46,7 +46,11 @@ if (!count($_POST)) {
 	$pageModel = new Model();
 	$pageModel->cacheConfigName = 'pages';
 	$pageModel->cacheConnect();
-	$pageCacheKey = $PAGE_URL_PATH . ' ' . (is_ajax() ? 'a' : 0) . (is_https() ? 'h' : 0) . (is_localhost() ? 'l' : 0) . (is_mobile() ? 'm' : 0);
+	$pageCacheKey = $PAGE_URL_PATH . ' '
+		. (is_ajax() ? 'a' : '')
+		. (is_dialog() ? 'd' : '')
+		. (is_https() ? 'h' : '')
+		. (is_localhost() ? 'l' : '');
 	$contents = $pageModel->cache->get($pageCacheKey);
 	if ($contents) {
 		echo $contents;
@@ -184,7 +188,15 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
  * @return true if the page was requested via AJAX.
  */
 function is_ajax() {
-	return isset($_REQUEST['is_ajax']) || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+	return isset($_REQUEST['isAjax']) || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+}
+
+/**
+ * Whether a page is being viewed in a veil dialog.
+ * @return true if the page was requested via a veil dialog.
+ */
+function is_dialog() {
+	return isset($_REQUEST['isDialog']);
 }
 
 /**

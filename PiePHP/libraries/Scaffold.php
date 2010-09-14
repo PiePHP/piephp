@@ -202,7 +202,7 @@ abstract class Scaffold extends Controller {
 	 * @return the URL as a string.
 	 */
 	public function getRedirectUrl() {
-		$redirectUrl = $GLOBALS['HTTP_BASE'] . $this->urlPath;
+		$redirectUrl = $GLOBALS[is_https() ? 'HTTPS_BASE' : 'HTTP_BASE'] . $this->urlPath;
 
 		// If the user selected to save and add another, then take them to an add page.
 		if (strpos($this->submitButtonValue, 'add') !== false) {
@@ -210,7 +210,7 @@ abstract class Scaffold extends Controller {
 		}
 
 		if (is_ajax()) {
-			$redirectUrl .= '?is_ajax=1';
+			$redirectUrl .= '?isAjax=1';
 		}
 		return $redirectUrl;
 	}

@@ -44,7 +44,6 @@ class ErrorsController extends NonCachingController {
 		$error = trim($_REQUEST['error']);
 		if (preg_match('/^(Fatal|Parse) error: (.*) in (.*) on line (.*)$/', $error, $match)) {
 			$this->handleError($match[1], $match[2], $match[3], $match[4], NULL, false);
-			$this->renderRefresher();
 		}
 		else {
 			die($error);
@@ -119,8 +118,12 @@ class ErrorsController extends NonCachingController {
 		$errorStats = $this->countErrorAndReturnStats($level . $message . $file . $lineNumber);
 		if ($errorStats['firstOfItsKind']) {
 			$file = str_replace('\\', '/', $file);
+
+			// Try ending some tags because we're inserting HTML into an unknown point in the page.
+			// Echoing a string means that Eclipse won't complain about unmatched tags.
+			echo '</var></form>';
+
 			?>
-			</var></form>
 			<form class="code" method="post" action="<?php echo $HTTP_ROOT; ?>errors/rewrite" target="submitter">
 				<h3><?php echo $message; ?></h3>
 				<h4><br><?php $this->renderPath($file); ?><i>, line</i> <?php echo $lineNumber; ?></h4>

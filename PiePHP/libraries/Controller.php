@@ -23,6 +23,11 @@ abstract class Controller {
 	public $model;
 
 	/**
+	 * If a user is authenticated, we can access their session information here.
+	 */
+	public $session;
+
+	/**
 	 * If a className is not provided to the loadModel method, the default Model class will be used.
 	 */
 	public $defaultModelClassName = 'Model';
@@ -48,7 +53,7 @@ abstract class Controller {
 	 * @param  $templateName: optional template name to override the controller's default template name.
 	 */
 	public function renderView($viewName, $data = array(), $templateName = NULL) {
-		global $APP_ROOT, $HTTP_ROOT, $HTTPS_ROOT;
+		global $APP_ROOT, $URL_ROOT, $HTTP_ROOT, $HTTPS_ROOT;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {
@@ -83,6 +88,7 @@ abstract class Controller {
 	 * Load one of this controller's properties with a model
 	 * @param  $propertyName: optional property name to override the default property "model"
 	 * @param  $className: optional class name to use instead of the default Model class.
+	 * @return the model, in case we want to chain from the load call.
 	 */
 	public function loadModel($propertyName = NULL, $className = NULL) {
 		if ($propertyName !== NULL) {
@@ -96,28 +102,33 @@ abstract class Controller {
 			$className = ucfirst($propertyName);
 			$this->$propertyName = new $className();
 		}
+		return $this->$propertyName;
 	}
 
 	/**
-	 * Use a location header to redirect to a given URL.
+	 * Use JavaScript or a location header to redirect to a given URL.
 	 * @param  $url: the URL to redirect to.
-	 * @param  $moved: whether to tell the client the page has moved permanently.
+	 * @param  $isMovedPermanently: whether to tell the client the page has moved permanently.
 	 */
-	public function sendRedirect($url, $moved = false) {
-		header($moved ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
-		header('Location: ' . $url);
+	public function sendRedirect($url, $isMovedPermanently = false) {
+		// If this is an AJAX request, we must tell the window.
+		if (is_ajax()) {
+			echo "<script>window.location = '" . addslashes($url) . "'</script>";
+		}
+		else {
+			header($isMovedPermanently ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
+			header('Location: ' . $url);
+		}
 		exit;
 	}
 
 	/**
-	 * Show the auto-refresher in a page if we're in a development environment.
+	 * Authenticate a user.
 	 */
-	public function renderRefresher() {
-		global $HTTP_ROOT;
-		if ($GLOBALS['ENVIRONMENT'] == 'development') {
-			?>
-			<iframe id="refresher" src="<?php echo $HTTP_ROOT; ?>refresher" style="display:none"></iframe>
-			<?php
+	public function authenticate() {
+		$this->session = new Session();
+		if (!$this->session->isSignedIn) {
+			$this->sendRedirect($GLOBALS['HTTPS_ROOT'] . 'sign_in/');
 		}
 	}
 

@@ -53,9 +53,10 @@ class SignInController extends Controller {
 	 * @param  $username: the username of the user who signed in.
 	 */
 	public function signInSucceeded($userId, $username) {
+		$keepUserSignedIn = isset($_POST['keepSignedIn']) ? 1 : 0;
 		$session = new Session();
-		$session->start($userId);
-		echo "<script>alert('succeeded')</script>";
+		$session->start($userId, $keepUserSignedIn);
+		echo "<script>alert('succeeded! user: $userId, remember: $keepUserSignedIn')</script>";
 		exit;
 	}
 

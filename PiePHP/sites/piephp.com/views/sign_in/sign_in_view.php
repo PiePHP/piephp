@@ -1,9 +1,13 @@
 <?php
 if (is_ajax()) {
-	?><var title="action"><?php echo $HTTPS_ROOT; ?>sign_in/</var><?php
+	?>
+	<var title="action"><?php echo $HTTPS_ROOT; ?>sign_in/</var>
+	<?php
 }
-else {
-	?><form method="post" action="<?php echo $HTTPS_ROOT; ?>sign_in/"><?php
+if (!is_dialog()) {
+	?>
+	<form method="post" action="<?php echo $HTTPS_ROOT; ?>sign_in/">
+	<?php
 }
 ?>
 <fieldset>
@@ -29,7 +33,9 @@ else {
 </div>
 </fieldset>
 <?php
-if (!is_ajax()) {
-	?></form><?php
+if (!is_dialog()) {
+	?>
+	</form>
+	<?php
 }
 ?>

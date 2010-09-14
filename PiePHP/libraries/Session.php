@@ -28,30 +28,59 @@ class Session {
 	public $rememberUserIdDurationInDays = 3650;
 
 	/**
+	 * We assume that a user is not signed in until we have checked their credentials to prove otherwise.
+	 */
+	public $isSignedIn = false;
+
+	/**
+	 * When we have authenticated or started a session, controllers and libraries can access the user's ID.
+	 */
+	public $userId;
+	
+	/**
+	 * If the user has a session cookie, check its parameters against a privately salted hash to authenticate. 
+	 */
+	public function __construct() {
+		if (isset($_COOKIE[$this->sessionCookieKey])) {
+			$cookieValue = $_COOKIE[$this->sessionCookieKey];
+			list($userHash, $userId, $time) = explode('-', $cookieValue);
+			$expectedHash = $this->makeHash($userId, $time);
+			if ($userHash == $expectedHash) {
+				$this->isSignedIn = true;
+				$this->userId = $userId;
+			}
+		}
+	}
+
+	/**
 	 * Start a session.
 	 * @param  $userId: the ID of the user we are starting a session for.
 	 * @param  $keepUserSignedIn: whether the user has selected the option to stay signed in.
 	 */
 	public function start($userId, $keepUserSignedIn = false) {
-		$userHash = md5($userId . time() . $GLOBALS['SALT']);
-		$cookieValue = $userHash . '-' . $userId . '-' . time();
+		$time = time();
+		$hash = $this->makeHash($userId, $time);
+		$cookieValue = $hash . '-' . $userId . '-' . $time;
 
 		if ($keepUserSignedIn) {
 			// Remember who the user is for a very long time.
-			$expire = time() + 86400 * $this->rememberUserIdDurationInDays;
-			setcookie($this->sessionCookieKey, $cookieValue, 0);
+			$expire = $time + 86400 * $this->rememberUserIdDurationInDays;
 		}
 		else {
 			// Use a session cookie.
-			$expire = 0;
+			$expire = NULL;
 		}
-		setcookie($this->sessionCookieKey, $cookieValue, $expire);
+		setcookie($this->sessionCookieKey, $cookieValue, $expire, '/');
 	}
 
 	/**
-	 * Authenticate a user.
+	 * Hash a user ID with a private salt in order to start or authenticate a session.
+	 * @param  $userId: the ID of the user we are starting a session for.
+	 * @param  $time: the time of session creation.
 	 */
-	public function authenticate() {
+	public function makeHash($userId, $time) {
+		$hash = md5($userId . $time . $GLOBALS['SALT']);
+		return $hash;
 	}
 
 }

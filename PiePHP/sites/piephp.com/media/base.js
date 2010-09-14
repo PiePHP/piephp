@@ -42,7 +42,7 @@ if (!window.log) (function(window) {
 	  return ('' + string).trim().split(/\s+/);
 	};
 
-	if (location.href.has('is_ajax')) {
+	if (location.href.has('isAjax')) {
 		return;
 	}
 
@@ -99,13 +99,13 @@ if (!window.log) (function(window) {
 		var isHome = noIndex(path) == '/';
 		if ($.support.opacity && loadedInitialPath) {
 			$('#logo').stop().animate({width: isHome ? 234 : 117, height: isHome ? 60 : 40, top: isHome ? 12 : 11});
-			$('#head ul').stop().animate({top: isHome ? 56 : 26});
+			$('#head ul').stop().animate({top: isHome ? 57 : 27});
 			$('#head').stop().animate({height: isHome ? 79 : 49});
 		}
 
 		if (!isForm) {
 			isLoading = 1;
-			$.get(href, {is_ajax: 1}, function(html) {
+			$.get(href, {isAjax: 1}, function(html) {
 				if (currentLoad == loadCount) {
 					isLoading = 0;
 					var load = function() {
@@ -272,20 +272,22 @@ if (!window.log) (function(window) {
 	var showVeil = window.showVeil = function(href) {
 		$('#veil')
 			.fadeIn()
+			.removeClass('submitted')
 			.html('<div class="veil"/><div id="dialog"/>')
 			.find('.veil')
 				.css({opacity: 0.8});
 		veilLoading();
-		$.get(href, {is_ajax: 1}, loadVeil);
+		$.get(href, {isAjax: 1, isDialog: 1}, loadVeil);
 	};
 
 	var loadVeil = window.loadVeil = function(html) {
 		var dialogQuery = $('#dialog').html(html).css({opacity: 1});
 		dialogQuery
+			.prepend($('<div id="dialogClose"/>').click(hideVeil))
 			.css({marginLeft: -dialogQuery.width() / 2})
 			.find('br:last').remove();
-		$('#veil')
-			.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
+			$('#veil')
+				.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
 		focusFirst(dialogQuery);
 	};
 
@@ -294,7 +296,7 @@ if (!window.log) (function(window) {
 	};
 
 	var hideVeil = window.hideVeil = function() {
-		$('#veil').fadeOut(function() {
+		$('#veil').fadeOut('fast', function() {
 			$(this).empty();
 		});
 	};
@@ -369,7 +371,7 @@ if (!window.log) (function(window) {
 				if (action.substring(0, base.length) == base) {
 					var target = form.target;
 					form.target = 'submitter';
-					form.action += (action.has('?') ? '&' : '?') + 'is_ajax=1';
+					form.action += (action.has('?') ? '&' : '?') + 'isAjax=1';
 					setTimeout(function() {
 						form.action = action;
 						form.target = target;
@@ -427,7 +429,7 @@ if (!window.log) (function(window) {
 			var doc = this.contentWindow.document;
 			var href = doc.location.href;
 			if (href != 'about:blank' && !href.has('errors/rewrite')) {
-				var path = getPath(href).replace(/[\?&]is_ajax=[01]/, '');
+				var path = getPath(href).replace(/[\?&]isAjax=[01]/, '');
 				loadContent(path, doc.body.innerHTML);
 			}
 		});

@@ -1,5 +1,4 @@
 <h1>PiePHP is the simplest Web Application Framework on the planet</h1>
-
 <h2><br>Why use PiePHP?</h2>
 <p>You won't find a faster framework anywhere.</p>
 

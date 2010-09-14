@@ -417,10 +417,7 @@ div.section {
 	float: left;
 	display: block;
 	padding: 4px 8px;
-}
-
-#user,
-#user a {
+	font-size: 11px;
 	color: #99d;
 }
 
@@ -442,7 +439,7 @@ div.section {
 #head ul {
 	position: absolute;
 	right: 20px;
-	top: 26px;
+	top: 27px;
 }
 
 #head li {
@@ -455,9 +452,9 @@ div.section {
 #head li a {
 	background: transparent url(tab.png) no-repeat bottom right;
 	display: block;
-	height: 13px;
-	padding: 5px 12px;
-	line-height: 13px;
+	height: 14px;
+	padding: 4px 12px;
+	line-height: 14px;
 	font-size: 13px;
 	color: #fff;
 }
@@ -493,7 +490,7 @@ div.section {
 }
 
 #home #head ul {
-	top: 56px;
+	top: 57px;
 }
 
 #body {
@@ -552,6 +549,21 @@ div.section {
 	top: 90px;
 	border: 2px solid #666;
 	background: #fff;
+}
+
+#dialogClose {
+	position: absolute;
+	display: block;
+	top: -17px;
+	right: -17px;
+	width: 32px;
+	height: 32px;
+	background: url(dialog_close.png);
+	cursor: pointer;
+}
+
+#dialogClose:hover {
+	background-position: bottom left;
 }
 
 #dialog fieldset {

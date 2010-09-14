@@ -15,6 +15,7 @@ class AdminController extends NonCachingController {
 	 * Show a list of links to available admin sections.
 	 */
 	public function indexAction() {
+		$this->authenticate();
 		$data = array('title' => 'Admin');
 		$this->renderView('admin/admin', $data);
 	}
@@ -27,6 +28,7 @@ class AdminController extends NonCachingController {
 	 * @param  $id: the ID of the record on which the scaffold will operate.
 	 */
 	public function catchAllAction($sectionName = '', $action = '', $id = 0) {
+		$this->authenticate();
 		$sectionNameCamel = upper_camel($sectionName);
 		$scaffoldName = $sectionNameCamel . 'Scaffold';
 		if (class_exists($scaffoldName, true)) {

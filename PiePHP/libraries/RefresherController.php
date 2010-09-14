@@ -1,6 +1,7 @@
 <?php
 /**
- * Allow pages to refresh themselves when changes are made in an IDE.
+ * Allow pages to refresh themselves in a development ENVIRONMENT when changes are made.
+ * The developer's IDE needs to log changes into a file, which is pointed to by $REFRESHER_FILE in the local config.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -12,28 +13,54 @@
 class RefresherController extends NonCachingController {
 
 	/**
-	 * Process a request for the file that will call JavaScript to refresh the page.
+	 * Load the refresher script via AJAX in an IFrame.
+	 * Putting it in an IFrame makes it run even if there are JavaScript errors on the parent page.
 	 */
 	public function indexAction() {
+		?>
+		<html>
+		<head>
+			<title>Refresher</title>
+			<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
+		</head>
+		<body>
+			<script type="text/javascript">
+				setTimeout(function() {
+					$.get('<?php echo $GLOBALS['URL_ROOT']; ?>refresher/script', function(js) {
+						eval(js);
+					});
+				}, 1000);
+			</script>
+		</body>
+		</html>
+		<?php
+	}
+
+	/**
+	 * Check the refresher file every second until we see a change or 10 minutes has passed.
+	 * If we see a change, we can tell the parent page to refresh, otherwise we just reload the refresher frame.
+	 */
+	public function scriptAction() {
 		$file = $GLOBALS['REFRESHER_FILE'];
 		if (!fopen($file, 'r')) {
-			?>
-			<script type="text/javascript">
-				alert('"<?php echo addslashes($file) ?>" is not a valid refresher file.');
-			</script>
-			<?php
+			//$this->renderScriptStart();
+			echo "alert('$file is not a valid refresher file.')";
+			//$this->renderScriptEnd();
 			exit;
 		}
 		$old = FileUtility::getModifiedTime($file);
 
+		// The PHP default is to allow 30 seconds for processing, so we'll give it 25 iterations of a 1-second-sleep loop.
 		for ($i = 0; $i < 25; $i++) {
 			sleep(1);
 			$new = FileUtility::getModifiedTime($file);
 			if ($new > $old) {
-				$this->loadModel();
-				$this->model->cacheConnect();
-				$this->model->cache->flush();
+
+				// Flushing the cache ensures that we'll see the newest code even if we're on a cached page.
+				$this->loadModel()->cacheConnect()->flush();
+
 				$this->renderRefreshScript('parent');
+				exit;
 			}
 		}
 
@@ -41,20 +68,10 @@ class RefresherController extends NonCachingController {
 	}
 
 	/**
-	 * Render a script that will reload or refresh.
-	 * @param  $scope: scope will reload the refresher if it is "window" or refresh the page if it is "parent".
+	 * Render a script that will reload the refresher or refresh the page.
+	 * @param  $scope: if scope is "window", the refresher frame will reload, or if it's "parent" the whole page will refresh.
 	 */
 	public function renderRefreshScript($scope) {
-		?>
-		<html>
-		<head><title>Refresher</title></head>
-		<body>
-		<script type="text/javascript">
-			<?php echo $scope; ?>.location.reload();
-		</script>
-		</body>
-		</html>
-		<?php
-		exit;
+		echo "$scope.location.reload()";
 	}
 }

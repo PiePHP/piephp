@@ -13,9 +13,12 @@ class PhpinfoController extends NonCachingController {
 
 	/**
 	 * Show PHP info for developers.
-	 * TODO: Check user credentials.
+	 * TODO: Check user credentials before showing them our entire server configuration.
 	 */
 	public function indexAction() {
+		if ($GLOBALS['ENVIRONMENT'] != 'development') {
+			$this->authenticate();
+		}
 		phpinfo();
 	}
 }
