@@ -7,14 +7,14 @@ if (!is_ajax()) {
 	<link rel="stylesheet" href="/media/base.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
-<body id="<?php echo ($viewName == 'home' ? 'home' : ''); ?>">
+<body>
 	<form id="veil"></form>
 	<div id="head">
 		<div class="section">
 			<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
 			<div id="user">
-				<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><span>Sign Up</span></a>
-				<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><span>Sign In</span></a>
+				<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
+				<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><b>Sign In</b></a>
 			</div>
 			<ul>
 				<li><a href="<?php echo $HTTP_ROOT; ?>">Home</a></li>
@@ -64,7 +64,7 @@ if (!is_ajax()) {
 	<?php
 	if ($GLOBALS['ENVIRONMENT'] == 'development') {
 		?>
-		<iframe id="refresher" src="<?php echo $URL_ROOT; ?>refresher" style="display:none"></iframe>
+		<iframe id="refresher" src="<?php echo $DISPATCHER_PATH; ?>refresher" style="display:none"></iframe>
 		<?php
 	}
 	?>

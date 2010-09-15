@@ -53,7 +53,7 @@ abstract class Controller {
 	 * @param  $templateName: optional template name to override the controller's default template name.
 	 */
 	public function renderView($viewName, $data = array(), $templateName = NULL) {
-		global $APP_ROOT, $URL_ROOT, $HTTP_ROOT, $HTTPS_ROOT;
+		global $APP_ROOT, $DISPATCHER_PATH, $HTTP_ROOT, $HTTPS_ROOT;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {
@@ -106,19 +106,26 @@ abstract class Controller {
 	}
 
 	/**
-	 * Use JavaScript or a location header to redirect to a given URL.
+	 * Use a location header to redirect to a given URL.
 	 * @param  $url: the URL to redirect to.
 	 * @param  $isMovedPermanently: whether to tell the client the page has moved permanently.
 	 */
 	public function sendRedirect($url, $isMovedPermanently = false) {
-		// If this is an AJAX request, we must tell the window.
 		if (is_ajax()) {
-			echo "<script>window.location = '" . addslashes($url) . "'</script>";
+			$url .= (strpos($url, '?') == false ? '?' : '&') . 'isAjax=1';
 		}
-		else {
-			header($isMovedPermanently ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
-			header('Location: ' . $url);
-		}
+		header($isMovedPermanently ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
+		header('Location: ' . $url);
+		exit;
+	}
+
+	/**
+	 * Use JavaScript or a location header to redirect to a given URL.
+	 * @param  $url: the URL to redirect to.
+	 */
+	public function sendJsRedirect($url) {
+		$scope = is_frame() ? 'parent' : 'window';
+		echo "<script>$scope.location = '" . addslashes($url) . "'</script>";
 		exit;
 	}
 
@@ -128,7 +135,9 @@ abstract class Controller {
 	public function authenticate() {
 		$this->session = new Session();
 		if (!$this->session->isSignedIn) {
-			$this->sendRedirect($GLOBALS['HTTPS_ROOT'] . 'sign_in/');
+			$signInController = new SignInController();
+			$signInController->indexAction();
+			exit;
 		}
 	}
 

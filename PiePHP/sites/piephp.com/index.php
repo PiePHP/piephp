@@ -11,7 +11,6 @@
  * @license    http://www.piephp.com/license
  */
 
-ob_start('ob_gzhandler');
 error_reporting(E_ALL);
 set_error_handler($ERROR_HANDLER = 'error_handler', E_ALL);
 
@@ -25,7 +24,7 @@ $CACHES = array(
 );
 
 $SERVER_NAME = 'pie';
-$URL_ROOT = '/';
+$DISPATCHER_PATH = '/';
 $APP_ROOT = str_replace('\\', '/', dirname(__FILE__)) . '/';
 $PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
 $ENVIRONMENT = 'production';
@@ -53,20 +52,23 @@ if (!count($_POST)) {
 		. (is_localhost() ? 'l' : '');
 	$contents = $pageModel->cache->get($pageCacheKey);
 	if ($contents) {
-		echo $contents;
-		exit;
+		send_output($contents);
 	}
 }
+
+ob_start();
 
 $HTTP_BASE = 'http://' . $SERVER_NAME;
 $HTTPS_BASE = 'http://' . $SERVER_NAME;
 if (is_https()) {
-	$HTTP_ROOT = $HTTP_BASE . $URL_ROOT;
-	$HTTPS_ROOT = $URL_ROOT;
+	$HTTP_ROOT = $HTTP_BASE . $DISPATCHER_PATH;
+	$HTTPS_ROOT = $DISPATCHER_PATH;
+	$CURRENT_URL = $HTTPS_BASE . $_SERVER['REQUEST_URI'];
 }
 else {
-	$HTTP_ROOT = $URL_ROOT;
-	$HTTPS_ROOT = $HTTPS_BASE . $URL_ROOT;
+	$HTTP_ROOT = $DISPATCHER_PATH;
+	$HTTPS_ROOT = $HTTPS_BASE . $DISPATCHER_PATH;
+	$CURRENT_URL = $HTTP_BASE . $_SERVER['REQUEST_URI'];
 }
 
 $parameters = explode('/', substr($PAGE_URL_PATH, 1));
@@ -98,10 +100,11 @@ else {
 call_user_func_array(array(&$controller, $actionName), $parameters);
 
 if ($controller->isCacheable && isset($pageModel)) {
-	$contents = ob_get_contents();
+	$contents = ob_get_clean();
 	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
 	$contents = preg_replace('/\\s+/ms', ' ', $contents);
 	$pageModel->cache->set($pageCacheKey, $contents, isset($PAGE_CACHE_TIME) ? $PAGE_CACHE_TIME : 60);
+	send_output($contents);
 }
 
 /**
@@ -184,6 +187,31 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
 }
 
 /**
+ * When HTML has come from the cache, it will not contain user-specific (like "Welcome, Sam" and "Sign out")
+ * So if the user is signed in, we should decorate the cached HTML with user stuff.
+ * Then we want to output it through the output buffer's gzip handler.
+ * @param  $output: the output to decorate.
+ */
+function send_output($output) {
+	global $DISPATCHER_PATH;
+	$session = new Session();
+	if ($session->isSignedIn) {
+		$pieces = preg_split('/<div id="user">.*?<\/div>/', $output, 2);
+		if (count($pieces) > 1) {
+			$output = $pieces[0] .
+				'<div id="user">' .
+				'<span>' . htmlentities($session->username) . '</span>' .
+				'<a href="' . $DISPATCHER_PATH . 'sign_out/" class="noAjax">Sign out</a>' .
+				'</div>' .
+				$pieces[1];
+		}
+	}
+	ob_start('ob_gzhandler');
+	echo $output;
+	exit;
+}
+
+/**
  * Whether a page was requested via AJAX
  * @return true if the page was requested via AJAX.
  */
@@ -197,6 +225,14 @@ function is_ajax() {
  */
 function is_dialog() {
 	return isset($_REQUEST['isDialog']);
+}
+
+/**
+ * Whether a page was reached via a submitter iframe.
+ * @return true if the page was requested via AJAX.
+ */
+function is_frame() {
+	return isset($_REQUEST['isFrame']);
 }
 
 /**

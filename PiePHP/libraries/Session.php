@@ -36,31 +36,34 @@ class Session {
 	 * When we have authenticated or started a session, controllers and libraries can access the user's ID.
 	 */
 	public $userId;
-	
+
 	/**
 	 * If the user has a session cookie, check its parameters against a privately salted hash to authenticate. 
 	 */
 	public function __construct() {
 		if (isset($_COOKIE[$this->sessionCookieKey])) {
 			$cookieValue = $_COOKIE[$this->sessionCookieKey];
-			list($userHash, $userId, $time) = explode('-', $cookieValue);
+			list($userHash, $userId, $time, $username) = explode('-', $cookieValue, 4);
 			$expectedHash = $this->makeHash($userId, $time);
 			if ($userHash == $expectedHash) {
 				$this->isSignedIn = true;
 				$this->userId = $userId;
+				$this->username = $username;
 			}
 		}
 	}
 
 	/**
-	 * Start a session.
+	 * Start a session by setting a session cookie with hash, user ID and time.
+	 * Also keep track of the username.
 	 * @param  $userId: the ID of the user we are starting a session for.
+	 * @param  $username: the username, in case we need to display it without hitting the database.
 	 * @param  $keepUserSignedIn: whether the user has selected the option to stay signed in.
 	 */
-	public function start($userId, $keepUserSignedIn = false) {
+	public function start($userId, $username, $keepUserSignedIn = false) {
 		$time = time();
 		$hash = $this->makeHash($userId, $time);
-		$cookieValue = $hash . '-' . $userId . '-' . $time;
+		$cookieValue = $hash . '-' . $userId . '-' . $time . '-' . $username;
 
 		if ($keepUserSignedIn) {
 			// Remember who the user is for a very long time.
@@ -71,6 +74,13 @@ class Session {
 			$expire = NULL;
 		}
 		setcookie($this->sessionCookieKey, $cookieValue, $expire, '/');
+	}
+
+	/**
+	 * End a session by deleting the session cookie.
+	 */
+	public function end() {
+		setcookie($this->sessionCookieKey, '', NULL, '/');
 	}
 
 	/**

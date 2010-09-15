@@ -26,7 +26,7 @@ class RefresherController extends NonCachingController {
 		<body>
 			<script type="text/javascript">
 				setTimeout(function() {
-					$.get('<?php echo $GLOBALS['URL_ROOT']; ?>refresher/script', function(js) {
+					$.get('<?php echo $GLOBALS['DISPATCHER_PATH']; ?>refresher/script', function(js) {
 						eval(js);
 					});
 				}, 1000);

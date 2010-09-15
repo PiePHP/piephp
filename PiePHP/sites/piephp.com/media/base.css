@@ -385,23 +385,19 @@ div.section {
 }
 
 #head {
-	height: 49px;
+	height: 79px;
 	position: relative;
 	background: #600 url(head.gif) repeat-x bottom left;
 	border-bottom: 1px solid #200;
-}
-
-#home #head {
-	height: 79px;
 }
 
 #logo {
 	position: absolute;
 	display: block;
 	left: 20;
-	top: 11px;
-	width: 117px;
-	height: 30px;
+	top: 12px;
+	width: 234px;
+	height: 60px;
 	background: transparent url(logo.gif) no-repeat;
 	background-size: 100%;
 	overflow: hidden;
@@ -413,7 +409,8 @@ div.section {
 	right: 20px;
 }
 
-#user a {
+#user a,
+#user span {
 	float: left;
 	display: block;
 	padding: 4px 8px;
@@ -439,7 +436,7 @@ div.section {
 #head ul {
 	position: absolute;
 	right: 20px;
-	top: 27px;
+	top: 57px;
 }
 
 #head li {
@@ -480,17 +477,6 @@ div.section {
 
 #foot li a {
 	padding: 0 10px;
-}
-
-#home #logo {
-	background-image: url(logo-big.gif);
-	top: 12px;
-	width: 234px;
-	height: 60px;
-}
-
-#home #head ul {
-	top: 57px;
 }
 
 #body {

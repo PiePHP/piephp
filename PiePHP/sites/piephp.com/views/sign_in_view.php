@@ -11,7 +11,7 @@ if (!is_dialog()) {
 }
 ?>
 <fieldset>
-<h2>Sign In</h2>
+<h2>Sign in</h2>
 <div>
 	<label>Username</label>
 	<input type="text" name="username" maxlength="32" class="required username" value="">

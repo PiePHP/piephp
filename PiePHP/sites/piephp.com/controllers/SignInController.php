@@ -1,6 +1,6 @@
 <?php
 /**
- * The sign in page for PiePHP
+ * The sign in page for PiePHP.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -19,7 +19,7 @@ class SignInController extends Controller {
 		if (count($_POST)) {
 			$this->processSignIn();
 		}
-		$this->renderView('sign_in/sign_in', array('title' => 'Sign In'));
+		$this->renderView('sign_in', array('title' => 'Sign in'));
 	}
 
 	/**
@@ -30,41 +30,31 @@ class SignInController extends Controller {
 		$password = $_POST['password'];
 		$this->loadModel();
 		$result = $this->model->result("
-			SELECT id, password
+			SELECT id, username, password
 			FROM users
 			WHERE LOWER(username) = '" . addslashes($username) . "'");
 		if ($result) {
 			$hash = md5($password . $result['id']);
 			if ($result['password'] == $hash) {
-				$this->signInSucceeded($result['id'], $username);
+				$this->startSessionAndSendRedirect($result['id'], $result['username']);
 			}
-			else {
-				$this->signInFailed();
-			}
-		}
-		else {
-			$this->signInFailed();
 		}
 	}
 
 	/**
-	 * The sign in succeeded, so start a session.
+	 * The sign in succeeded, so start a session and send the user to the appropriate page.
 	 * @param  $userId: the ID of the user who signed in.
 	 * @param  $username: the username of the user who signed in.
 	 */
-	public function signInSucceeded($userId, $username) {
+	public function startSessionAndSendRedirect($userId, $username) {
 		$keepUserSignedIn = isset($_POST['keepSignedIn']) ? 1 : 0;
 		$session = new Session();
-		$session->start($userId, $keepUserSignedIn);
-		echo "<script>alert('succeeded! user: $userId, remember: $keepUserSignedIn')</script>";
-		exit;
-	}
-
-	/**
-	 * The sign in failed, so show the appropriate message.
-	 */
-	public function signInFailed() {
-		echo "<script>alert('failed')</script>";
-		exit;
+		$session->start($userId, $username, $keepUserSignedIn);
+		if (isset($_COOKIE['SIGN_IN_REDIRECT_URL'])) {
+			$this->sendJsRedirect($_COOKIE['SIGN_IN_REDIRECT_URL']);
+		}
+		else {
+			$this->sendJsRedirect($GLOBALS['HTTP_ROOT']);
+		}
 	}
 }

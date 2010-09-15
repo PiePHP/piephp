@@ -96,12 +96,6 @@ if (!window.log) (function(window) {
 		$('#body>div').addClass('loading');
 		var path = getPath(href);
 		var currentLoad = ++loadCount;
-		var isHome = noIndex(path) == '/';
-		if ($.support.opacity && loadedInitialPath) {
-			$('#logo').stop().animate({width: isHome ? 234 : 117, height: isHome ? 60 : 40, top: isHome ? 12 : 11});
-			$('#head ul').stop().animate({top: isHome ? 57 : 27});
-			$('#head').stop().animate({height: isHome ? 79 : 49});
-		}
 
 		if (!isForm) {
 			isLoading = 1;
@@ -109,7 +103,7 @@ if (!window.log) (function(window) {
 				if (currentLoad == loadCount) {
 					isLoading = 0;
 					var load = function() {
-						loadContent(path, html, isHome);
+						loadContent(path, html);
 					};
 					if (bodySectionQuery.html()) {
 						load();
@@ -122,7 +116,7 @@ if (!window.log) (function(window) {
 		}
 	};
 
-	var loadContent = function(path, html, isHome) {
+	var loadContent = function(path, html) {
 		hideVeil();
 		window.scrollTo(0, 0);
 		var bodySectionQuery = $('#body .section');
@@ -135,7 +129,6 @@ if (!window.log) (function(window) {
 			return this.title == 'title';
 		}).text();
 		$('#loading').remove();
-		$('body')[0].id = isHome ? 'home' : '';
 		lightTab();
 	};
 
@@ -346,7 +339,7 @@ if (!window.log) (function(window) {
 				showVeil(href);
 				return false;
 			}
-			else if (this.id.has('uservoice')) {
+			else if ($(this).hasClass('noAjax') || this.id.has('uservoice')) {
 				return true;
 			}
 			else {
@@ -371,7 +364,7 @@ if (!window.log) (function(window) {
 				if (action.substring(0, base.length) == base) {
 					var target = form.target;
 					form.target = 'submitter';
-					form.action += (action.has('?') ? '&' : '?') + 'isAjax=1';
+					form.action += (action.has('?') ? '&' : '?') + 'isAjax=1&isFrame=1';
 					setTimeout(function() {
 						form.action = action;
 						form.target = target;
