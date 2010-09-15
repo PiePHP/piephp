@@ -1,0 +1,6 @@
+Database patches
+User group authorization
+Sign up page
+Database synchronization
+Code generation
+Error reporting
