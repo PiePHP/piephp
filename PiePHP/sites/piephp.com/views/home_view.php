@@ -1,9 +1,17 @@
-<h1>PiePHP is the simplest Web Application Framework on the planet</h1>
+<h1>PiePHP - the instant gratification framework</h1>
 <h2><br>Why use PiePHP?</h2>
 <p>You won't find a faster framework anywhere.</p>
 
 <h2><br>Status</h2>
 <p>PiePHP is in alpha!</p>
+
+
+Description
+Download
+Announcements
+Features
+
+
 
 <var><?
 foreach ($posts as $post) {
@@ -16,3 +24,4 @@ foreach ($posts as $post) {
 	<?
 }
 ?></var>
+

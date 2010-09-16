@@ -1,6 +1,14 @@
 Database patches
+User groups field
 User group authorization
-Sign up page
+Installer
+------------------------
 Database synchronization
 Code generation
 Error reporting
+Test suite
+News/blog
+Documentation
+Sign up page
+Forums
+Internationalization
