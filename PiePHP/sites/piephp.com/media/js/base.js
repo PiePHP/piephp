@@ -1,35 +1,88 @@
+/**
+ * This base javascript library currently does many things (too many things).
+ *  - AJAX-based persistent page framework
+ *  - JavaScript console logging
+ *  - Helpful prototype methods
+ *  - Form validation
+ *  - Veil dialogs
+ *  - Navigation highlighting
+ *
+ * This needs to be broken up into multiple libraries.  The best time for this
+ * reorganization effort will be when when automated JS file merging and
+ * compression is implemented, using Closure Compiler.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
+
+// The logger is a shared object that is put onto the window.
+// If it's there, we've already been through this code, and we don't want to rerun it.
 if (!window.log) (function(window) {
 
+	/**
+	 * Occurrences of document and location can be compressed because they are local now.
+	 */
 	var document = window.document;
-
 	var location = window.location;
 
+	/**
+	 * The base URL is used for comparison against link HRefs and form actions to determine
+	 * whether they're pointing to the same host and are therefore AJAXable.
+	 */
 	var base = location.protocol + '//' + location.host;
 
+	/**
+	 * The path of the current page helps us to track whether the user has put something
+	 * new into the address bar, necessitating an AJAX get.
+	 */
 	var currentPath = '/';
 
+	/**
+	 * When we begin loading new AJAX content, we can use a counter for comparison upon
+	 * receiving a response to determine whether it is stale (and should be discarded).
+	 */
 	var loadCount = 0;
 
+	/**
+	 * If we are loading new AJAX content, we can expect a URL change and know to ignore
+	 * it because it was not a user-entered URL.
+	 */
 	var isLoading = 0;
 
-	var loadedInitialPath = 0;
-
+	/**
+	 * jQuery selector for form fields that we will use.
+	 */
 	var formFieldsSelector = 'input,select,textarea,button';
 
+	/**
+	 * jQuery selector for some types of elements that can take focus.
+	 */
 	var focusableSelector = formFieldsSelector + ',a';
 
+	/**
+	 * "Extend" an object by applying new properties to it (and overwriting any existing ones).
+	 */
 	var extend = function(object, properties) {
 		for (var name in properties) {
 			object[name] = properties[name];
 		}
 	};
 
+	/**
+	 * String.has(substring) is true if the string has at least one instance of the substring.
+	 */
 	extend(String.prototype, {
 		has: function(text) {
 			return this.indexOf(text) > -1;
 		}
 	});
 
+	/**
+	 * Array.each helps us walk through an array with a callback function.
+	 */
 	extend(Array.prototype, {
 		each: function(callback) {
 			for (var i = 0; i < this.length; i++) {
@@ -38,24 +91,31 @@ if (!window.log) (function(window) {
 		}
 	});
 
-	if (location.href.has('isAjax')) {
-		return;
-	}
-
+	/**
+	 * Break up a string by its whitespace.
+	 */
 	var whitespaceSplit = function(string) {
-	  return ('' + string).trim().split(/\s+/);
+		return ('' + string).trim().split(/\s+/);
 	};
 
+	/**
+	 * The log prints messages to the console in browsers that support it.
+	 * It exposes itself to other scripts via the window object.
+	 */
 	var log = window.log = function(message, value) {
 		if (window.console) {
-  		console.log(typeof(value) == 'undefined' ? message : message + ': ' + value);
+			console.log(typeof(value) == 'undefined' ? message : message + ': ' + value);
 		}
 	};
 
+	/**
+	 * Get the current time for time measurement tasks.
+	 */
 	var time = function() {
 		return (new Date()).getTime();
 	};
 
+	// TODO: Continue commenting this library (and ideally break it into smaller pieces as well.
 	var getPath = function(href) {
 		return href.substring(base.length).replace(/^\/#/, '');
 	};
@@ -123,11 +183,11 @@ if (!window.log) (function(window) {
 		var bodyQuery = $('#body');
 		currentPath = path;
 		$('#body>div').removeClass('loading');
-    var htmlQuery = $(html);
-    if (htmlQuery.find('#body').size()) {
-      htmlQuery = htmlQuery.find('#body');
-    }
-    wire(bodyQuery.html(htmlQuery));
+		var htmlQuery = $(html);
+		if (htmlQuery.find('#body').size()) {
+		  htmlQuery = htmlQuery.find('#body');
+		}
+		wire(bodyQuery.html(htmlQuery));
 		document.location = base + '/#' + path;
 		document.title = $('#title').text();
 		$('#loading').remove();
@@ -359,7 +419,7 @@ if (!window.log) (function(window) {
 				}
 				if (action.substring(0, base.length) == base) {
 					var target = form.target;
-          form.isAjax.value = 1;
+		      form.isAjax.value = 1;
 					form.action += (action.has('?') ? '&' : '?') + 'isAjax=1&isFrame=1';
 					form.target = 'submitter';
 					setTimeout(function() {
@@ -434,7 +494,6 @@ if (!window.log) (function(window) {
 	navQuery
 		.delegate('a', 'mouseenter', animateHover)
 		.delegate('a', 'mouseleave', animateHover);
-	loadedInitialPath = 1;
 	lightTab();
 	wire(document);
 

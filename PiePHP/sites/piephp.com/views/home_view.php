@@ -18,7 +18,7 @@
 </div>
 
 <div id="features">
-	<h2>What's in PiePHP?</h2>
+	<h2>What's in the pie?</h2>
 	<ul>
 		<li>A simple yet solid <b>Model View Controller</b> architecture</li>
 		<li>Essential <b>rapid application development</b> features</li>

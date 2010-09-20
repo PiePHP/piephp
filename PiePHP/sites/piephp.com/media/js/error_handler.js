@@ -1,4 +1,16 @@
+/**
+ * Facilitate code viewing and rewriting in the UI when an error has been handled.
+ * This is used to show code for both the file in which the error occurred, and
+ * optionally in each file in the stack trace.
+ *
+ * @author     Sam Eubank <sam@piephp.com>
+ * @package    PiePHP
+ * @since      Version 0.0
+ * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @license    http://www.piephp.com/license
+ */
 
+// Don't rerun this if the errorHandling already exists.
 if (!window.errorHandling) {
 
 	window.errorHandling = 1;
@@ -57,6 +69,7 @@ if (!window.errorHandling) {
 						formQuery.submit();
 					});
 			});
+
 		query.find('div.toggle')
 			.click(function() {
 				$(this).toggleClass('toggled');

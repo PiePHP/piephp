@@ -129,7 +129,7 @@ h4 {
 	float: left;
 	height: 19px;
 	font-size: 11px;
-  padding: 0 8px;
+	padding: 0 8px;
 }
 
 #userNav a,
@@ -148,7 +148,7 @@ h4 {
 	padding: 3px 12px;
 	height: 12px;
 	line-height: 12px;
-  color: #bcd;
+	color: #bcd;
 }
 
 #userNav a:hover {
@@ -240,7 +240,7 @@ h4 {
 #explanation {
 	border: 1px solid #468;
 	width: 660px;
-	height: 250px;
+	height: 210px;
 	background: #123;
 }
 
@@ -248,7 +248,7 @@ h4 {
 	position: absolute;
 	background: url(../pie.gif);
 	left: 22px;
-	top: 57px;
+	top: 42px;
 	width: 140px;
 	height: 118px;
 }
@@ -256,7 +256,7 @@ h4 {
 #ig {
 	position: absolute;
 	left: 196px;
-	top: 52px;
+	top: 37px;
 	color: #abc;
 	font-size: 26px;
 	line-height: 42px;
@@ -313,7 +313,7 @@ h4 {
 #features {
 	border: 1px solid #fff;
 	width: 620px;
-	height: 400px;
+	height: 440px;
 	background: #fff;
 	padding: 20px;
 }
@@ -338,5 +338,5 @@ h4 {
 	height: 572px;
 	background: #cde;
 	padding: 20px;
-  font-size: 14px;
+	font-size: 14px;
 }

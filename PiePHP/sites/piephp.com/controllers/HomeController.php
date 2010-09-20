@@ -18,7 +18,7 @@ class HomeController extends Controller {
 		$this->loadModel('blogModel');
 		$data = array(
 			'title' => 'The instant gratification framework',
-      'manualContentLayout' => true,
+		  'manualContentLayout' => true,
 			'posts' => $this->blogModel->posts()
 		);
 		$this->renderView('home', $data);

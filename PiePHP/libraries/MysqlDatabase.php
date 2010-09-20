@@ -27,7 +27,7 @@ class MysqlDatabase extends Database {
 	 * Begin a database transaction.
 	 */
 	public function beginTransaction() {
-    // TODO: Implement transaction stuff.
+		// TODO: Implement transaction stuff.
 		//$this->query('BEGIN TRANSACTION');
 	}
 
@@ -35,7 +35,7 @@ class MysqlDatabase extends Database {
 	 * Roll back the current database transaction.
 	 */
 	public function rollbackTransaction() {
-    // TODO: Implement transaction stuff.
+		// TODO: Implement transaction stuff.
 		//$this->query('ROLLBACK TRANSACTION');
 	}
 
@@ -43,7 +43,7 @@ class MysqlDatabase extends Database {
 	 * Commit the current database transaction.
 	 */
 	public function commitTransaction() {
-    // TODO: Implement transaction stuff.
+		// TODO: Implement transaction stuff.
 		//$this->query('COMMIT TRANSACTION');
 	}
 
