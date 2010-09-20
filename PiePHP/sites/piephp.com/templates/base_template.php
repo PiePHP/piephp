@@ -4,62 +4,61 @@ if (!is_ajax()) {
 <html>
 <head>
 	<title>PiePHP - <?php echo $title; ?></title>
-	<link rel="stylesheet" href="/media/base.css" type="text/css">
+	<link rel="stylesheet" href="/media/css/base.css" type="text/css">
+	<link rel="stylesheet" href="/media/css/scaffolds.css" type="text/css">
+	<link rel="stylesheet" href="/media/css/veil.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
 	<form id="veil"></form>
 	<div id="head">
-		<div class="section">
-			<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
-			<div id="user">
-				<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
-				<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><b>Sign In</b></a>
+		<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
+		<div id="user">
+			<div id="userNav">
+				<span>
+					<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
+					<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><b>Sign In</b></a>
+				</span>
 			</div>
-			<ul>
-				<li><a href="<?php echo $HTTP_ROOT; ?>">Home</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>downloads">Downloads</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>tutorials">Tutorials</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>community">Community</a></li>
-			</ul>
 		</div>
+	</div>
+	<div id="nav">
+		<span>
+			<a href="<?php echo $HTTP_ROOT; ?>downloads">Downloads</a>
+			<a href="<?php echo $HTTP_ROOT; ?>tutorials">Tutorials</a>
+			<a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a>
+			<a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a>
+			<a href="<?php echo $HTTP_ROOT; ?>community">Community</a>
+		</span>
+		<form action="<?php echo $HTTP_ROOT; ?>search">
+			<input type="text" id="search" name="q" title="Search PiePHP.com">
+			<button id="go"></button>
+		</form>
 	</div>
 	<div id="body">
-		<div class="section">
-			<?php
-			}
-			else {
-				?><var title="title">PiePHP - <?php echo $title; ?></var><?php
-			}
-			include $viewPath;
+		<?php
+		}
+		else {
+			?><var title="title">PiePHP - <?php echo $title; ?></var><?php
+		}
+		if ($viewName != 'home' && !is_dialog()) {
 			?>
-			<br id="bodyEnd">
+			<div id="content">
 			<?php
-			if (!is_ajax()) {
+		}
+		include $viewPath;
+		if ($viewName != 'home' && !is_dialog()) {
 			?>
-		</div>
+			</div>
+			<?php
+		}
+		?>
+		<?php
+		if (!is_ajax()) {
+		?>
 	</div>
 	<div id="foot">
-		<div class="section">
-			<ul>
-				<li><a href="<?php echo $HTTP_ROOT; ?>">Home</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>downloads">Downloads</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>tutorials">Tutorials</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>community">Community</a></li>
-				<li><a href="<?php echo $HTTP_ROOT; ?>license">License</a></li>
-				<?php
-				if (is_localhost()) {
-					?>
-					<li><a href="<?php echo $HTTP_ROOT; ?>admin">Admin</a></li>
-					<?php
-				}
-				?>
-			</ul>
-		</div>
+		Copyright 2007-2010, Pie Software Foundation, All rights reserved
 	</div>
 	<?php
 	if ($GLOBALS['ENVIRONMENT'] == 'development') {
@@ -68,11 +67,11 @@ if (!is_ajax()) {
 		<?php
 	}
 	?>
+	<script type="text/javascript" src="/media/js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="/media/js/base.js"></script>
+	<script type="text/javascript" src="/media/js/uservoice.js"></script>
+	<script type="text/javascript" src="/media/js/google_analytics.js"></script>
 </body>
-<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
-<script type="text/javascript" src="/media/base.js"></script>
-<script type="text/javascript" src="/media/uservoice.js"></script>
-<script type="text/javascript" src="/media/google_analytics.js"></script>
 </html>
 <?php
 }

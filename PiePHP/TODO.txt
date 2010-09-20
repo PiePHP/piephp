@@ -12,4 +12,5 @@ News/blog
 Documentation
 Sign up page
 Forums
+Search
 Internationalization

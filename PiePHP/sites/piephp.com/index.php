@@ -1,7 +1,7 @@
 <?php
 /**
- * This is the dispatcher file, which is called at the beginning of every request.
- * If it can find a response in the cache, it will show it.
+ * This is the dispatcher file which routes every request.
+ * If it can find a response for the request in the page cache, it outputs that response.
  * Otherwise, it determines which Controller and Action should be used to process the request.
  *
  * @author     Sam Eubank <sam@piephp.com>
@@ -11,27 +11,44 @@
  * @license    http://www.piephp.com/license
  */
 
+// Strict error handling promotes less error-prone code.
 error_reporting(E_ALL);
-set_error_handler($ERROR_HANDLER = 'error_handler', E_ALL);
+set_error_handler('error_handler', E_ALL);
 
+// To avoid revealing production passwords in development environments, we can use config_local.php
+// to override database configs.
 $DATABASES = array(
 	'default' => 'mysql:host=localhost username=piephp password= database=piephp'
 );
 
+// Caches can be used for full-page HTML (in the dispatcher) or SQL queries (in a Model).
 $CACHES = array(
 	'default' => 'memcache:host=localhost port=11211 prefix=piephp_ expire=600',
 	'pages' => 'memcache:host=localhost port=11211 prefix=piephp_pages_ expire=600'
 );
 
-$SERVER_NAME = 'pie';
-$DISPATCHER_PATH = '/';
-$APP_ROOT = str_replace('\\', '/', dirname(__FILE__)) . '/';
-$PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
+// In development environments, we should use config_local.php to override this value.
 $ENVIRONMENT = 'production';
-$VERSION = '0.0.0';
 
-@include 'config_local.php';
+// The version number is used when generating minified JavaScript and CSS for a deployment.
+// TODO: Make this actually happen.
+$VERSION = '0.0.1';
 
+// APP_ROOT is the directory which contains this application's files.
+$APP_ROOT = str_replace('\\', '/', dirname(__FILE__)) . '/';
+
+// PIE_ROOT is the directory which contains PiePHP libraries and sites that use PiePHP.
+$PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
+
+// If a REDIRECT_URL exists, then mod_rewrite is allowing us to dispatching from '/'.
+// Otherwise, we need to make URLs point to index.php by setting it as the DISPATCHER_PATH.
+$DISPATCHER_PATH = isset($_SERVER['REDIRECT_URL']) ? '/' : '/index.php/';
+
+// Any of the above settings can be overridden in a development/test/staging environment by
+// rewriting them in config_local.php.
+include 'config_local.php';
+
+// Class autoloading needs to know where to look for classes with certain suffixes.
 $CLASS_DIRS = array(
 	'*' => $PIE_ROOT . 'libraries/',
 	'Controller' => $APP_ROOT . 'controllers/',
@@ -58,8 +75,8 @@ if (!count($_POST)) {
 
 ob_start();
 
-$HTTP_BASE = 'http://' . $SERVER_NAME;
-$HTTPS_BASE = 'http://' . $SERVER_NAME;
+$HTTP_BASE = 'http://' . $_SERVER['SERVER_NAME'];
+$HTTPS_BASE = 'http://' . $_SERVER['SERVER_NAME'];
 if (is_https()) {
 	$HTTP_ROOT = $HTTP_BASE . $DISPATCHER_PATH;
 	$HTTPS_ROOT = $DISPATCHER_PATH;
@@ -75,7 +92,9 @@ $parameters = explode('/', substr($PAGE_URL_PATH, 1));
 
 $controllerName = upper_camel($parameters[0]) . 'Controller';
 
-// If the URL is /hello and there's no Hello controller, then hello can be treated as a Home controller method.
+// If the URL was "/" or if it was "/hello/" and there's no HelloController, we'll just use the
+// HomeController.  In the "/hello/" case, there's a chace that HomeController has a helloAction
+// or a catchAllAction.
 if ($controllerName == 'Controller' || !class_exists($controllerName, true)) {
 	$controllerName = 'HomeController';
 }
@@ -86,7 +105,9 @@ $controller = new $controllerName();
 
 $actionName = (count($parameters) ? lower_camel($parameters[0]) : '') . 'Action';
 
-// If the URL is /controller/hello and there's no hello method, hello is a parameter of the index method.
+// If the URL was "/something/hello/" then we want the helloAction of the SomethingController.  If
+// the SomethingController doesn't have a helloAction, it might have a catchAllAction.  If not,
+// then the Controller base catchAllAction can return a 404.
 if ($actionName == 'Action') {
 	$actionName = 'indexAction';
 }
@@ -187,10 +208,10 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
 }
 
 /**
- * When HTML has come from the cache, it will not contain user-specific (like "Welcome, Sam" and "Sign out")
- * So if the user is signed in, we should decorate the cached HTML with user stuff.
- * Then we want to output it through the output buffer's gzip handler.
- * @param  $output: the output to decorate.
+ * When HTML has come from the cache, it won't yet contain stuff that's specific to a signed-in
+ * user (such as "Welcome, Sam" and "Sign out").  So if the user is signed in, we should decorate
+ * the cached HTML with user stuff. Then we'll output it through the output buffer's gzip handler.
+ * @param  $output: the output to decorate and send.
  */
 function send_output($output) {
 	global $DISPATCHER_PATH;
@@ -200,8 +221,11 @@ function send_output($output) {
 		if (count($pieces) > 1) {
 			$output = $pieces[0] .
 				'<div id="user">' .
-				'<span>' . htmlentities($session->username) . '</span>' .
-				'<a href="' . $DISPATCHER_PATH . 'sign_out/" class="noAjax">Sign out</a>' .
+					'<span>' . htmlentities($session->username) . '</span>' .
+					'<div id="userNav">' .
+					'<a href="' . $DISPATCHER_PATH . 'admin/">Admin</a>' .
+					'<a href="' . $DISPATCHER_PATH . 'sign_out/" class="noAjax">Sign out</a>' .
+					'</div>' .
 				'</div>' .
 				$pieces[1];
 		}
@@ -273,7 +297,7 @@ function p($var) {
  * Print a value to the page with formatting preserved, then exit.
  * @param  $var: the value to print.
  */
-function d($var) {
+function x($var) {
 	p($var);
 	exit;
 }

@@ -22,11 +22,18 @@ class ErrorsController extends NonCachingController {
 	public $uniqueErrors = array();
 
 	/**
-	 * Display an error page.
-	 * @param  $errorCode: the HTTP error code.
+	 * Display a server error page.
 	 */
-	public function indexAction($errorCode = '500') {
-		$this->renderError($errorCode);
+	public function indexAction() {
+		$this->processError(500);
+	}
+
+	/**
+	 * Display an error page.
+	 * @param  $errorCode: the HTTP error code that we want to display a page for.
+	 */
+	public function catchAllAction($errorCode = 500) {
+		$this->processError($errorCode);
 	}
 
 	/**
@@ -207,9 +214,9 @@ class ErrorsController extends NonCachingController {
 			if ($errorStats['firstInPage']) {
 				?>
 				<link rel="stylesheet" href="/media/base.css" type="text/css">
-				<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
-				<script type="text/javascript" src="/media/base.js"></script>
-				<script type="text/javascript" src="/media/error_handler.js"></script>
+				<script type="text/javascript" src="/media/js/jquery-1.4.2.js"></script>
+				<script type="text/javascript" src="/media/js/base.js"></script>
+				<script type="text/javascript" src="/media/js/error_handler.js"></script>
 				<?php
 			}
 		}

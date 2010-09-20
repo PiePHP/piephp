@@ -3,9 +3,9 @@ var uservoiceOptions = {
   host: 'piephp.uservoice.com', 
   forum: 'general', 
   alignment: 'right',
-  background_color:'#99b', 
+  background_color:'#123', 
   text_color: 'white',
-  hover_color: '#b91',
+  hover_color: '#012',
   lang: 'en',
   showTab: true
 };

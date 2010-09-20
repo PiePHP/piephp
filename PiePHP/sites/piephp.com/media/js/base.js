@@ -91,9 +91,9 @@ if (!window.log) (function(window) {
 	};
 
 	var loadUrl = function(href, isForm) {
-		var bodySectionQuery = $('#body .section');
-		bodySectionQuery.children().css({opacity: 0.25});
-		$('#body>div').addClass('loading');
+		var bodyQuery = $('#body');
+		bodyQuery.children().css({opacity: 0.25});
+		$('#body>div').eq(0).addClass('loading');
 		var path = getPath(href);
 		var currentLoad = ++loadCount;
 
@@ -105,7 +105,7 @@ if (!window.log) (function(window) {
 					var load = function() {
 						loadContent(path, html);
 					};
-					if (bodySectionQuery.html()) {
+					if (bodyQuery.html()) {
 						load();
 					}
 					else {
@@ -119,13 +119,13 @@ if (!window.log) (function(window) {
 	var loadContent = function(path, html) {
 		hideVeil();
 		window.scrollTo(0, 0);
-		var bodySectionQuery = $('#body .section');
+		var bodyQuery = $('#body');
 		currentPath = path;
 		$('#body>div').removeClass('loading');
-		wire(bodySectionQuery.html(html));
+		wire(bodyQuery.html(html));
 		document.location = base + '/#' + path;
 		document.title = $('#body var').filter(function() {
-			log('var', $(this).attr('title'));
+			//log('var', $(this).attr('title'));
 			return this.title == 'title';
 		}).text();
 		$('#loading').remove();
@@ -140,20 +140,16 @@ if (!window.log) (function(window) {
 	};
 
 	var lightTab = function() {
-		$('#head li.on').removeClass('on').stop().animate({opacity: 0});
-		$('#head ul.on a').each(function(linkIndex, link) {
+		log('lightTab');
+		$('#nav span.on a').removeClass('on').stop().animate({opacity: 0});
+		$('#nav span.on a').each(function(linkIndex, link) {
 			var light = 0;
 			var linkPath = getPath(link.href);
-			if (noIndex(linkPath) == '/') {
-				if (noIndex(currentPath) == '/') {
-					light = 1;
-				}
-			}
-			else if (currentPath.substring(0, linkPath.length) == linkPath) {
+			if (currentPath.substring(0, linkPath.length) == linkPath) {
 				light = 1;
 			}
 			if (light) {
-				$(link).parent().addClass('on').stop().animate({opacity: 1});
+				$(link).addClass('on').stop().animate({opacity: 1});
 			}
 		});
 	};
@@ -343,6 +339,7 @@ if (!window.log) (function(window) {
 				return true;
 			}
 			else {
+				log(href);
 				if (href.charAt(0) == '/') {
 					href = base + href;
 				}
@@ -427,19 +424,19 @@ if (!window.log) (function(window) {
 			}
 		});
 	checkUrl();
-	var headSectionQuery = $('#head .section');
-	var navQuery = headSectionQuery.find('ul');
-	navQuery.clone().addClass('hover').appendTo(headSectionQuery).find('li').css({opacity: 0});
-	navQuery.clone().addClass('on').appendTo(headSectionQuery).find('li').css({opacity: 0});
+	var navQuery = $('#nav');
+	var navSpanQuery = navQuery.find('span');
+	navSpanQuery.clone().addClass('hover').appendTo(navQuery).find('a').css({opacity: 0, zIndex: 98});
+	navSpanQuery.clone().addClass('on').appendTo(navQuery).find('a').css({opacity: 0, zIndex: 99});
 	var animateHover = function(event) {
-		var isEnter = event.type.has('over');
-		headSectionQuery.find('ul.hover li').eq($(this).index())
+		var isEnter = event.type.has('r');
+		navQuery.find('span.hover a').eq($(this).index())
 			.stop()
 			.animate({opacity: isEnter ? 1 : 0}, isEnter ? 'fast' : 'slow');
 	};
-	headSectionQuery
-		.delegate('li', 'mouseenter', animateHover)
-		.delegate('li', 'mouseleave', animateHover);
+	navQuery
+		.delegate('a', 'mouseenter', animateHover)
+		.delegate('a', 'mouseleave', animateHover);
 	loadedInitialPath = 1;
 	lightTab();
 	wire(document);

@@ -1,0 +1,21 @@
+With rewrites:
+
+REDIRECT_QUERY_STRING	isAjax=1
+REDIRECT_URL	/phpinfo/
+GATEWAY_INTERFACE	CGI/1.1
+SERVER_PROTOCOL	HTTP/1.1
+REQUEST_METHOD	GET
+QUERY_STRING	isAjax=1
+REQUEST_URI	/phpinfo/?isAjax=1
+SCRIPT_NAME	/index.php
+PATH_INFO	/phpinfo/
+PATH_TRANSLATED	redirect:\index.php\phpinfo\
+
+
+Without rewrites:
+
+QUERY_STRING	isAjax=1
+REQUEST_URI	/index.php/phpinfo/?isAjax=1
+SCRIPT_NAME	/index.php
+PATH_INFO	/phpinfo/
+PATH_TRANSLATED	C:\Frameworks\PiePHP\sites\piephp.com\phpinfo\

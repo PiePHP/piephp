@@ -1,1 +1,5 @@
+# Do not allow files in this directory to be accessed directly.
 Deny from all
+
+# If someone tries to browse this directory, it will generate a 403.
+ErrorDocument 403 /errors/403

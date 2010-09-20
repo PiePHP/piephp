@@ -7,3 +7,4 @@
 php_flag magic_quotes_gpc Off
 php_value error_prepend_string "<script src='/media/jquery-1.4.2.js'></script><div class='fatal'>"
 php_value error_append_string "</div><script>var q=$('.fatal:last');q.load('/errors/fatal', {error: q.text()})</script>"
+

@@ -1,48 +1,8 @@
-body {
-	background: #dde;
-}
-
-body,
-td {
-	color: #333;
-}
-
-body,
-div,
-ul,
-td,
-th,
-h1,
-h2,
-h3,
-h4,
-fieldset {
-	margin: 0;
-	border: 0;
-	padding: 0;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-}
-
 input,
 select,
 textarea {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-}
-
-var {
-	display: none;
-}
-
-a {
-	color: #44a;
-	text-decoration: none;
-	font-weight: bold;
-}
-
-a:hover {
-	color: #b90;
 }
 
 form {
@@ -126,8 +86,7 @@ input.password {
 }
 
 input.hint,
-textarea.hint
-{
+textarea.hint {
 	color: #aaa;
 }
 
@@ -208,7 +167,7 @@ div.actions button.main {
 
 form.code {
 	border: 1px solid #ee6;
-	background: #ffc url(icons/error.png) no-repeat 8px 8px;
+	background: #ffc url(../icons/error.png) no-repeat 8px 8px;
 	padding: 8px 8px 8px 28px;
 	position: relative;
 	margin: 0 0 8px 0;
@@ -221,7 +180,7 @@ form.code textarea {
 }
 
 form.code textarea.submitting {
-	background: #fff url(loading.gif) no-repeat 4px 4px;
+	background: #fff url(../loading.gif) no-repeat 4px 4px;
 	color: #ccc;
 }
 
@@ -284,7 +243,7 @@ form.code div.toggle,
 form.code div.toggled {
 	cursor: pointer;
 	padding-left: 16px;
-	background: transparent url(icons/toggle.png) no-repeat -16px 0px;
+	background: transparent url(../icons/toggle.png) no-repeat -16px 0px;
 }
 
 form.code div.toggled {
@@ -333,231 +292,10 @@ a.remove {
 }
 
 a.add {
-	background-image: url(icons/add.png);
+	background-image: url(../icons/add.png);
 }
 
 a.remove {
-	background-image: url(icons/remove.png);
+	background-image: url(../icons/remove.png);
 	color: #c00;
-}
-
-h1,
-h2,
-h3,
-h4
-{
-	font-family: Tahoma, Verdana, sans-serif;
-}
-
-h1 {
-	font-size: 24px;
-	padding: 0 0 6px 0;
-}
-
-h2 {
-	font-size: 20px;
-	padding: 0 0 5px 0;
-}
-
-h3 {
-	font-size: 16px;
-	padding: 0 0 4px 0;
-}
-
-h4 {
-	font-size: 13px;
-	padding: 0 0 3px 0;
-}
-
-#head,
-#body,
-#foot {
-	text-align: center;
-}
-
-div.section {
-	width: 990px;
-	margin: 0 auto;
-	text-align: left;
-	position: relative;
-	padding: 0 20px;
-	clear: both;
-}
-
-#head {
-	height: 79px;
-	position: relative;
-	background: #600 url(head.gif) repeat-x bottom left;
-	border-bottom: 1px solid #200;
-}
-
-#logo {
-	position: absolute;
-	display: block;
-	left: 20;
-	top: 12px;
-	width: 234px;
-	height: 60px;
-	background: transparent url(logo.gif) no-repeat;
-	background-size: 100%;
-	overflow: hidden;
-	text-indent: -100px;
-}
-
-#user {
-	position: absolute;
-	right: 20px;
-}
-
-#user a,
-#user span {
-	float: left;
-	display: block;
-	padding: 4px 8px;
-	font-size: 11px;
-	color: #99d;
-}
-
-#user a:hover {
-	color: #fff;
-}
-
-#head ul,
-#foot ul {
-	display: block;
-}
-
-#head li,
-#foot li {
-	display: block;
-	float: left;
-}
-
-#head ul {
-	position: absolute;
-	right: 20px;
-	top: 57px;
-}
-
-#head li {
-	background: #99b url(tab.png) no-repeat top left;
-	margin-left: 2px;
-	text-shadow: #336 1px 1px 2px;
-	border-bottom: 1px solid #200;
-}
-
-#head li a {
-	background: transparent url(tab.png) no-repeat bottom right;
-	display: block;
-	height: 14px;
-	padding: 4px 12px;
-	line-height: 14px;
-	font-size: 13px;
-	color: #fff;
-}
-
-#head ul.hover li {
-	background-color: #b91;
-	text-shadow: #000 1px 1px 2px;
-}
-
-#head ul.on li {
-	background-color: #fff;
-	border-bottom: 1px solid #fff;
-	text-shadow: none;
-}
-
-#head ul.on a {
-	color: #333;
-}
-
-#foot ul {
-	margin-left: -10px;
-}
-
-#foot li a {
-	padding: 0 10px;
-}
-
-#body {
-	background: #fff;
-}
-
-#body div.section {
-	padding: 20px 20px;
-	min-height: 200px;
-}
-
-#body div.loading {
-	background: url(loading.gif) no-repeat 2px 26px;
-}
-
-#bodyEnd {
-	clear: both;
-}
-
-#foot {
-	border-top: 1px solid #99a;
-	background: #dde url(foot.gif) repeat-x top left;
-	padding: 10px 0;
-	height: 37px;
-}
-
-#loading {
-	background-image: url(loading.gif);
-	width: 80px;
-	height: 80px;
-	position: absolute;
-	left: 445px;
-	top: 20px;
-}
-
-#veil {
-	position: fixed;
-	z-index: 9;
-	width: 100%;
-	height: 100%;
-	display: none;
-}
-
-#veil div.veil {
-	position: absolute;
-	z-index: 10;
-	width: 100%;
-	height: 100%;
-	background: #fff;
-}
-
-#dialog {
-	position: absolute;
-	z-index: 11;
-	left: 50%;
-	top: 90px;
-	border: 2px solid #666;
-	background: #fff;
-}
-
-#dialogClose {
-	position: absolute;
-	display: block;
-	top: -17px;
-	right: -17px;
-	width: 32px;
-	height: 32px;
-	background: url(dialog_close.png);
-	cursor: pointer;
-}
-
-#dialogClose:hover {
-	background-position: bottom left;
-}
-
-#dialog fieldset {
-	margin: 0;
-}
-
-#dialog div.loading {
-	padding: 16px 20px 16px 40px;
-	background: url(loading.gif) no-repeat 20px 16px;
-	font-weight: bold;
 }

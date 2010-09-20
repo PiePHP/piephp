@@ -21,7 +21,7 @@ class RefresherController extends NonCachingController {
 		<html>
 		<head>
 			<title>Refresher</title>
-			<script type="text/javascript" src="/media/jquery-1.4.2.js"></script>
+			<script type="text/javascript" src="/media/js/jquery-1.4.2.js"></script>
 		</head>
 		<body>
 			<script type="text/javascript">
