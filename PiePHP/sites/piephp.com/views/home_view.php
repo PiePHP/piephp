@@ -27,8 +27,8 @@
 	<h2>What sets PiePHP apart?</h2>
 	<ul>
 		<li><b>Speed</b><div>PiePHP has the fastest page rendering time of any major PHP framework.</div></li>
-		<li><b>Environments</b><div>PiePHP supports development, test, staging and production environments to make your development flexible and your site secure.</div></li>
-		<li><b>Auto-refresh</b><div>In a development environment, when you save changes in your IDE, it can cause your pages to refresh in every browser that is open to them.  What better way to optimize the change &amp; verify cycle?</div></li>
+		<li><b>Environments</b><div>PiePHP supports development, test, staging and production environments to make your development environment flexible and your live site secure.</div></li>
+		<li><b>Auto-refresh</b><div>When you save changes in your IDE, your PiePHP development environment can cause your pages to refresh in every browser window.  What better way to optimize the change &amp; verify cycle?</div></li>
 		<li><b>Error editing</b><div>In a development environment, any error can show an editable code block for each step of the stack trace.  So you can fix the error and move on quickly without even using your editor.</div></li>
 		<li><a href="<?php echo $HTTP_ROOT; ?>documentation">Much much more...</a></li>
 	</ul>

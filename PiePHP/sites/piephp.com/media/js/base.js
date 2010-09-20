@@ -343,7 +343,7 @@ if (!window.log) (function(window) {
 				if (href.charAt(0) == '/') {
 					href = base + href;
 				}
-				if (href.substring(0, base.length) == base) {
+				if (href.substring(0, base.length + 1) == base + '/') {
 					loadUrl(href);
 					$(link).blur();
 					return false;
