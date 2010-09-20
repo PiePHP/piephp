@@ -14,7 +14,7 @@
 
 <div id="news">
 	<h2>What's new?</h2>
-	<p>We're actively seeking talented contributors.  If you're passionate about getting things done quickly and painlessly, and if you have a knack for PHP and/or jQuery, then please get in touch with us to find out how you could fit on the team.</p>
+	<p>We're actively seeking talented contributors.  If you love getting things done quickly and painlessly, and if you have a knack for PHP and/or jQuery, then please get in touch with us to find out how you could fit on the team.</p>
 </div>
 
 <div id="features">

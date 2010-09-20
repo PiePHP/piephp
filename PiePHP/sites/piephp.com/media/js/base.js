@@ -38,17 +38,17 @@ if (!window.log) (function(window) {
 		}
 	});
 
-	var whitespaceSplit = function(string) {
-	  return ('' + string).trim().split(/\s+/);
-	};
-
 	if (location.href.has('isAjax')) {
 		return;
 	}
 
+	var whitespaceSplit = function(string) {
+	  return ('' + string).trim().split(/\s+/);
+	};
+
 	var log = window.log = function(message, value) {
 		if (window.console) {
-			console.log(message + (typeof value != 'undefined' ? ': ' + value : ''));
+  		console.log(typeof(value) == 'undefined' ? message : message + ': ' + value);
 		}
 	};
 
@@ -75,6 +75,7 @@ if (!window.log) (function(window) {
 					element.value = element.HINT;
 				}
 			});
+		query.find('form').append('<input type="hidden" name="isAjax"/>');
 	}];
 
 	var wire = window.wire = function(selectorOrCallback) {
@@ -122,12 +123,13 @@ if (!window.log) (function(window) {
 		var bodyQuery = $('#body');
 		currentPath = path;
 		$('#body>div').removeClass('loading');
-		wire(bodyQuery.html(html));
+    var htmlQuery = $(html);
+    if (htmlQuery.find('#body').size()) {
+      htmlQuery = htmlQuery.find('#body');
+    }
+    wire(bodyQuery.html(htmlQuery));
 		document.location = base + '/#' + path;
-		document.title = $('#body var').filter(function() {
-			//log('var', $(this).attr('title'));
-			return this.title == 'title';
-		}).text();
+		document.title = $('#title').text();
 		$('#loading').remove();
 		lightTab();
 	};
@@ -140,7 +142,6 @@ if (!window.log) (function(window) {
 	};
 
 	var lightTab = function() {
-		log('lightTab');
 		$('#nav span.on a').removeClass('on').stop().animate({opacity: 0});
 		$('#nav span.on a').each(function(linkIndex, link) {
 			var light = 0;
@@ -231,7 +232,6 @@ if (!window.log) (function(window) {
 						isValid = isValid && validationRules.eval(rule, value, field);
 					});
 				}
-				log('validate', field.name);
 				/*
 				if (isValid && className.has('ajax')) {
 					clearTimeout(field.timer);
@@ -339,7 +339,6 @@ if (!window.log) (function(window) {
 				return true;
 			}
 			else {
-				log(href);
 				if (href.charAt(0) == '/') {
 					href = base + href;
 				}
@@ -360,8 +359,9 @@ if (!window.log) (function(window) {
 				}
 				if (action.substring(0, base.length) == base) {
 					var target = form.target;
-					form.target = 'submitter';
+          form.isAjax.value = 1;
 					form.action += (action.has('?') ? '&' : '?') + 'isAjax=1&isFrame=1';
+					form.target = 'submitter';
 					setTimeout(function() {
 						form.action = action;
 						form.target = target;
@@ -407,10 +407,7 @@ if (!window.log) (function(window) {
 		});
 
 	$().ajaxError(function(event, request, options, error) {
-		log('event', event);
-		log('request', request);
-		log('options', options);
-		log('error', error);
+		log('ajaxError', arguments);
 	});
 
 	$('<iframe name="submitter" id="submitter" style="display:none"/>')

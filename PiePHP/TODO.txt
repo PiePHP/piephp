@@ -1,6 +1,7 @@
 Database patches
 User groups field
 User group authorization
+Make non-caching controllers default
 Installer
 ------------------------
 JavaScript/CSS Minification

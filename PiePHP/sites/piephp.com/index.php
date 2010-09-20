@@ -7,7 +7,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -240,7 +240,7 @@ function send_output($output) {
  * @return true if the page was requested via AJAX.
  */
 function is_ajax() {
-	return isset($_REQUEST['isAjax']) || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+	return (isset($_REQUEST['isAjax']) && $_REQUEST['isAjax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 }
 
 /**

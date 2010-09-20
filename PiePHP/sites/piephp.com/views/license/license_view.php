@@ -1,5 +1,5 @@
 <h1>PiePHP License</h1>
-<p>Copyright (c) 2010, The Pie Software Foundation.<br>All rights reserved.</p>
+<p>Copyright (c) 2007-2010, The Pie Software Foundation.<br>All rights reserved.</p>
 <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
 <ol>
   <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li>

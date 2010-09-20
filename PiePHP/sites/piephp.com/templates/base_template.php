@@ -15,10 +15,8 @@ if (!is_ajax()) {
 		<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
 		<div id="user">
 			<div id="userNav">
-				<span>
-					<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
-					<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><b>Sign In</b></a>
-				</span>
+  			<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
+  			<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><b>Sign In</b></a>
 			</div>
 		</div>
 	</div>
@@ -39,15 +37,16 @@ if (!is_ajax()) {
 		<?php
 		}
 		else {
-			?><var title="title">PiePHP - <?php echo $title; ?></var><?php
+			?><var id="title">PiePHP - <?php echo $title; ?></var><?php
 		}
-		if ($viewName != 'home' && !is_dialog()) {
+		if (isset($manualContentLayout) || is_dialog()) {
+  		include $viewPath;
+		}
+    else {
 			?>
 			<div id="content">
 			<?php
-		}
-		include $viewPath;
-		if ($viewName != 'home' && !is_dialog()) {
+  		include $viewPath;
 			?>
 			</div>
 			<?php

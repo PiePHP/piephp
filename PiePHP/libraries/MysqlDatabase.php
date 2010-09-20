@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -27,6 +27,7 @@ class MysqlDatabase extends Database {
 	 * Begin a database transaction.
 	 */
 	public function beginTransaction() {
+    // TODO: Implement transaction stuff.
 		//$this->query('BEGIN TRANSACTION');
 	}
 
@@ -34,6 +35,7 @@ class MysqlDatabase extends Database {
 	 * Roll back the current database transaction.
 	 */
 	public function rollbackTransaction() {
+    // TODO: Implement transaction stuff.
 		//$this->query('ROLLBACK TRANSACTION');
 	}
 
@@ -41,6 +43,7 @@ class MysqlDatabase extends Database {
 	 * Commit the current database transaction.
 	 */
 	public function commitTransaction() {
+    // TODO: Implement transaction stuff.
 		//$this->query('COMMIT TRANSACTION');
 	}
 
