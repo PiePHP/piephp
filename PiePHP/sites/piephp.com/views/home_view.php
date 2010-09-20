@@ -27,6 +27,7 @@
 	<h2>What sets PiePHP apart?</h2>
 	<ul>
 		<li><b>Speed</b><div>PiePHP has the fastest page rendering time of any major PHP framework.</div></li>
+		<li><b>Persistent page</b><div>The PiePHP JavaScript library can AJAXify your links and forms, so the page shell doesn't need to re-render as users browse. That means you can put media players or chat widgets or whatever you want into your page, and they won't need to stop.</div></li>
 		<li><b>Environments</b><div>PiePHP supports development, test, staging and production environments to make your development environment flexible and your live site secure.</div></li>
 		<li><b>Auto-refresh</b><div>When you save changes in your IDE, your PiePHP development environment can cause your pages to refresh in every browser window.  What better way to optimize the change &amp; verify cycle?</div></li>
 		<li><b>Error editing</b><div>In a development environment, any error can show an editable code block for each step of the stack trace.  So you can fix the error and move on quickly without even using your editor.</div></li>
