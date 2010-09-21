@@ -8,10 +8,10 @@ JavaScript/CSS Minification
 Database synchronization
 Code generation
 Error reporting
-Test suite
 News/blog
 Documentation
 Sign up page
 Forums
 Search
+Test suite
 Internationalization
