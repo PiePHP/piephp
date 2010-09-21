@@ -56,7 +56,18 @@ $CLASS_DIRS = array(
 	'Scaffold' => $APP_ROOT . 'scaffolds/'
 );
 
-$PAGE_URL_PATH = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
+// If mod_rewrite used the path as a query string, we need to separate path data from query data.
+if (!isset($_SERVER['PATH_INFO'])) {
+	list($_SERVER['PATH_INFO'], $_SERVER['QUERY_STRING']) = explode('?', $_SERVER['REQUEST_URI'] . '?');
+	$pairs = explode('&', $_SERVER['QUERY_STRING']);
+	foreach ($pairs as $pair) {
+		list($key, $value) = explode('=', $pair . '=');
+		// TODO: Deal with multiple instances of the same key.
+		$_GET[$key] = $value;
+		$_REQUEST[$key] = $value;
+	}
+}
+$PAGE_URL_PATH = $_SERVER['PATH_INFO'];
 
 if (!count($_POST)) {
 	$pageModel = new Model();
