@@ -106,6 +106,16 @@ abstract class Controller {
 	}
 
 	/**
+	 * Set a combination of headers to prevent clients from caching the response.
+	 */
+	public function preventCaching() {
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+		header('Cache-Control: no-store, no-cache, must-revalidate');
+		header('Cache-Control: post-check=0, pre-check=0', false);
+		header('Pragma: no-cache');
+	}
+
+	/**
 	 * Use a location header to redirect to a given URL.
 	 * @param  $url: the URL to redirect to.
 	 * @param  $isMovedPermanently: whether to tell the client the page has moved permanently.

@@ -26,10 +26,9 @@ class RefresherController extends NonCachingController {
 		<body>
 			<script type="text/javascript">
 				setTimeout(function() {
-					$.get('<?php echo $GLOBALS['DISPATCHER_PATH']; ?>refresher/script', function(js) {
-						eval(js);
-					});
+					$('body').load('<?php echo $GLOBALS['DISPATCHER_PATH']; ?>refresher/script/' + (new Date()).getTime());
 				}, 1000);
+				setTimeout(window.location.reload, 30000);
 			</script>
 		</body>
 		</html>
@@ -37,41 +36,39 @@ class RefresherController extends NonCachingController {
 	}
 
 	/**
+	 * Echo some code wrapped in script tags.
+	 * @param  $code: a snippet of JavaScript code.
+	 */
+	public function renderScript($code) {
+		echo '<script type="text/javascript">' . $code . '</script>';
+	}
+
+	/**
 	 * Check the refresher file every second until we see a change or 10 minutes has passed.
 	 * If we see a change, we can tell the parent page to refresh, otherwise we just reload the refresher frame.
 	 */
 	public function scriptAction() {
+		$this->preventCaching();
 		$file = $GLOBALS['REFRESHER_FILE'];
 		if (!fopen($file, 'r')) {
-			//$this->renderScriptStart();
-			echo "alert('$file is not a valid refresher file.')";
-			//$this->renderScriptEnd();
+			$this->renderScript("alert('$file is not a valid refresher file.')");
 			exit;
 		}
 		$old = FileUtility::getModifiedTime($file);
 
 		// The PHP default is to allow 30 seconds for processing, so we'll give it 25 iterations of a 1-second-sleep loop.
 		for ($i = 0; $i < 25; $i++) {
-			sleep(1);
 			$new = FileUtility::getModifiedTime($file);
 			if ($new > $old) {
 
 				// Flushing the cache ensures that we'll see the newest code even if we're on a cached page.
 				$this->loadModel()->cacheConnect()->flush();
 
-				$this->renderRefreshScript('parent');
+				$this->renderScript('parent.location.reload()');
 				exit;
 			}
+			sleep(1);
 		}
-
-		$this->renderRefreshScript('window');
-	}
-
-	/**
-	 * Render a script that will reload the refresher or refresh the page.
-	 * @param  $scope: if scope is "window", the refresher frame will reload, or if it's "parent" the whole page will refresh.
-	 */
-	public function renderRefreshScript($scope) {
-		echo "$scope.location.reload()";
+		$this->renderScript('window.location.reload()');
 	}
 }

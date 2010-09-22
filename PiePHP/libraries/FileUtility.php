@@ -22,4 +22,15 @@ class FileUtility {
 		return $stat['mtime'];
 	}
 
+	/**
+	 * Append a line to a file.
+	 * @param  $filePath: the path of the file.
+	 * @param  $line: the line to be appended.
+	 */
+	public static function appendLogMessage($filePath, $line) {
+		$handle = fopen($filePath, 'a');
+		fwrite($handle, $line . "\n");
+		fclose($handle);
+	}
+
 }
