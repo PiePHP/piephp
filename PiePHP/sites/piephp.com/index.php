@@ -72,7 +72,7 @@ $PAGE_URL_PATH = $_SERVER['PATH_INFO'];
 if (!count($_POST)) {
 	$pageModel = new Model();
 	$pageModel->cacheConfigName = 'pages';
-	$pageModel->cacheConnect();
+	$pageModel->loadCache();
 	$pageCacheKey = $PAGE_URL_PATH . ' '
 		. (is_ajax() ? 'a' : '')
 		. (is_dialog() ? 'd' : '')

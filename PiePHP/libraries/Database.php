@@ -17,6 +17,11 @@ abstract class Database {
 	public $connection;
 
 	/**
+	 * In some situations, we just want SQL errors to fail silently.
+	 */
+	public $ignoreErrors = false;
+
+	/**
 	 * Last ID to be inserted into a table in the database.
 	 */
 	public $insertId;
@@ -27,6 +32,9 @@ abstract class Database {
 	 * @param  $sql: the SQL query that resulted in an error.
 	 */
 	public function triggerError($message, $sql = '') {
+		if ($this->ignoreErrors) {
+			return;
+		}
 		if ($sql) {
 			$message .= '<br><kbd>' . $sql . '</kbd>';
 		}

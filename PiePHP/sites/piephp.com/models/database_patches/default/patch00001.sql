@@ -1,4 +1,12 @@
-CREATE TABLE users (
+DROP TABLE IF EXISTS patches;
+CREATE TABLE IF NOT EXISTS patches (
+  ordinal int unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO patches(ordinal) VALUES(1);
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users (
 	id bigint(20) unsigned NOT NULL auto_increment,
 	first_name varchar(50) NOT NULL,
 	last_name varchar(50) NOT NULL,
@@ -9,10 +17,11 @@ CREATE TABLE users (
 	KEY first_name (first_name,last_name)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO users VALUES (1, 'Sam', 'Eubank', 'sameubank@gmail.com', 'BigBear', '7c6a180b36896a0a8c02787eeafb0e4c');
+INSERT INTO users VALUES (1, 'Sam', 'Eubank', 'sameubank@gmail.com', 'sameubank', '7c6a180b36896a0a8c02787eeafb0e4c');
 
 
-CREATE TABLE user_groups (
+DROP TABLE IF EXISTS user_groups;
+CREATE TABLE IF NOT EXISTS user_groups (
 	id bigint(20) unsigned NOT NULL auto_increment,
 	`name` varchar(50) NOT NULL,
 	PRIMARY KEY  (id),

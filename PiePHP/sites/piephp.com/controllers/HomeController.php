@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class HomeController extends CachingController {
+class HomeController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the home page.
@@ -18,7 +23,7 @@ class HomeController extends CachingController {
 		$this->loadModel('blogModel');
 		$data = array(
 			'title' => 'The instant gratification framework',
-		  'manualContentLayout' => true,
+			'manualContentLayout' => true,
 			'posts' => $this->blogModel->posts()
 		);
 		$this->renderView('home', $data);

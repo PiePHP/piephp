@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class DownloadsController extends CachingController {
+class DownloadsController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the main downloads page.

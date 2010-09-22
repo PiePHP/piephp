@@ -29,8 +29,8 @@ class SignInController extends Controller {
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		$this->loadModel();
-		$result = $this->model->result("
-			SELECT id, username, password
+		$result = $this->model->selectAssoc("
+			id, username, password
 			FROM users
 			WHERE LOWER(username) = '" . addslashes($username) . "'");
 		if ($result) {

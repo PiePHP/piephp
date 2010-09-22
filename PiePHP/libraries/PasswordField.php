@@ -106,7 +106,7 @@ class PasswordField extends MultiField {
 				SELECT ' . $this->column . '
 				FROM ' . $this->scaffold->table . '
 				WHERE id = ' . $this->scaffold->id;
-			$result = $this->scaffold->model->result($sql);
+			$result = $this->scaffold->model->selectAssoc($sql);
 			/*if ($hash != $result[$this->column]) {
 				$isValid = false;
 				$this->currentPassword->hasValidationErrors = true;

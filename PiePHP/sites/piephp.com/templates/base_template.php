@@ -39,6 +39,8 @@ if (!is_ajax()) {
 		else {
 			?><var id="title">PiePHP - <?php echo $title; ?></var><?php
 		}
+		//echo 'manualContentLayout: ' . (isset($manualContentLayout) ? 'true' : 'false') . '<br>';
+		//echo 'is_dialog(): ' . (is_dialog() ? 'true' : 'false') . '<br>';
 		if (isset($manualContentLayout) || is_dialog()) {
 			include $viewPath;
 		}
@@ -48,6 +50,7 @@ if (!is_ajax()) {
 			<?php
 			include $viewPath;
 			?>
+			<br class="both">
 			</div>
 			<?php
 		}

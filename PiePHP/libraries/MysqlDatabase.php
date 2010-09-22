@@ -67,8 +67,8 @@ class MysqlDatabase extends Database {
 	 * @param  $sql: a SQL query string.
 	 * @return an array of associative arrays.
 	 */
-	public function results($sql) {
-		$resource = $this->query($sql);
+	public function select($sql) {
+		$resource = $this->query('SELECT ' . $sql);
 		$results = array();
 		if ($resource) {
 			while ($assoc = mysql_fetch_assoc($resource)) {

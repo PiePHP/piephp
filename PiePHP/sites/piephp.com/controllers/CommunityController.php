@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class CommunityController extends CachingController {
+class CommunityController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the PiePHP community homepage.

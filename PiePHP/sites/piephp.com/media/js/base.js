@@ -185,7 +185,7 @@ if (!window.log) (function(window) {
 		$('#body>div').removeClass('loading');
 		var htmlQuery = $(html);
 		if (htmlQuery.find('#body').size()) {
-		  htmlQuery = htmlQuery.find('#body');
+			htmlQuery = htmlQuery.find('#body');
 		}
 		wire(bodyQuery.html(htmlQuery));
 		document.location = base + '/#' + path;
@@ -419,7 +419,7 @@ if (!window.log) (function(window) {
 				}
 				if (action.substring(0, base.length) == base) {
 					var target = form.target;
-		      form.isAjax.value = 1;
+					form.isAjax.value = 1;
 					form.action += (action.has('?') ? '&' : '?') + 'isAjax=1&isFrame=1';
 					form.target = 'submitter';
 					setTimeout(function() {

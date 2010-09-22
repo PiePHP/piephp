@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class TutorialsController extends CachingController {
+class TutorialsController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the list of tutorials.

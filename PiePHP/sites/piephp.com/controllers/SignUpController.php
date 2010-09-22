@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class SignUpController extends CachingController {
+class SignUpController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the sign up page.

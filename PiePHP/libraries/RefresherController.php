@@ -62,7 +62,7 @@ class RefresherController extends Controller {
 			if ($new > $old) {
 
 				// Flushing the cache ensures that we'll see the newest code even if we're on a cached page.
-				$this->loadModel()->cacheConnect()->flush();
+				$this->loadModel()->loadCache()->flush();
 
 				$this->renderScript('parent.location.reload()');
 				exit;

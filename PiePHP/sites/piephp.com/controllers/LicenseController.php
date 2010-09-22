@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class LicenseController extends CachingController {
+class LicenseController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the PiePHP license.

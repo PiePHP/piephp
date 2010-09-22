@@ -27,7 +27,7 @@ class FileUtility {
 	 * @param  $filePath: the path of the file.
 	 * @param  $line: the line to be appended.
 	 */
-	public static function appendLogMessage($filePath, $line) {
+	public static function appendLine($filePath, $line) {
 		$handle = fopen($filePath, 'a');
 		fwrite($handle, $line . "\n");
 		fclose($handle);

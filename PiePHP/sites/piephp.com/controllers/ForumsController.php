@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class ForumsController extends CachingController {
+class ForumsController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the forums.

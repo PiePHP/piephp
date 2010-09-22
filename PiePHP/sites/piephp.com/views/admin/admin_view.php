@@ -7,4 +7,4 @@
 <h3><a href="<?php echo $HTTP_ROOT; ?>code_generator/">Code generator</a></h3>
 <h3><a href="<?php echo $HTTP_ROOT; ?>code_comments/">Code comments</a></h3>
 <h3><a href="<?php echo $HTTP_ROOT; ?>phpinfo/">PHPinfo</a></h3>
-<h3><a href="<?php echo $HTTP_ROOT; ?>memcache_stats/">Memcache stats</a></h3>
+<h3><a href="<?php echo $HTTP_ROOT; ?>cache_tools/">Cache tools</a></h3>

@@ -9,7 +9,12 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends CachingController {
+class DocumentationController extends Controller {
+
+	/**
+	 * Turn caching on.
+	 */
+	public $useCaching = true;
 
 	/**
 	 * Show the table of contents.

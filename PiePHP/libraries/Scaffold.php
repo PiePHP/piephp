@@ -221,7 +221,7 @@ abstract class Scaffold extends Controller {
 	public function getResult() {
 		if ($this->id) {
 			$this->loadModel();
-			$this->result = $this->model->result("SELECT * FROM $this->table WHERE id = " . ($this->id * 1));
+			$this->result = $this->model->selectAssoc("* FROM $this->table WHERE id = " . ($this->id * 1));
 		}
 	}
 
@@ -290,7 +290,7 @@ abstract class Scaffold extends Controller {
 			}
 		echo '</tr>';
 		$this->loadModel();
-		$results = $this->model->results("SELECT * FROM $this->table LIMIT 100");
+		$results = $this->model->select("* FROM $this->table LIMIT 100");
 		foreach ($results as $resultIndex => $result) {
 			$this->result = $result;
 			echo '<tr class="' . ($resultIndex % 2 ? 'odd' : 'even') . '">';

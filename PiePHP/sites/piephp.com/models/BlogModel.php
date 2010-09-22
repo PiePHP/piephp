@@ -22,7 +22,7 @@ class BlogModel extends Model {
 	 * @return the posts as an array of associative arrays.
 	 */
 	public function posts() {
-		return $this->results('SELECT * FROM posts', 60);
+		return $this->select('* FROM posts', 60);
 	}
 
 }

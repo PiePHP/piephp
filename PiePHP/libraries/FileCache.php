@@ -74,4 +74,33 @@ class FileCache {
 		return $APP_ROOT . 'cache/' . $this->prefix . md5($cacheKey) . '.html';
 	}
 
+	/**
+	 * "Flush" the cache by deleting all cache files.
+	 */
+	public function flush() {
+		global $APP_ROOT;
+		$directoryHandle = opendir($APP_ROOT . 'cache');
+		while (false !== ($filename = readdir($directoryHandle))) {
+			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {
+				unlink($APP_ROOT . 'cache/' . $filename);
+			}
+		}
+	}
+
+	/**
+	 * Get stats on cache files.
+	 * @return the stats from Memcache.
+	 */
+	public function getStats() {
+		global $APP_ROOT;
+		$files = array();
+		$directoryHandle = opendir($APP_ROOT . 'cache');
+		while (false !== ($filename = readdir($directoryHandle))) {
+			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {
+				$files[] = $APP_ROOT . 'cache/' . $filename;
+			}
+		}
+		return array('files' => count($files));
+	}
+
 }

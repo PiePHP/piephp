@@ -122,6 +122,8 @@ class ErrorsController extends Controller {
 	public function handleError($level, $message, $file, $lineNumber, $context = NULL, $showStackTrace = true) {
 		global $HTTP_ROOT;
 
+		Logger::error("$message in $file on line $lineNumber");
+
 		$errorStats = $this->countErrorAndReturnStats($level . $message . $file . $lineNumber);
 		if ($errorStats['firstOfItsKind']) {
 			$file = str_replace('\\', '/', $file);

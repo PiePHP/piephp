@@ -52,21 +52,28 @@ class MemcacheCache {
 
 	/**
 	 * Get a value from Memcache by its key.
+	 * If we previously failed to make a connection, we can just move on.
 	 * @param  $cacheKey: the key (in conjunction with the prefix) is used to retrieve the value.
 	 * @return the cached value if one was found.
 	 */
 	public function get($cacheKey) {
-		$value = $this->connection->get($this->prefix . $cacheKey);
-		return $value;
+		if ($this->connection) {
+			$value = $this->connection->get($this->prefix . $cacheKey);
+			return $value;
+		}
 	}
 
 	/**
 	 * Store a value in Memcache.
+	 * If we previously failed to make a connection, we can just move on.
 	 * @param  $cacheKey: the key (in conjunction with the prefix) is used to name the file.
 	 * @param  $value: the value is written to the file, along with the current time for expiration purposes.
+	 * @param  $expire: how long to keep the cached value (in seconds).  If null, we'll use the default.
 	 */
 	public function set($cacheKey, $value, $expire = NULL) {
-		$this->connection->set($this->prefix . $cacheKey, $value, 0, $expire === NULL ? $this->expire : $expire);
+		if ($this->connection) {
+			$this->connection->set($this->prefix . $cacheKey, $value, 0, $expire === NULL ? $this->expire : $expire);
+		}
 	}
 
 	/**
@@ -74,6 +81,14 @@ class MemcacheCache {
 	 */
 	public function flush() {
 		$this->connection->flush();
+	}
+
+	/**
+	 * Get stats from Memcache.
+	 * @return the stats from Memcache.
+	 */
+	public function getStats() {
+		return $this->connection->getStats();
 	}
 
 }

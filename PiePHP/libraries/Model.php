@@ -47,10 +47,14 @@ class Model {
 
 	/**
 	 * Connect to the database if a connection has not already been made.
+	 * @param $databaseConfigName: can override the default database for the model.
 	 * @return the database connection.
 	 */
-	public function databaseConnect() {
+	public function loadDatabase($databaseConfigName = NULL) {
 		global $DATABASES;
+		if ($databaseConfigName) {
+			$this->databaseConfigName = $databaseConfigName;
+		}
 		if (!$this->database && $this->databaseConfigName) {
 			$database = $DATABASES[$this->databaseConfigName];
 			if (is_string($database)) {
@@ -72,10 +76,14 @@ class Model {
 
 	/**
 	 * Connect to the cache if a connection has not already been made.
+	 * @param $cacheConfigName: can override the default cache for the model.
 	 * @return the cache connection.
 	 */
-	public function cacheConnect() {
+	public function loadCache($cacheConfigName = NULL) {
 		global $CACHES;
+		if ($cacheConfigName) {
+			$this->cacheConfigName = $cacheConfigName;
+		}
 		if (!$this->cache && $this->cacheConfigName) {
 			$cache = $CACHES[$this->cacheConfigName];
 			if (is_string($cache)) {
@@ -102,7 +110,7 @@ class Model {
 	 * Begin a database transaction.
 	 */
 	public function beginTransaction() {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$this->database->beginTransaction();
 	}
 
@@ -110,7 +118,7 @@ class Model {
 	 * Roll back the current database transaction.
 	 */
 	public function rollbackTransaction() {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$this->database->commitTransaction();
 	}
 
@@ -118,7 +126,7 @@ class Model {
 	 * Commit the current database transaction.
 	 */
 	public function commitTransaction() {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$this->database->commitTransaction();
 	}
 
@@ -127,7 +135,7 @@ class Model {
 	 * @param  $sql: the SQL query to execute.
 	 */
 	public function execute($sql) {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$this->database->query($sql);
 	}
 
@@ -137,7 +145,7 @@ class Model {
 	 * @param  $columnValues: an associative array of column values.
 	 */
 	public function insert($table, $columnValues) {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$sql = $this->database->getInsertSql($table, $columnValues);
 		$this->execute($sql);
 	}
@@ -149,7 +157,7 @@ class Model {
 	 * @param  $id: the ID of the record we wish to update.
 	 */
 	public function update($table, $columnValues, $id) {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$sql = $this->database->getUpdateSql($table, $columnValues, $id);
 		$this->execute($sql);
 	}
@@ -160,7 +168,7 @@ class Model {
 	 * @param  $id: the ID of the record we wish to delete.
 	 */
 	public function delete($table, $id) {
-		$this->databaseConnect();
+		$this->loadDatabase();
 		$sql = $this->database->getDeleteSql($table, $id);
 		$this->execute($sql);
 	}
@@ -171,9 +179,9 @@ class Model {
 	 * @param  $cacheTimeInSeconds: the number of seconds to store these database results in the cache.
 	 * @return results as an array of associative arrays.
 	 */
-	public function results($sql, $cacheTimeInSeconds = false) {
+	public function select($sql, $cacheTimeInSeconds = false) {
 		// Try getting cached results.
-		if ($cacheTimeInSeconds !== false && $this->cacheConnect()) {
+		if ($cacheTimeInSeconds !== false && $this->loadCache()) {
 			$cacheKey = strlen($sql) < 255 ? $sql : md5($sql);
 			$value = $this->cache->get($cacheKey);
 			if ($value) {
@@ -184,8 +192,8 @@ class Model {
 			$cacheTimeInSeconds = false;
 		}
 		// No results from the cache, so connect to the database and get them.
-		$this->databaseConnect();
-		$results = $this->database->results($sql);
+		$this->loadDatabase();
+		$results = $this->database->select($sql);
 		// Try caching results for next time.
 		if ($cacheTimeInSeconds !== false) {
 			$this->cache->set($cacheKey, serialize($results), $cacheTimeInSeconds);
@@ -199,9 +207,20 @@ class Model {
 	 * @param  $cacheTimeInSeconds: the number of seconds to store this database result in the cache.
 	 * @return the result as an associative array.
 	 */
-	public function result($sql, $cacheTimeInSeconds = false) {
-		$results = $this->results($sql, $cacheTimeInSeconds);
+	public function selectAssoc($sql, $cacheTimeInSeconds = false) {
+		$results = $this->select($sql, $cacheTimeInSeconds);
 		return count($results) ? $results[0] : NULL;
+	}
+
+	/**
+	 * Query the cache, or failing that, the database, and return a single value from a result.
+	 * @param  $sql: the SQL query to execute.
+	 * @param  $cacheTimeInSeconds: the number of seconds to store this database result in the cache.
+	 * @return the result value.
+	 */
+	public function selectValue($sql, $cacheTimeInSeconds = false) {
+		$result = $this->selectAssoc($sql, $cacheTimeInSeconds);
+		return count($result) ? $result[0] : NULL;
 	}
 
 }
