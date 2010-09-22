@@ -1,6 +1,6 @@
 <?php
 /**
- * The API documentation for PiePHP.
+ * A search engine will go here.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,21 +9,15 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends Controller {
+class SearchController extends Controller {
 
 	/**
-	 * Turn caching on.
-	 */
-	public $useCaching = true;
-
-	/**
-	 * Show the table of contents.
+	 * Show search results.
 	 */
 	public function indexAction() {
 		$data = array(
-			'title' => 'Documentation'
+			'title' => 'Search'
 		);
-		$this->renderView('documentation/documentation', $data);
+		$this->renderView('search/search', $data);
 	}
-
 }

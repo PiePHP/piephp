@@ -25,5 +25,4 @@ class DocumentationController extends Controller {
 		);
 		$this->renderView('documentation/documentation', $data);
 	}
-
 }

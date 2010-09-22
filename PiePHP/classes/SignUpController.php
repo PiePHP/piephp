@@ -1,6 +1,6 @@
 <?php
 /**
- * The API documentation for PiePHP.
+ * The sign up page for PiePHP.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends Controller {
+class SignUpController extends Controller {
 
 	/**
 	 * Turn caching on.
@@ -17,13 +17,9 @@ class DocumentationController extends Controller {
 	public $useCaching = true;
 
 	/**
-	 * Show the table of contents.
+	 * Show the sign up page.
 	 */
 	public function indexAction() {
-		$data = array(
-			'title' => 'Documentation'
-		);
-		$this->renderView('documentation/documentation', $data);
+		$this->renderView('sign_up', array('title' => 'Sign up'));
 	}
-
 }

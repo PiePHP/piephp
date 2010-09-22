@@ -4,9 +4,9 @@ if (!is_ajax()) {
 <html>
 <head>
 	<title>PiePHP - <?php echo $title; ?></title>
-	<link rel="stylesheet" href="/media/css/base.css" type="text/css">
-	<link rel="stylesheet" href="/media/css/scaffolds.css" type="text/css">
-	<link rel="stylesheet" href="/media/css/veil.css" type="text/css">
+	<link rel="stylesheet" href="/css/base.css" type="text/css">
+	<link rel="stylesheet" href="/css/scaffolds.css" type="text/css">
+	<link rel="stylesheet" href="/css/veil.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
@@ -50,7 +50,7 @@ if (!is_ajax()) {
 			<?php
 			include $viewPath;
 			?>
-			<br class="both">
+			<br class="clear">
 			</div>
 			<?php
 		}
@@ -65,14 +65,14 @@ if (!is_ajax()) {
 	<?php
 	if ($GLOBALS['ENVIRONMENT'] == 'development') {
 		?>
-		<iframe id="refresher" src="<?php echo $DISPATCHER_PATH; ?>refresher" style="display:none"></iframe>
+		<iframe id="refresher" src="<?php echo $URL_ROOT; ?>refresher" style="display:none"></iframe>
 		<?php
 	}
 	?>
-	<script type="text/javascript" src="/media/js/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="/media/js/base.js"></script>
-	<script type="text/javascript" src="/media/js/uservoice.js"></script>
-	<script type="text/javascript" src="/media/js/google_analytics.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="/js/base.js"></script>
+	<script type="text/javascript" src="/js/uservoice.js"></script>
+	<script type="text/javascript" src="/js/google_analytics.js"></script>
 </body>
 </html>
 <?php

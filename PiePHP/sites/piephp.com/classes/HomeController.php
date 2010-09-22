@@ -1,6 +1,6 @@
 <?php
 /**
- * The API documentation for PiePHP.
+ * The PiePHP home page.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends Controller {
+class HomeController extends Controller {
 
 	/**
 	 * Turn caching on.
@@ -17,13 +17,15 @@ class DocumentationController extends Controller {
 	public $useCaching = true;
 
 	/**
-	 * Show the table of contents.
+	 * Show the home page.
 	 */
 	public function indexAction() {
+		$this->loadModel('blogModel');
 		$data = array(
-			'title' => 'Documentation'
+			'title' => 'The instant gratification framework',
+			'manualContentLayout' => true,
+			'posts' => $this->blogModel->posts()
 		);
-		$this->renderView('documentation/documentation', $data);
+		$this->renderView('home', $data);
 	}
-
 }

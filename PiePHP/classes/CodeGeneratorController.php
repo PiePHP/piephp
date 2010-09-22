@@ -1,6 +1,6 @@
 <?php
 /**
- * The API documentation for PiePHP.
+ * A user interface that will allow scaffolds to be created from a browser.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,21 +9,15 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends Controller {
+class CodeGeneratorController extends Controller {
 
 	/**
-	 * Turn caching on.
-	 */
-	public $useCaching = true;
-
-	/**
-	 * Show the table of contents.
+	 * Show the main options for code generation.
 	 */
 	public function indexAction() {
 		$data = array(
-			'title' => 'Documentation'
+			'title' => 'Code generator'
 		);
-		$this->renderView('documentation/documentation', $data);
+		$this->renderView('code_generator/code_generator', $data);
 	}
-
 }
