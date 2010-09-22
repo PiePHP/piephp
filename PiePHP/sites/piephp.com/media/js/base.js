@@ -180,15 +180,15 @@ if (!window.log) (function(window) {
 	var loadContent = function(path, html) {
 		hideVeil();
 		window.scrollTo(0, 0);
-		var bodyQuery = $('#body');
 		currentPath = path;
+		document.location = base + '/#' + path;
+		var bodyQuery = $('#body');
 		$('#body>div').removeClass('loading');
 		var htmlQuery = $(html);
 		if (htmlQuery.find('#body').size()) {
 			htmlQuery = htmlQuery.find('#body');
 		}
 		wire(bodyQuery.html(htmlQuery));
-		document.location = base + '/#' + path;
 		document.title = $('#title').text();
 		$('#loading').remove();
 		lightTab();
