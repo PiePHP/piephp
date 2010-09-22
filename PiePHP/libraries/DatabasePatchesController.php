@@ -16,6 +16,7 @@ class DatabasePatchesController extends Controller {
 	 */
 	public function indexAction() {
 		global $DATABASES;
+    global $APP_ROOT;
 		$this->authenticate();
 
 		$results = array();
@@ -26,7 +27,7 @@ class DatabasePatchesController extends Controller {
 			$model->ignoreErrors = true;
 			$nextOrdinal = $model->selectValue('MAX(ordinal) FROM patches') + 1;
 			$model->ignoreErrors = false;
-			
+
 			while (file_exists($path = $APP_ROOT . 'models/database_patches/' . $databaseName . '/patch' . sprintf('%05d', $nextOrdinal) . '.sql')) {
 				$patched = true;
 				//echo 'Running ' . $path . '...<br/>';
@@ -36,9 +37,9 @@ class DatabasePatchesController extends Controller {
 					if (trim($statement)) {
 						$model->execute($statement);
 					}
+          $results[$databaseName][] = $path;
 				}
-				$model->execute('UPDATE patches SET ordinal = ' . $nextOrdinal);
-				$nextOrdinal++;
+				$model->execute('UPDATE patches SET ordinal = ' . $nextOrdinal++);
 			}
 		}
 

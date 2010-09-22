@@ -2,13 +2,20 @@
 <p>The following patches were run:</p>
 <?php
 
-foreach ($results as $name => $result) {
+foreach ($results as $name => $patches) {
 	?>
 	<h3><?php echo $name ?></h3>
 	<?php
-	if (!count($result)) {
+	if (count($patches)) {
+    foreach ($patches as $patch) {
+  		?>
+  		<?php echo $patch; ?><br>
+  		<?php
+    }
+	}
+  else {
 		?>
-		<p>There were no new patches.</p>
+		<p>No new patches.</p>
 		<?php
 	}
 	?>
