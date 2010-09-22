@@ -12,6 +12,10 @@
 	<b id="product">Download PiePHP<i>Version <?php echo $GLOBALS['VERSION']; ?></i></b>
 </a>
 
+<div id="fb">
+  <fb:like href="http://www.piephp.com/" width="302"></fb:like>
+</div>
+
 <div id="news">
 	<h2>What's new?</h2>
 	<p>We're actively seeking talented contributors.  If you love getting things done quickly and painlessly, and if you have a knack for PHP and/or jQuery, then please get in touch with us to find out how you can be a part of the team.</p>

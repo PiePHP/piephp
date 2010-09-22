@@ -71,8 +71,9 @@ if (!is_ajax()) {
 	?>
 	<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="/js/base.js"></script>
-	<script type="text/javascript" src="/js/uservoice.js"></script>
 	<script type="text/javascript" src="/js/google_analytics.js"></script>
+	<script type="text/javascript" src="/js/facebook.js"></script>
+	<script type="text/javascript" src="/js/uservoice.js"></script>
 </body>
 </html>
 <?php
