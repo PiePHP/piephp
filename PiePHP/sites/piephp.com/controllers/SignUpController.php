@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class SignUpController extends Controller {
+class SignUpController extends CachingController {
 
 	/**
 	 * Show the sign up page.

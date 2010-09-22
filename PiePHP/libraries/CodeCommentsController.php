@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class CodeCommentsController extends NonCachingController {
+class CodeCommentsController extends Controller {
 
 	/**
 	 * If comments were submitted, add them to the appropriate file.

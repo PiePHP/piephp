@@ -131,7 +131,7 @@ else {
 
 call_user_func_array(array(&$controller, $actionName), $parameters);
 
-if ($controller->isCacheable && isset($pageModel)) {
+if ($controller->useCaching && isset($pageModel)) {
 	$contents = ob_get_clean();
 	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
 	$contents = preg_replace('/\\s+/ms', ' ', $contents);

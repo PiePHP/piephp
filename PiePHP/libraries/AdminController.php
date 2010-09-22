@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class AdminController extends NonCachingController {
+class AdminController extends Controller {
 
 	/**
 	 * Show a list of links to available admin sections.

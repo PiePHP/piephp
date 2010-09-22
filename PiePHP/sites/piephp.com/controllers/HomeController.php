@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class HomeController extends Controller {
+class HomeController extends CachingController {
 
 	/**
 	 * Show the home page.

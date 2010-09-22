@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends Controller {
+class DocumentationController extends CachingController {
 
 	/**
 	 * Show the table of contents.

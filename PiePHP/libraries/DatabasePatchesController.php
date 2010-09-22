@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class DatabasePatchesController extends NonCachingController {
+class DatabasePatchesController extends Controller {
 
 	/**
 	 * Search for database patches in models/database_patches, and run any that are found.

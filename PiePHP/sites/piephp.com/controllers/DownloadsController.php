@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class DownloadsController extends Controller {
+class DownloadsController extends CachingController {
 
 	/**
 	 * Show the main downloads page.

@@ -33,9 +33,9 @@ abstract class Controller {
 	public $defaultModelClassName = 'Model';
 
 	/**
-	 * If isCacheable is true, the buffer output will be cached when the page has finished processing.
+	 * If useCaching is true, the buffer output will be cached when the page has finished processing.
 	 */
-	public $isCacheable = true;
+	public $useCaching = false;
 
 	/**
 	 * If the second part of the URL does not match a known action for the controller, its catchAllAction is called.

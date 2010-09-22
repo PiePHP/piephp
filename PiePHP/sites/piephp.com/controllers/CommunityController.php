@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class CommunityController extends Controller {
+class CommunityController extends CachingController {
 
 	/**
 	 * Show the PiePHP community homepage.

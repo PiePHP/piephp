@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class MemcacheStatsController extends NonCachingController {
+class MemcacheStatsController extends Controller {
 
 	/**
 	 * Display Memcache stats.

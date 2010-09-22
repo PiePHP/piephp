@@ -143,7 +143,7 @@ class Field {
 
 	/**
 	 * Render the CSS class for this field.
-	 * TODO: This would be more straightforward if it returned a value.
+	 * TODO: This might be more straightforward if it returned a value.
 	 */
 	public function renderInputClass() {
 		$className = lower_camel($this->type);

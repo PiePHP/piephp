@@ -9,11 +9,11 @@
  * @license    http://www.piephp.com/license
  */
 
-class PhpinfoController extends NonCachingController {
+class PhpinfoController extends Controller {
 
 	/**
 	 * Show PHP info for developers.
-	 * TODO: Check user credentials before showing them our entire server configuration.
+	 * TODO: Check user credentials for "developer" status or greater before showing them server configuration info.
 	 */
 	public function indexAction() {
 		if ($GLOBALS['ENVIRONMENT'] != 'development') {

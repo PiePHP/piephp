@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class TutorialsController extends Controller {
+class TutorialsController extends CachingController {
 
 	/**
 	 * Show the list of tutorials.

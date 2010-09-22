@@ -10,7 +10,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class RefresherController extends NonCachingController {
+class RefresherController extends Controller {
 
 	/**
 	 * Load the refresher script via AJAX in an IFrame.

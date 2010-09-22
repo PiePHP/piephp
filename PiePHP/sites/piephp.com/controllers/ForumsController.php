@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class ForumsController extends Controller {
+class ForumsController extends CachingController {
 
 	/**
 	 * Show the forums.

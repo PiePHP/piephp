@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class SearchController extends NonCachingController {
+class SearchController extends Controller {
 
 	/**
 	 * Show search results.

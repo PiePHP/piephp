@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class SignOutController extends NonCachingController {
+class SignOutController extends Controller {
 
 	/**
 	 * Sign a user out.

@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class ErrorsController extends NonCachingController {
+class ErrorsController extends Controller {
 
 	/**
 	 * The number of errors that have been handled in the page.
@@ -242,7 +242,7 @@ class ErrorsController extends NonCachingController {
 	 * @param  $value: the value to be shown.
 	 */
 	public function renderValue($value) {
-		//TODO: make a fancier display for function argument values and context variable values.
+		//TODO: Make a fancier display for function argument values and context variable values.
 		if (is_string($value)) {
 			echo "'" . addslashes($value) . "'";
 		}
