@@ -53,7 +53,11 @@ abstract class Controller {
 	 * @param  $templateName: optional template name to override the controller's default template name.
 	 */
 	public function renderView($viewName, $data = array(), $templateName = NULL) {
-		global $APP_ROOT, $URL_ROOT, $HTTP_ROOT, $HTTPS_ROOT;
+		global $APP_ROOT;
+    global $URL_ROOT;
+    global $HTTP_ROOT;
+    global $HTTPS_ROOT;
+    global $ENVIRONMENT;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {

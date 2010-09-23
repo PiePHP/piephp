@@ -208,6 +208,7 @@ class ErrorsController extends Controller {
 				}
 				?>
 			</form>
+      <br class="clear">
 			<?php
 			if ($errorStats['firstInPage']) {
 				?>

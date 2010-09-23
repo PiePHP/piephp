@@ -208,7 +208,7 @@ class Field {
 	public function renderListCell($isFirst = false) {
 		echo '<td>';
 		if ($isFirst) {
-			echo '<a href="' . $this->scaffold->urlPath . 'change/' . $this->scaffold->result['id'] . '">';
+			echo '<a href="' . $this->scaffold->urlRoot . 'change/' . $this->scaffold->result['id'] . '">';
 		}
 		$this->renderListCellValue();
 		if ($isFirst) {

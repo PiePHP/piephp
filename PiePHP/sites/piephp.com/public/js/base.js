@@ -497,10 +497,12 @@ if (!window.log) (function(window) {
 	lightTab();
 	wire(document);
 
-	var appendScript = window.appendScript = function(src) {
-		var scriptQuery = $('<' + 'script type="text/javascript" src="' + src + '"/>');
-		scriptQuery[0].async = true;
-		$('head').append(scriptQuery);
+	var appendScript = window.appendScript = function(src, delay) {
+    setTimeout(function() {
+      var scriptQuery = $('<' + 'script type="text/javascript" src="' + src + '"/>');
+  		scriptQuery[0].async = true;
+  		$('head').append(scriptQuery);
+    }, delay ? delay : 0);
 	};
 
 

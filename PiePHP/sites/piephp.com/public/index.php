@@ -15,18 +15,25 @@
 error_reporting(E_ALL);
 set_error_handler('error_handler', E_ALL);
 
-// To avoid revealing production passwords in development environments, we can use config_local.php
-// to override database configs.
+/**
+ * The configuration settings below are the default configuration for deployments
+ * of this application.  Local configurations can override the defaults using
+ * their own "config_local.php", which should be ignored by source control clients.
+ */
+
+// Database configurations are included here, but we do not make database connections
+// until data is needed.  In many cases, we can try getting data from a cache first.
 $DATABASES = array(
-	'default' => 'mysql:host=localhost username=piephp password= database=piephp'
+	'default' => 'mysql:host=localhost username=piephp password=password database=piephp'
 );
 
-// Caches can be used for full-page HTML (in the dispatcher) or SQL queries (in a Model).
+// Caches can be used for things like query results and full-page HTML.
 $CACHES = array(
 	'default' => 'memcache:host=localhost port=11211 prefix=piephp_ expire=600',
 	'pages' => 'file:host=localhost port=11211 prefix=piephp_pages_ expire=600'
 );
 
+//
 // In development environments, we should use config_local.php to override this value.
 $ENVIRONMENT = 'production';
 
@@ -34,37 +41,49 @@ $ENVIRONMENT = 'production';
 // TODO: Make this actually happen.
 $VERSION = '0.0.1';
 
-// APP_ROOT is the directory which contains this application's files.
+// $APP_ROOT is the directory which contains this application's files.
 $APP_ROOT = str_replace('\\', '/', dirname(dirname(__FILE__))) . '/';
 
-// PIE_ROOT is the directory which contains PiePHP libraries and sites that use PiePHP.
+// $PIE_ROOT is the directory which contains PiePHP libraries and sites that use PiePHP.
 $PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
+
+// $URL_ROOT is the part of the URL that spans from the server name (and port, if any) to the
+// controller name.  This is the URL for the dispatcher, and is usually "/" or "/index.php/".
+// For deployments to servers without mod_rewrite, this can be changed in config_local.php.
+$URL_ROOT = '/';
 
 // Any of the above settings can be overridden in a development/test/staging environment by
 // rewriting them in config_local.php.
 include 'config_local.php';
 
-// If a REDIRECT_URL exists, then mod_rewrite is allowing us to dispatching from '/'.
-// Otherwise, we need to make URLs point to index.php by setting it as the URL_ROOT.
-$URL_ROOT = isset($_SERVER['REDIRECT_URL']) ? '/' : '/index.php/';
-$URI_PATH = substr($_SERVER['REQUEST_URI'], strlen($URL_ROOT));
-list($URL_PATH, $QUERY_STRING) = explode('?', $URI_PATH . '?');
-
+// If we're not posting data, we should check for a cached copy of the requested page.
 if (!count($_POST) && isset($CACHES['pages'])) {
 	include $PIE_ROOT . 'classes/Model.php';
 	include $PIE_ROOT . 'classes/' . ($CACHES['pages'][0] == 'f' ? 'File' : 'Memcache') . 'Cache.php';
 	$pageModel = new Model();
 	$pageModel->cacheConfigName = 'pages';
 	$pageModel->loadCache();
-	$pageCacheKey = $URI_PATH . '&'
+	$pageCacheKey = $_SERVER['REQUEST_URI'] . '&'
 	. (is_ajax() ? 'a' : '')
 	. (is_dialog() ? 'd' : '')
 	. (is_https() ? 'h' : '')
 	. (is_localhost() ? 'l' : '');
 	$contents = $pageModel->cache->get($pageCacheKey);
 	if ($contents) {
+  	ob_start('ob_gzhandler');
 		send_output($contents);
 	}
+}
+// TODO: Find out why PHP won't let me get the contents of a gzipped buffer.
+ob_start();
+
+// The REQUEST_URI is what was requested before mod_rewrite changed anything.
+// For a URL like "http://server:port/url/to/the/page?query=string",
+// the URL_ROOT will be "/url/to/the/page".
+// and the QUERY_STRING will be "query=string".
+list($URL_PATH, $QUERY_STRING) = explode('?', $_SERVER['REQUEST_URI'] . '?');
+if (strpos($URL_PATH, $URL_ROOT) === false) {
+  $URL_PATH = str_replace('//', '/', $URL_ROOT . $URL_PATH);
 }
 
 // If mod_rewrite used the path as a query string, we need to separate path data from query data.
@@ -83,15 +102,13 @@ $HTTPS_BASE = 'http://' . $_SERVER['SERVER_NAME'];
 if (is_https()) {
 	$HTTP_ROOT = $HTTP_BASE . $URL_ROOT;
 	$HTTPS_ROOT = $URL_ROOT;
-	$CURRENT_URL = $HTTPS_BASE . $_SERVER['REQUEST_URI'];
 }
 else {
 	$HTTP_ROOT = $URL_ROOT;
 	$HTTPS_ROOT = $HTTPS_BASE . $URL_ROOT;
-	$CURRENT_URL = $HTTP_BASE . $_SERVER['REQUEST_URI'];
 }
 
-$PARAMETERS = explode('/', $URL_PATH);
+$PARAMETERS = explode('/', substr($URL_PATH, strlen($URL_ROOT)));
 
 $CONTROLLER_NAME = upper_camel($PARAMETERS[0]) . 'Controller';
 
@@ -104,7 +121,7 @@ if ($CONTROLLER_NAME == 'Controller' || !class_exists($CONTROLLER_NAME, true)) {
 else {
 	array_shift($PARAMETERS);
 }
-$controller = new $CONTROLLER_NAME();
+$CONTROLLER = new $CONTROLLER_NAME();
 
 $ACTION_NAME = (count($PARAMETERS) ? lower_camel($PARAMETERS[0]) : '') . 'Action';
 
@@ -114,16 +131,16 @@ $ACTION_NAME = (count($PARAMETERS) ? lower_camel($PARAMETERS[0]) : '') . 'Action
 if ($ACTION_NAME == 'Action') {
 	$ACTION_NAME = 'indexAction';
 }
-if (!method_exists($controller, $ACTION_NAME)) {
+if (!method_exists($CONTROLLER, $ACTION_NAME)) {
 	$ACTION_NAME = 'catchAllAction';
 }
 else {
 	array_shift($PARAMETERS);
 }
 
-call_user_func_array(array(&$controller, $ACTION_NAME), $PARAMETERS);
+call_user_func_array(array(&$CONTROLLER, $ACTION_NAME), $PARAMETERS);
 
-if ($controller->useCaching && isset($pageModel)) {
+if ($CONTROLLER->useCaching && isset($pageModel)) {
 	$contents = ob_get_clean();
 	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
 	$contents = preg_replace('/\\s+/ms', ' ', $contents);
@@ -212,14 +229,11 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
  * @param  $output: the output to decorate and send.
  */
 function send_output($output) {
-	global $URL_ROOT;
+  global $URL_ROOT;
 	if (!is_ajax()) {
 		$session = new Session();
-		Logger::debug('signed in: ' . $session->isSignedIn);
 		if ($session->isSignedIn) {
-			Logger::debug('before split');
-			$pieces = preg_split('/<div id="user">.*?<\/div>/', $output, 2);
-			Logger::debug(var_export($pieces));
+			$pieces = preg_split('/<div id="user">.*?<\/div>/msi', $output, 2);
 			if (count($pieces) > 1) {
 				$output = $pieces[0] .
 					'<div id="user">' .
@@ -233,7 +247,6 @@ function send_output($output) {
 			}
 		}
 	}
-	ob_start('ob_gzhandler');
 	echo $output;
 	exit;
 }
@@ -243,7 +256,9 @@ function send_output($output) {
  * @return true if the page was requested via AJAX.
  */
 function is_ajax() {
-	return (isset($_REQUEST['isAjax']) && $_REQUEST['isAjax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
+	return (isset($_REQUEST['isAjax']) && $_REQUEST['isAjax'])
+    || (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+      && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 }
 
 /**

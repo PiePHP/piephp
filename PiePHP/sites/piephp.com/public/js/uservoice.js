@@ -14,12 +14,12 @@ var uservoiceOptions = {
 	host: 'piephp.uservoice.com', 
 	forum: 'general', 
 	alignment: 'right',
-	background_color:'#123', 
+	background_color:'#012', 
 	text_color: 'white',
-	hover_color: '#012',
+	hover_color: '#246',
 	lang: 'en',
 	showTab: true
 };
 
 // The script is appended to the DOM, so it will load asynchronously in most browsers.
-appendScript(document.location.protocol + '//cdn.uservoice.com/javascripts/widgets/tab.js');
+appendScript(document.location.protocol + '//cdn.uservoice.com/javascripts/widgets/tab.js', 500);

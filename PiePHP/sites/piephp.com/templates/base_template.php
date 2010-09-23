@@ -61,7 +61,7 @@ if (!is_ajax()) {
 		Copyright 2007-2010, Pie Software Foundation, All rights reserved
 	</div>
 	<?php
-	if ($GLOBALS['ENVIRONMENT'] == 'development') {
+	if ($ENVIRONMENT == 'development') {
 		?>
 		<iframe id="refresher" src="<?php echo $URL_ROOT; ?>refresher" style="display:none"></iframe>
 		<?php

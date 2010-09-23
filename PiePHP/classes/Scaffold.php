@@ -66,7 +66,7 @@ abstract class Scaffold extends Controller {
 	/**
 	 * The URL path of this scaffold. (e.g. /admin/users/)
 	 */
-	public $urlPath;
+	public $urlRoot;
 
 	/**
 	 * An associative array with database column names for keys and POST data for values.
@@ -85,6 +85,7 @@ abstract class Scaffold extends Controller {
 	 * @param  $id: which record it's supposed to act on.
 	 */
 	public function __construct($name, $action = 'list', $id = 0) {
+    global $URL_PATH;
 		if (!$this->table) {
 			$this->table = strtolower(separate($name, '_'));
 		}
@@ -113,7 +114,7 @@ abstract class Scaffold extends Controller {
 			$fields[$fieldName] = $field;
 		}
 		$this->fields = &$fields;
-		$this->urlPath = preg_replace('/(add|change|remove)\/([0-9]+\/?)?$/', '', $GLOBALS['PAGE_URL_PATH']);
+		$this->urlRoot = preg_replace('/(add|change|remove)\/([0-9]+\/?)?(\?.*)?$/', '', $URL_PATH);
 		$this->getResult();
 	}
 
@@ -202,7 +203,7 @@ abstract class Scaffold extends Controller {
 	 * @return the URL as a string.
 	 */
 	public function getRedirectUrl() {
-		$redirectUrl = $GLOBALS[is_https() ? 'HTTPS_BASE' : 'HTTP_BASE'] . $this->urlPath;
+		$redirectUrl = $GLOBALS[is_https() ? 'HTTPS_BASE' : 'HTTP_BASE'] . $this->urlRoot;
 
 		// If the user selected to save and add another, then take them to an add page.
 		if (strpos($this->submitButtonValue, 'add') !== false) {
@@ -333,7 +334,7 @@ abstract class Scaffold extends Controller {
 	 * Render the form's start tag.
 	 */
 	public function renderFormStart() {
-		$action = $this->urlPath . $this->action . '/';
+		$action = $this->urlRoot . $this->action . '/';
 		if ($this->id) {
 			$action .= $this->id . '/';
 		}
@@ -351,11 +352,11 @@ abstract class Scaffold extends Controller {
 			echo '</div>';
 		}
 		else if ($this->action == 'list') {
-			echo '<a href="' . $this->urlPath . 'add/" class="add">Add a ' . $this->singular . '</a>';
+			echo '<a href="' . $this->urlRoot . 'add/" class="add">Add a ' . $this->singular . '</a>';
 		}
 		else {
 			if ($this->action == 'change') {
-				echo '<a href="' . $this->urlPath . 'remove/' . $this->id . '/" class="remove">Remove</a>';
+				echo '<a href="' . $this->urlRoot . 'remove/' . $this->id . '/" class="remove">Remove</a>';
 			}
 			echo '<div>';
 				if ($this->action == 'change') {

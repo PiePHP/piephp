@@ -17,6 +17,7 @@ class RefresherController extends Controller {
 	 * Putting it in an IFrame makes it run even if there are JavaScript errors on the parent page.
 	 */
 	public function indexAction() {
+    global $URL_ROOT;
 		?>
 		<html>
 		<head>
@@ -26,7 +27,7 @@ class RefresherController extends Controller {
 		<body>
 			<script type="text/javascript">
 				setTimeout(function() {
-					$('body').load('<?php echo $GLOBALS['URL_ROOT']; ?>refresher/script/' + (new Date()).getTime());
+					$('body').load('<?php echo $URL_ROOT; ?>refresher/script/' + (new Date()).getTime());
 				}, 1000);
 				setTimeout(window.location.reload, 30000);
 			</script>
@@ -48,8 +49,9 @@ class RefresherController extends Controller {
 	 * If we see a change, we can tell the parent page to refresh, otherwise we just reload the refresher frame.
 	 */
 	public function scriptAction() {
+    global $REFRESHER_FILE;
 		$this->preventCaching();
-		$file = $GLOBALS['REFRESHER_FILE'];
+		$file = $REFRESHER_FILE;
 		if (!fopen($file, 'r')) {
 			$this->renderScript("alert('$file is not a valid refresher file.')");
 			exit;
