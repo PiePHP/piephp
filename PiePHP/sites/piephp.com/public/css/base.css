@@ -38,9 +38,13 @@ var {
 	display: none;
 }
 
+u,
+a {
+	text-decoration: none;
+}
+
 a {
 	color: #44a;
-	text-decoration: none;
 	font-weight: bold;
 }
 

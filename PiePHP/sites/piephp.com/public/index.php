@@ -40,21 +40,36 @@ $APP_ROOT = str_replace('\\', '/', dirname(dirname(__FILE__))) . '/';
 // PIE_ROOT is the directory which contains PiePHP libraries and sites that use PiePHP.
 $PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
 
-// If a REDIRECT_URL exists, then mod_rewrite is allowing us to dispatching from '/'.
-// Otherwise, we need to make URLs point to index.php by setting it as the URL_ROOT.
-$URL_ROOT = isset($_SERVER['REDIRECT_URL']) ? '/' : '/index.php/';
-
 // Any of the above settings can be overridden in a development/test/staging environment by
 // rewriting them in config_local.php.
 include 'config_local.php';
 
-// Class autoloading needs to know where to look for classes with certain suffixes.
-$CLASS_DIRS = array($PIE_ROOT . 'classes/');
+// If a REDIRECT_URL exists, then mod_rewrite is allowing us to dispatching from '/'.
+// Otherwise, we need to make URLs point to index.php by setting it as the URL_ROOT.
+$URL_ROOT = isset($_SERVER['REDIRECT_URL']) ? '/' : '/index.php/';
+$URI_PATH = substr($_SERVER['REQUEST_URI'], strlen($URL_ROOT));
+list($URL_PATH, $QUERY_STRING) = explode('?', $URI_PATH . '?');
+
+if (!count($_POST) && isset($CACHES['pages'])) {
+	include $PIE_ROOT . 'classes/Model.php';
+	include $PIE_ROOT . 'classes/' . ($CACHES['pages'][0] == 'f' ? 'File' : 'Memcache') . 'Cache.php';
+	$pageModel = new Model();
+	$pageModel->cacheConfigName = 'pages';
+	$pageModel->loadCache();
+	$pageCacheKey = $URI_PATH . '&'
+	. (is_ajax() ? 'a' : '')
+	. (is_dialog() ? 'd' : '')
+	. (is_https() ? 'h' : '')
+	. (is_localhost() ? 'l' : '');
+	$contents = $pageModel->cache->get($pageCacheKey);
+	if ($contents) {
+		send_output($contents);
+	}
+}
 
 // If mod_rewrite used the path as a query string, we need to separate path data from query data.
-if (!isset($_SERVER['PATH_INFO'])) {
-	list($_SERVER['PATH_INFO'], $_SERVER['QUERY_STRING']) = explode('?', $_SERVER['REQUEST_URI'] . '?');
-	$pairs = explode('&', $_SERVER['QUERY_STRING']);
+if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
+	$pairs = explode('&', $QUERY_STRING);
 	foreach ($pairs as $pair) {
 		list($key, $value) = explode('=', $pair . '=');
 		// TODO: Deal with multiple instances of the same key.
@@ -62,26 +77,6 @@ if (!isset($_SERVER['PATH_INFO'])) {
 		$_REQUEST[$key] = $value;
 	}
 }
-
-if (!count($_POST)) {
-  include $PIE_ROOT . 'classes/Model.php';
-  include $PIE_ROOT . 'classes/MemcacheCache.php';
-	$pageModel = new Model();
-	$pageModel->cacheConfigName = 'pages';
-	$pageModel->loadCache();
-	$pageCacheKey = $_SERVER['PATH_INFO'] . ' '
-		. (is_ajax() ? 'a' : '')
-		. (is_dialog() ? 'd' : '')
-		. (is_https() ? 'h' : '')
-		. (is_localhost() ? 'l' : '');
-	$contents = $pageModel->cache->get($pageCacheKey);
-	if ($contents) {
-		send_output($contents);
-	}
-}
-
-// Up to this point, we didn't need app-specific classes.
-$CLASS_DIRS[] = $APP_ROOT . 'classes/';
 
 $HTTP_BASE = 'http://' . $_SERVER['SERVER_NAME'];
 $HTTPS_BASE = 'http://' . $_SERVER['SERVER_NAME'];
@@ -96,7 +91,7 @@ else {
 	$CURRENT_URL = $HTTP_BASE . $_SERVER['REQUEST_URI'];
 }
 
-$PARAMETERS = explode('/', substr($_SERVER['PATH_INFO'], 1));
+$PARAMETERS = explode('/', $URL_PATH);
 
 $CONTROLLER_NAME = upper_camel($PARAMETERS[0]) . 'Controller';
 
@@ -141,13 +136,11 @@ if ($controller->useCaching && isset($pageModel)) {
  * @param  $className: the name of the class we're trying to use.
  */
 function __autoload($className) {
-	global $CLASS_DIRS;
-  foreach ($CLASS_DIRS as $directory) {
-    $autoloadFile = $directory . $className . '.php';
-		if (@include($autoloadFile)) {
-			return;
-		}
-  }
+	$autoloadFile = '../classes/' . $className . '.php';
+	if (@include($autoloadFile)) {
+		return;
+	}
+	include('../../' . $autoloadFile);
 }
 
 /**
@@ -220,19 +213,24 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
  */
 function send_output($output) {
 	global $URL_ROOT;
-	$session = new Session();
-	if ($session->isSignedIn) {
-		$pieces = preg_split('/<div id="user">.*?<\/div>/', $output, 2);
-		if (count($pieces) > 1) {
-			$output = $pieces[0] .
-				'<div id="user">' .
-					'<span>' . htmlentities($session->username) . '</span>' .
-					'<div id="userNav">' .
-					'<a href="' . $URL_ROOT . 'admin/">Admin</a>' .
-					'<a href="' . $URL_ROOT . 'sign_out/" class="noAjax">Sign out</a>' .
+	if (!is_ajax()) {
+		$session = new Session();
+		Logger::debug('signed in: ' . $session->isSignedIn);
+		if ($session->isSignedIn) {
+			Logger::debug('before split');
+			$pieces = preg_split('/<div id="user">.*?<\/div>/', $output, 2);
+			Logger::debug(var_export($pieces));
+			if (count($pieces) > 1) {
+				$output = $pieces[0] .
+					'<div id="user">' .
+						'<span>' . htmlentities($session->username) . '</span>' .
+						'<u id="userNav">' .
+							'<a href="' . $URL_ROOT . 'admin/">Admin</a>' .
+							'<a href="' . $URL_ROOT . 'sign_out/" class="noAjax">Sign out</a>' .
+						'</u>' .
 					'</div>' .
-				'</div>' .
 				$pieces[1];
+			}
 		}
 	}
 	ob_start('ob_gzhandler');

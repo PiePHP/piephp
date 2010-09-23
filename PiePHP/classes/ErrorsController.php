@@ -128,10 +128,6 @@ class ErrorsController extends Controller {
 		if ($errorStats['firstOfItsKind']) {
 			$file = str_replace('\\', '/', $file);
 
-			// Try ending some tags because we're inserting HTML into an unknown point in the page.
-			// Echoing a string means that Eclipse won't complain about unmatched tags.
-			echo '</var></form>';
-
 			?>
 			<form class="code" method="post" action="<?php echo $HTTP_ROOT; ?>errors/rewrite" target="submitter">
 				<h3><?php echo $message; ?></h3>

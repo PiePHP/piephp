@@ -219,7 +219,7 @@ class Model {
 	 * @return the result value.
 	 */
 	public function selectValue($sql, $cacheTimeInSeconds = false) {
-		$result = $this->selectAssoc($sql, $cacheTimeInSeconds);
+		$result = array_values($this->selectAssoc($sql, $cacheTimeInSeconds));
 		return count($result) ? $result[0] : NULL;
 	}
 

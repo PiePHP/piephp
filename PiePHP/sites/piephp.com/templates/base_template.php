@@ -14,10 +14,10 @@ if (!is_ajax()) {
 	<div id="head">
 		<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
 		<div id="user">
-			<div id="userNav">
+			<u id="userNav">
 				<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
 				<a href="<?php echo $HTTP_ROOT; ?>sign_in" class="veil"><b>Sign In</b></a>
-			</div>
+			</u>
 		</div>
 	</div>
 	<div id="nav">
@@ -39,8 +39,6 @@ if (!is_ajax()) {
 		else {
 			?><var id="title">PiePHP - <?php echo $title; ?></var><?php
 		}
-		//echo 'manualContentLayout: ' . (isset($manualContentLayout) ? 'true' : 'false') . '<br>';
-		//echo 'is_dialog(): ' . (is_dialog() ? 'true' : 'false') . '<br>';
 		if (isset($manualContentLayout) || is_dialog()) {
 			include $viewPath;
 		}

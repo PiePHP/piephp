@@ -13,7 +13,7 @@
 </a>
 
 <div id="fb">
-  <fb:like href="http://www.piephp.com/" width="302"></fb:like>
+  <?php echo '<fb:like width="302"></fb:like>'; ?>
 </div>
 
 <div id="news">
