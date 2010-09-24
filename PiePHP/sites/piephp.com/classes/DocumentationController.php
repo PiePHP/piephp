@@ -19,10 +19,9 @@ class DocumentationController extends Controller {
 	/**
 	 * Show the table of contents.
 	 */
-	public function indexAction() {
-		$data = array(
+	public function defaultAction() {
+		$this->render(array(
 			'title' => 'Documentation'
-		);
-		$this->renderView('documentation/documentation', $data);
+		));
 	}
 }

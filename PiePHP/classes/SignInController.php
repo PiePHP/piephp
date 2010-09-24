@@ -15,11 +15,13 @@ class SignInController extends Controller {
 	 * Process a sign in if data has been posted.
 	 * If processing does not redirect us somewhere, then show the sign in page.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 		if (count($_POST)) {
 			$this->processSignIn();
 		}
-		$this->renderView('sign_in', array('title' => 'Sign in'));
+		$this->render(array(
+      'title' => 'Sign in'
+    ));
 	}
 
 	/**

@@ -14,10 +14,9 @@ class SearchController extends Controller {
 	/**
 	 * Show search results.
 	 */
-	public function indexAction() {
-		$data = array(
+	public function defaultAction() {
+		$this->render(array(
 			'title' => 'Search'
-		);
-		$this->renderView('search/search', $data);
+		));
 	}
 }

@@ -15,7 +15,7 @@ class CodeCommentsController extends Controller {
 	 * If comments were submitted, add them to the appropriate file.
 	 * Walk the directory looking for PHP files with uncommented sections, and show a comments form.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 
 		/**
 		 * If a file has the PHP extension, try showing a comments form for it.
@@ -115,7 +115,7 @@ class CodeCommentsController extends Controller {
 					$source = str_replace("/**$index**/", $replacement, $source);
 				}
 
-				$GLOBALS['controller']->renderView('admin/code_comments', array(
+				$GLOBALS['controller']->render(array(
 					'title' => 'Code comments',
 					'path' => $path,
 					'source' => $source

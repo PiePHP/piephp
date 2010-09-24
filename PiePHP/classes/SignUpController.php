@@ -19,7 +19,9 @@ class SignUpController extends Controller {
 	/**
 	 * Show the sign up page.
 	 */
-	public function indexAction() {
-		$this->renderView('sign_up', array('title' => 'Sign up'));
+	public function defaultAction() {
+		$this->render(array(
+      'title' => 'Sign up'
+    ));
 	}
 }

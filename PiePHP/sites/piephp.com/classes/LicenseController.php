@@ -19,8 +19,8 @@ class LicenseController extends Controller {
 	/**
 	 * Show the PiePHP license.
 	 */
-	public function indexAction() {
-		$this->renderView('license/license', array(
+	public function defaultAction() {
+		$this->render(array(
       'title' => 'License'
     ));
 	}

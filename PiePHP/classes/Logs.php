@@ -10,7 +10,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class Logger {
+class Logs {
 
 	/**
 	 * Log a debug message, as long as we're not in a production environment.
@@ -19,8 +19,8 @@ class Logger {
 	public static function debug($message) {
 		global $ENVIRONMENT;
 		if ($ENVIRONMENT != 'production') {
-			Logger::appendLogMessage('all.log', 'DEBUG ' . $message);
-			Logger::appendLogMessage('debug.log', $message);
+			Logs::appendLogMessage('all.log', 'DEBUG ' . $message);
+			Logs::appendLogMessage('debug.log', $message);
 		}
 	}
 
@@ -31,9 +31,9 @@ class Logger {
 	public static function error($message) {
 		global $ENVIRONMENT;
 		if ($ENVIRONMENT != 'production') {
-			Logger::appendLogMessage('all.log', 'ERROR ' . $message);
+			Logs::appendLogMessage('all.log', 'ERROR ' . $message);
 		}
-		Logger::appendLogMessage('error.log', $message);
+		Logs::appendLogMessage('error.log', $message);
 	}
 
 	/**

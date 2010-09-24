@@ -19,10 +19,9 @@ class CommunityController extends Controller {
 	/**
 	 * Show the PiePHP community homepage.
 	 */
-	public function indexAction() {
-		$data = array(
+	public function defaultAction() {
+		$this->render(array(
 			'title' => 'Community'
-		);
-		$this->renderView('community/community', $data);
+		));
 	}
 }

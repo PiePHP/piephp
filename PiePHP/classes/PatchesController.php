@@ -14,7 +14,7 @@ class PatchesController extends Controller {
 	/**
 	 * Search for patches in models/patches, and run any that are found.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 		global $ENVIRONMENT;
 		global $DATABASES;
 		global $APP_ROOT;
@@ -46,7 +46,7 @@ class PatchesController extends Controller {
 			}
 		}
 
-		$this->renderView('patches/patches', array(
+		$this->render(array(
 			'title' => 'Patches',
 			'results' => $results
 		));

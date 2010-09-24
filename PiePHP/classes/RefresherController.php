@@ -16,7 +16,7 @@ class RefresherController extends Controller {
 	 * Load the refresher script via AJAX in an IFrame.
 	 * Putting it in an IFrame makes it run even if there are JavaScript errors on the parent page.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
     global $URL_ROOT;
 		?>
 		<html>
@@ -50,6 +50,7 @@ class RefresherController extends Controller {
 	 */
 	public function scriptAction() {
     global $REFRESHER_FILE;
+    global $CACHES;
 		$this->preventCaching();
 		$file = $REFRESHER_FILE;
 		if (!fopen($file, 'r')) {
@@ -64,7 +65,9 @@ class RefresherController extends Controller {
 			if ($new > $old) {
 
 				// Flushing the cache ensures that we'll see the newest code even if we're on a cached page.
-				$this->loadModel()->loadCache()->flush();
+        foreach ($CACHES as $cacheName) {
+				  $this->loadModel()->loadCache($cacheName)->flush();
+        }
 
 				$this->renderScript('parent.location.reload()');
 				exit;

@@ -19,13 +19,12 @@ class HomeController extends Controller {
 	/**
 	 * Show the home page.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 		$this->loadModel('blogModel');
-		$data = array(
+		$this->render(array(
 			'title' => 'The instant gratification framework',
 			'manualContentLayout' => true,
 			'posts' => $this->blogModel->posts()
-		);
-		$this->renderView('home', $data);
+		));
 	}
 }

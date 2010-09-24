@@ -1,9 +1,9 @@
-Database patches
+Make the refresher flush all caches
+JavaScript/CSS Groupification
 User groups field
 User group authorization
 Installer
 ------------------------
-JavaScript/CSS Minification
 Database synchronization
 Code generation
 Error reporting

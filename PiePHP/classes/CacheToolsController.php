@@ -14,14 +14,14 @@ class CacheToolsController extends Controller {
 	/**
 	 * If there is more than one cache, display the list of caches.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 		global $CACHES;
 		if (count($CACHES) == 1) {
 			$names = array_keys($CACHES);
 			$this->statsAction($names[0]);
 			exit;
 		}
-		$this->renderView('cache_tools/caches', array(
+		$this->renderView('cacheTools_default', array(
 			'title' => 'Memcache caches',
 			'caches' => $CACHES
 		));
@@ -33,7 +33,7 @@ class CacheToolsController extends Controller {
 	 */
 	public function statsAction($cacheName) {
 		$stats = $this->loadModel()->loadCache($cacheName)->getStats();
-		$this->renderView('cache_tools/stats', array(
+		$this->render(array(
 			'title' => 'Cache stats',
 			'cacheName' => $cacheName,
 			'stats' => $stats
@@ -46,6 +46,6 @@ class CacheToolsController extends Controller {
 	 */
 	public function flushAction($cacheName) {
 		$this->loadModel()->loadCache($cacheName)->flush();
-		$this->indexAction();
+    $this->defaultAction();
 	}
 }

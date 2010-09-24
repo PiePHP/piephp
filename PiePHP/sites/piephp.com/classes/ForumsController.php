@@ -19,13 +19,9 @@ class ForumsController extends Controller {
 	/**
 	 * Show the forums.
 	 */
-	public function indexAction() {
-		//$forum = new ForumScaffold();
-		//$this->loadModel('forumsModel');
-		$data = array(
-			'title' => 'Forums',
-			//'forums' => $this->forumsModel->forums()
-		);
-		$this->renderView('forums/forums', $data);
+	public function defaultAction() {
+		$this->render(array(
+			'title' => 'Forums'
+		));
 	}
 }

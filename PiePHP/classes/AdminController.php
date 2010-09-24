@@ -14,10 +14,11 @@ class AdminController extends Controller {
 	/**
 	 * Show a list of links to available admin sections.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 		$this->authenticate();
-		$data = array('title' => 'Admin');
-		$this->renderView('admin/admin', $data);
+		$this->render(array(
+      'title' => 'Admin'
+    ));
 	}
 
 	/**
@@ -33,13 +34,12 @@ class AdminController extends Controller {
 		$scaffoldName = $sectionNameCamel . 'Scaffold';
 		if (class_exists($scaffoldName, true)) {
 			$scaffold = new $scaffoldName($sectionNameCamel, $action, $id);
-			$data = array(
+			$scaffold->processPost();
+			return $this->renderView('admin_' . $scaffold->action, array(
 				'title' => $scaffold->getTitle(),
 				'section' => $sectionName,
 				'scaffold' => $scaffold
-			);
-			$scaffold->processPost();
-			return $this->renderView('admin/' . $scaffold->action, $data);
+			));
 		}
 	}
 

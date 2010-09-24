@@ -79,6 +79,7 @@ class FileCache {
 	 */
 	public function flush() {
 		global $APP_ROOT;
+    Logs::debug('flush!');
 		$directoryHandle = opendir($APP_ROOT . 'cache');
 		while (false !== ($filename = readdir($directoryHandle))) {
 			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {

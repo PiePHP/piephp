@@ -15,7 +15,7 @@ abstract class Controller {
 	 * The view template that is used if one is not provided.
 	 * Note: templates come from the project's "/templates" directory and are suffixed with "_template.php"
 	 */
-	public $defaultTemplateName = 'base';
+	public $defaultTemplateName = 'default';
 
 	/**
 	 * If a propertyName is not provided to the loadModel method, the property will be $model.
@@ -53,6 +53,8 @@ abstract class Controller {
 	 * @param  $templateName: optional template name to override the controller's default template name.
 	 */
 	public function renderView($viewName, $data = array(), $templateName = NULL) {
+    // We include the view and template in this function.
+    // They'll want easy access to some globals.
 		global $APP_ROOT;
     global $URL_ROOT;
     global $HTTP_ROOT;
@@ -70,7 +72,7 @@ abstract class Controller {
 		}
 
 		// Pass the view path in so that it can be used by a template if necessary.
-		$viewPath = $APP_ROOT . 'views/' . $viewName . '_view.php';
+		$viewPath = $APP_ROOT . 'views/' . $viewName . 'View.php';
 
 		// If no template name was passed in, use the controller's default.
 		if ($templateName === NULL) {
@@ -79,12 +81,35 @@ abstract class Controller {
 
 		// If there's a template, include it and let it include the view, otherwise, just include the view.
 		if ($templateName) {
-			include $APP_ROOT . 'templates/' . $templateName . '_template.php';
+			include $APP_ROOT . 'templates/' . $templateName . 'Template.php';
 		}
 		else {
 			include $viewPath;
 		}
 
+	}
+
+	/**
+	 * Infer a view based on the controller and action, and render that view.
+	 * @param  $data: optional data to be passed in to the view.
+	 * @param  $templateName: optional template name to override the controller's default template name.
+	 */
+	public function render($data = array(), $templateName = NULL) {
+		global $CONTROLLER_NAME;
+    global $ACTION_NAME;
+
+    // Slice "Controller" off the end of the controller name, and lowercase the first letter.
+    $controller = substr($CONTROLLER_NAME, 0, -10);
+    $controller[0] = strtolower($controller[0]);
+
+    // Slice "Action" off the end of the action name.
+    $action = substr($ACTION_NAME, 0, -6);
+
+    // For example, the MyAccountController's profileSettingsAction will have the viewName "myAccount_profileSettings".
+    // This viewName will resolve to the file: "/views/myAccount_profileSettingsView.php"
+    $viewName = $controller . '_' . $action;
+
+		$this->renderView($viewName, $data, $templateName);
 	}
 
 	/**
@@ -151,7 +176,7 @@ abstract class Controller {
 		$this->session = new Session();
 		if (!$this->session->isSignedIn) {
 			$signInController = new SignInController();
-			$signInController->indexAction();
+			$signInController->defaultAction();
 			exit;
 		}
 	}

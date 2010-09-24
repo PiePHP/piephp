@@ -18,7 +18,7 @@ set_error_handler('error_handler', E_ALL);
 /**
  * The configuration settings below are the default configuration for deployments
  * of this application.  Local configurations can override the defaults using
- * their own "config_local.php", which should be ignored by source control clients.
+ * their own "localConfig.php", which should be ignored by source control clients.
  */
 
 // Database configurations are included here, but we do not make database connections
@@ -34,7 +34,7 @@ $CACHES = array(
 );
 
 //
-// In development environments, we should use config_local.php to override this value.
+// In development environments, we should use localConfig.php to override this value.
 $ENVIRONMENT = 'production';
 
 // The version number is used when generating minified JavaScript and CSS for a deployment.
@@ -49,12 +49,12 @@ $PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
 
 // $URL_ROOT is the part of the URL that spans from the server name (and port, if any) to the
 // controller name.  This is the URL for the dispatcher, and is usually "/" or "/index.php/".
-// For deployments to servers without mod_rewrite, this can be changed in config_local.php.
+// For deployments to servers without mod_rewrite, this can be changed in localConfig.php.
 $URL_ROOT = '/';
 
 // Any of the above settings can be overridden in a development/test/staging environment by
-// rewriting them in config_local.php.
-include 'config_local.php';
+// rewriting them in localConfig.php.
+include 'localConfig.php';
 
 // If we're not posting data, we should check for a cached copy of the requested page.
 if (!count($_POST) && isset($CACHES['pages'])) {
@@ -127,9 +127,9 @@ $ACTION_NAME = (count($PARAMETERS) ? lower_camel($PARAMETERS[0]) : '') . 'Action
 
 // If the URL was "/something/hello/" then we want the helloAction of the SomethingController.  If
 // the SomethingController doesn't have a helloAction, it might have a catchAllAction.  If not,
-// then the Controller base catchAllAction can return a 404.
+// then the base Controller catchAllAction method can return a 404.
 if ($ACTION_NAME == 'Action') {
-	$ACTION_NAME = 'indexAction';
+	$ACTION_NAME = 'defaultAction';
 }
 if (!method_exists($CONTROLLER, $ACTION_NAME)) {
 	$ACTION_NAME = 'catchAllAction';
@@ -178,11 +178,11 @@ function upper_camel($underscored) {
  * @return the name in lowerCamelCase.
  */
 function lower_camel($underscored) {
-	$ACTION_NAME = upper_camel($underscored);
-	if ($ACTION_NAME) {
-		$ACTION_NAME[0] = strtolower($ACTION_NAME[0]);
+	$upperCamel = upper_camel($underscored);
+	if ($upperCamel) {
+		$upperCamel[0] = strtolower($upperCamel[0]);
 	}
-	return $ACTION_NAME;
+	return $upperCamel;
 }
 
 /**

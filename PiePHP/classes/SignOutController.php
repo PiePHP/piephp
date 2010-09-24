@@ -14,10 +14,12 @@ class SignOutController extends Controller {
 	/**
 	 * Sign a user out.
 	 */
-	public function indexAction() {
+	public function defaultAction() {
 		$session = new Session();
 		$session->end();
-		$this->renderView('sign_out', array('title' => 'Signed out'));
+		$this->render(array(
+      'title' => 'Signed out'
+    ));
 	}
 
 }

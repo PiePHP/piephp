@@ -19,21 +19,9 @@ class DownloadsController extends Controller {
 	/**
 	 * Show the main downloads page.
 	 */
-	public function indexAction() {
-		$data = array(
+	public function defaultAction() {
+		$this->render(array(
 			'title' => 'Downloads'
-		);
-		$this->renderView('downloads/downloads', $data);
-	}
-
-	/**
-	 * Show the page that contains information about the latest stable build.
-	 */
-	function latestAction() {
-		$data = array(
-			'title' => 'Latest stable build!'
-		);
-		$this->defaultTemplateName = 'veil';
-		$this->renderView('downloads/latest', $data);
+		));
 	}
 }

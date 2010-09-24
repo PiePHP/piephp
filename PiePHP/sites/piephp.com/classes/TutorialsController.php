@@ -19,10 +19,9 @@ class TutorialsController extends Controller {
 	/**
 	 * Show the list of tutorials.
 	 */
-	public function indexAction() {
-		$data = array(
+	public function defaultAction() {
+		$this->render(array(
 			'title' => 'Tutorials'
-		);
-		$this->renderView('tutorials/tutorials', $data);
+		));
 	}
 }
