@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -17,8 +17,8 @@ class AdminController extends Controller {
 	public function defaultAction() {
 		$this->authenticate();
 		$this->render(array(
-      'title' => 'Admin'
-    ));
+			'title' => 'Admin'
+		));
 	}
 
 	/**
@@ -33,7 +33,7 @@ class AdminController extends Controller {
 		$sectionNameCamel = upper_camel($sectionName);
 		$scaffoldName = $sectionNameCamel . 'Scaffold';
 		if (class_exists($scaffoldName, true)) {
-			$scaffold = new $scaffoldName($sectionNameCamel, $action, $id);
+			$scaffold = new $scaffoldName($action, $id);
 			$scaffold->processPost();
 			return $this->renderView('admin_' . $scaffold->action, array(
 				'title' => $scaffold->getTitle(),

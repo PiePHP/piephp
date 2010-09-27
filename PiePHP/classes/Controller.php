@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -23,7 +23,7 @@ abstract class Controller {
 	public $model;
 
 	/**
-	 * If a user is authenticated, we can access their session information here.
+	 * When we authenticate a user with the controller's authenticate method, we store the session information here.
 	 */
 	public $session;
 
@@ -34,8 +34,22 @@ abstract class Controller {
 
 	/**
 	 * If useCaching is true, the buffer output will be cached when the page has finished processing.
+	 * Caching can be turned on by overriding this property in the class definition, or it can be turned on inside
+	 * a method because it the dispatcher checks for caching AFTER the controller action is called.
 	 */
 	public $useCaching = false;
+
+	/**
+	 * If useCaching is true, this is how long we will cache content.
+	 */
+	public $cacheTimeInSeconds = 60;
+
+	/**
+	 * If there is no default action defined, just catch it like we would catch any other undefined action.
+	 */
+	public function defaultAction() {
+		$this->catchAllAction();
+	}
 
 	/**
 	 * If the second part of the URL does not match a known action for the controller, its catchAllAction is called.
@@ -53,13 +67,14 @@ abstract class Controller {
 	 * @param  $templateName: optional template name to override the controller's default template name.
 	 */
 	public function renderView($viewName, $data = array(), $templateName = NULL) {
-    // We include the view and template in this function.
-    // They'll want easy access to some globals.
-		global $APP_ROOT;
-    global $URL_ROOT;
-    global $HTTP_ROOT;
-    global $HTTPS_ROOT;
-    global $ENVIRONMENT;
+		// We include the view and template in this function.
+		// They'll want easy access to some globals.
+		global $SITE_DIR;
+		global $URL_ROOT;
+		global $HTTP_ROOT;
+		global $HTTPS_ROOT;
+		global $ENVIRONMENT;
+		global $VERSION;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {
@@ -72,7 +87,7 @@ abstract class Controller {
 		}
 
 		// Pass the view path in so that it can be used by a template if necessary.
-		$viewPath = $APP_ROOT . 'views/' . $viewName . 'View.php';
+		$viewPath = $SITE_DIR . 'views/' . $viewName . 'View.php';
 
 		// If no template name was passed in, use the controller's default.
 		if ($templateName === NULL) {
@@ -81,7 +96,7 @@ abstract class Controller {
 
 		// If there's a template, include it and let it include the view, otherwise, just include the view.
 		if ($templateName) {
-			include $APP_ROOT . 'templates/' . $templateName . 'Template.php';
+			include $SITE_DIR . 'templates/' . $templateName . 'Template.php';
 		}
 		else {
 			include $viewPath;
@@ -96,18 +111,18 @@ abstract class Controller {
 	 */
 	public function render($data = array(), $templateName = NULL) {
 		global $CONTROLLER_NAME;
-    global $ACTION_NAME;
+		global $ACTION_NAME;
 
-    // Slice "Controller" off the end of the controller name, and lowercase the first letter.
-    $controller = substr($CONTROLLER_NAME, 0, -10);
-    $controller[0] = strtolower($controller[0]);
+		// Slice "Controller" off the end of the controller name, and lowercase the first letter.
+		$controller = substr($CONTROLLER_NAME, 0, -10);
+		$controller[0] = strtolower($controller[0]);
 
-    // Slice "Action" off the end of the action name.
-    $action = substr($ACTION_NAME, 0, -6);
+		// Slice "Action" off the end of the action name.
+		$action = substr($ACTION_NAME, 0, -6);
 
-    // For example, the MyAccountController's profileSettingsAction will have the viewName "myAccount_profileSettings".
-    // This viewName will resolve to the file: "/views/myAccount_profileSettingsView.php"
-    $viewName = $controller . '_' . $action;
+		// For example, the MyAccountController's profileSettingsAction will have the viewName "myAccount_profileSettings".
+		// This viewName will resolve to the file: "/views/myAccount_profileSettingsView.php"
+		$viewName = $controller . '_' . $action;
 
 		$this->renderView($viewName, $data, $templateName);
 	}

@@ -108,7 +108,7 @@ h4 {
 #user span {
 	float: left;
 	color: #679;
-	padding: 4px 12px 0 0;
+	padding: 2px 12px 0 0;
 	font-weight: bold;
 }
 
@@ -169,7 +169,7 @@ h4 {
 	background: #468;
 	border: 1px solid #123;
 	padding: 5px 9px;
-  margin: 0 2px;
+	margin: 0 2px;
 	color: #fff;
 	text-shadow: #000 1px 1px 2px;
 	border-radius: 6px;
@@ -221,10 +221,15 @@ h4 {
 }
 
 #uservoice-feedback-tab {
-  border: 1px solid #468!IMPORTANT;
+	border: 1px solid #468!IMPORTANT;
 }
 
 #body {
+	color: #fff;
+}
+
+#body div {
+	color: #000;
 }
 
 #body div.loading {
@@ -336,7 +341,7 @@ h4 {
 	width: 282px;
 	height: 23px;
 	background: #eee;
-  padding: 5px 10px;
+	padding: 5px 10px;
 }
 
 #features {

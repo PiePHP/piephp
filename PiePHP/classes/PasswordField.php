@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -39,14 +39,16 @@ class PasswordField extends MultiField {
 	public function __construct($settings, $scaffold) {
 
 		$this->fields = array();
+		$required = $settings['required'] && $scaffold->action == 'add';
 
 		if ($scaffold->action == 'change') {
 
 			$this->fields[] = $this->currentPassword = new Field(array(
 				'name' => 'current_' . $settings['name'],
 				'type' => 'Password',
-				'advice' => 'Please enter the password to change it.',
-				'required' => false
+				'cssClass' => 'currentPassword password',
+				'advice' => 'To change your password, you must provide your password.',
+				'required' => $required
 			), $scaffold);
 
 		}
@@ -54,7 +56,8 @@ class PasswordField extends MultiField {
 		$this->fields[] = $this->newPassword = new Field(array(
 			'name' => 'new_' . $settings['name'],
 			'type' => 'Password',
-			'required' => $this->required,
+			'cssClass' => 'newPassword password',
+			'required' => $required,
 			'label' => $scaffold->action == 'add' ? 'Choose a password' : 'New password'
 		), $scaffold);
 
@@ -63,7 +66,9 @@ class PasswordField extends MultiField {
 			$this->fields[] = $this->confirmPassword = new Field(array(
 				'name' => 'confirm_' . $settings['name'],
 				'type' => 'Password',
-				'required' => false,
+				'cssClass' => 'confirmPassword password',
+				'advice' => 'Please type the password again for confirmation.',
+				'required' => $required,
 				'label' => 'Re-type password'
 			), $scaffold);
 		}
@@ -100,18 +105,17 @@ class PasswordField extends MultiField {
 		$isValid = ($this->newPassword->getValue() == $this->confirmPassword->getValue());
 
 		// If we're changing a password and we're not an administrator, the current password is required.
-		if ($this->scaffold->action == 'change') {
+		if ($this->scaffold->action == 'change' && $this->newPassword->getValue()) {
 			$hash = $this->hash($this->currentPassword->getValue());
-			$sql = '
-				SELECT ' . $this->column . '
+			$sql = $this->column . '
 				FROM ' . $this->scaffold->table . '
 				WHERE id = ' . $this->scaffold->id;
 			$result = $this->scaffold->model->selectAssoc($sql);
-			/*if ($hash != $result[$this->column]) {
+			if ($hash != $result[$this->column]) {
 				$isValid = false;
 				$this->currentPassword->hasValidationErrors = true;
 				$this->currentPassword->advice = 'The password was incorrect.';
-			}*/
+			}
 		}
 		return $isValid;
 	}

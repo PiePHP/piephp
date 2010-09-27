@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -65,13 +65,15 @@ class MysqlDatabase extends Database {
 	/**
 	 * Do a query on the database, and return results.
 	 * @param  $sql: a SQL query string.
-	 * @return an array of associative arrays.
+	 * @param  $valuesOnly: whether to return values only, or return column names as well.
+	 * @return results as an array of associative arrays (or an array of arrays if $valuesOnly == true).
 	 */
-	public function select($sql) {
+	public function select($sql, $valuesOnly = false) {
 		$resource = $this->query('SELECT ' . $sql);
 		$results = array();
 		if ($resource) {
-			while ($assoc = mysql_fetch_assoc($resource)) {
+			$fetcher = $valuesOnly ? 'mysql_fetch_row' : 'mysql_fetch_assoc';
+			while ($assoc = $fetcher($resource)) {
 				$results[] = $assoc;
 			}
 		}

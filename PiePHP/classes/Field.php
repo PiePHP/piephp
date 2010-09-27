@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -42,6 +42,11 @@ class Field {
 	 * Maximum length of the submitted value and corresponding database field.
 	 */
 	public $maxlength = 0; // Zero indicates no limit.
+
+	/**
+	 * CSS class for the field.
+	 */
+	public $cssClass = '';
 
 	/**
 	 * User-visible label for the field, which is displayed in tables and forms.
@@ -81,6 +86,13 @@ class Field {
 			$this->column = separate($this->name, '_');
 		}
 		$this->scaffold = $scaffold;
+		$this->initialize();
+	}
+
+	/**
+	 * Some types of fields will need additional initialization.
+	 */
+	public function initialize() {
 	}
 
 	/**
@@ -125,8 +137,8 @@ class Field {
 	 * @return the POSTed or stored value.
 	 */
 	public function getValue() {
-		if (isset($_POST[$this->column])) {
-			return $_POST[$this->column];
+		if (isset($_POST[$this->name])) {
+			return $_POST[$this->name];
 		}
 		if (isset($this->scaffold->result[$this->column])) {
 			return $this->scaffold->result[$this->column];
@@ -146,11 +158,13 @@ class Field {
 	 * TODO: This might be more straightforward if it returned a value.
 	 */
 	public function renderInputClass() {
-		$className = lower_camel($this->type);
+		$className = $this->cssClass ? $this->cssClass : lower_camel($this->type);
 		if ($this->required) {
 			$className = 'required ' . $className;
 		}
-		echo ' class="' . $className . '"';
+		if ($className) {
+			echo ' class="' . $className . '"';
+		}
 	}
 
 	/**

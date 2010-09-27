@@ -1,9 +1,9 @@
-Make the refresher flush all caches
-JavaScript/CSS Groupification
 User groups field
 User group authorization
 Installer
 ------------------------
+Eliminate refresher race conditions
+Enable multiple refresher files
 Database synchronization
 Code generation
 Error reporting

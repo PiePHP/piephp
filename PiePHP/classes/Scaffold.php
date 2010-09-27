@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -44,7 +44,7 @@ abstract class Scaffold extends Controller {
 	public $fieldsets;
 
 	/**
-	 * The action which the scaffold is currently performing. ("list" | "add" | "change" | "remove")
+	 * The action which the scaffold is currently performing, like "list", "add", "change" or "remove".
 	 */
 	public $action;
 
@@ -79,28 +79,49 @@ abstract class Scaffold extends Controller {
 	public $hasValidationErrors = false;
 
 	/**
+	 * A column name or SQL expression used for human-readable identification of a record
+	 * when one or more records are to be selectable from another scaffold.
+	 */
+	public $labelForForeignRelations;
+
+	/**
 	 * Create a scaffold by name, and tell it what it's supposed to do in this request.
 	 * @param  $name: the name of the scaffold.
 	 * @param  $action: what it's supposed to do.
 	 * @param  $id: which record it's supposed to act on.
 	 */
-	public function __construct($name, $action = 'list', $id = 0) {
-    global $URL_PATH;
+	public function __construct($action = 'list', $id = 0) {
+		global $URL_PATH;
+
+		// Example: "UserGroupsScaffold".
+		$className = get_class($this);
+
+		// Example: "UserGroups".
+		$name = substr($className, 0, -8);
+
+		// Example: "user_groups".
 		if (!$this->table) {
 			$this->table = strtolower(separate($name, '_'));
 		}
+
+		// Example: "user_group".
 		if (!$this->type) {
 			$this->type = substr($this->table, 0, -1);
 		}
+
+		// Example: "user group".
 		if (!$this->singular) {
 			$this->singular = separate($this->type, ' ');
 		}
+
+		// Example: "user groups".
 		if (!$this->plural) {
 			$this->plural = separate($this->table, ' ');
 		}
+
 		$this->action = $action ? $action : 'list';
-		$this->submitButtonValue = isset($_POST['submit']) ? $_POST['submit'] : NULL;
 		$this->id = $id * 1;
+		$this->submitButtonValue = isset($_POST['submit']) ? $_POST['submit'] : NULL;
 
 		if (!isset($this->listFields)) {
 			$this->listFields = array_keys($this->fields);
@@ -114,6 +135,12 @@ abstract class Scaffold extends Controller {
 			$fields[$fieldName] = $field;
 		}
 		$this->fields = &$fields;
+
+		// Example: "user groups".
+		if (!$this->labelForForeignRelations) {
+			$this->labelForForeignRelations = $this->fields[$this->listFields[0]]->column;
+		}
+
 		$this->urlRoot = preg_replace('/(add|change|remove)\/([0-9]+\/?)?(\?.*)?$/', '', $URL_PATH);
 		$this->getResult();
 	}
@@ -126,8 +153,10 @@ abstract class Scaffold extends Controller {
 
 			$this->validate();
 			if ($this->hasValidationErrors) {
+				Logs::debug('validationErrors');
 				return;
 			}
+			Logs::debug('no validationErrors');
 
 			$this->loadModel();
 			$this->model->beginTransaction();
@@ -355,7 +384,10 @@ abstract class Scaffold extends Controller {
 			echo '<a href="' . $this->urlRoot . 'add/" class="add">Add a ' . $this->singular . '</a>';
 		}
 		else {
-			if ($this->action == 'change') {
+			if ($this->action == 'add') {
+				echo '<a href="' . $this->urlRoot . '" class="cancel">Cancel</a>';
+			}
+			elseif ($this->action == 'change') {
 				echo '<a href="' . $this->urlRoot . 'remove/' . $this->id . '/" class="remove">Remove</a>';
 			}
 			echo '<div>';
@@ -388,4 +420,15 @@ abstract class Scaffold extends Controller {
 			echo '</fieldset>';
 		}
 	}
+
+	/**
+	 * If this scaffold's data will be used to select relations to it, the relating scaffold must have strings
+	 * to describe the related records.
+	 * @return an associative array relating IDs to labels.
+	 */
+	public function getLabelsForForeignRelations() {
+		$this->loadModel();
+		return $this->model->selectMap("id, $this->labelForForeignRelations FROM $this->table LIMIT 100");
+	}
+
 }

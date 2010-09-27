@@ -13,7 +13,7 @@
 </a>
 
 <div id="fb">
-  <?php echo '<fb:like width="302"></fb:like>'; ?>
+	<?php echo '<fb:like width="302"></fb:like>'; ?>
 </div>
 
 <div id="news">
@@ -37,7 +37,6 @@
 		<li><b>Error editing</b><div>In a development environment, errors are shown as editable code blocks.  So you can fix the error and move on quickly without even using your editor.</div></li>
 	</ul>
 </div>
-
 
 
 <var><?

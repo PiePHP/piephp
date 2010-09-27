@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -30,6 +30,10 @@ class UsersScaffold extends Scaffold {
 		'password' => array(
 			'type' => 'Password',
 			'required' => true
+		),
+		'userGroups' => array(
+			'type' => 'ManyToMany',
+			'foreignScaffold' => 'UserGroupsScaffold'
 		)
 	);
 
@@ -38,12 +42,12 @@ class UsersScaffold extends Scaffold {
 	 */
 	public $fieldsets = array(
 		'Personal information' => array('name', 'email'),
-		'Authentication' => array('username', 'password'),
+		'Authentication' => array('username', 'password', 'userGroups'),
 	);
 
 	/**
 	 * In a list of records, we will see all fields except passwords.
 	 */
-	public $listFields = array('username', 'name', 'email');
+	public $listFields = array('username', 'name', 'email', 'userGroups');
 
 }

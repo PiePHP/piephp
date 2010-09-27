@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -29,7 +29,7 @@ class MultiField extends Field {
 			parent::renderFormField();
 		}
 		else {
-			echo '<div>';
+			echo '<div class="multi">';
 			foreach ($this->fields as $field) {
 				$field->renderFormField();
 			}

@@ -4,9 +4,7 @@ if (!is_ajax()) {
 <html>
 <head>
 	<title>PiePHP - <?php echo $title; ?></title>
-	<link rel="stylesheet" href="/css/base.css" type="text/css">
-	<link rel="stylesheet" href="/css/scaffolds.css" type="text/css">
-	<link rel="stylesheet" href="/css/veil.css" type="text/css">
+	<link rel="stylesheet" href="/core-<?php echo $VERSION; ?>.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
@@ -58,7 +56,7 @@ if (!is_ajax()) {
 		?>
 	</div>
 	<div id="foot">
-		Copyright 2007-2010, Pie Software Foundation, All rights reserved
+		Copyright &copy; 2007-2010, Pie Software Foundation, All rights reserved
 	</div>
 	<?php
 	if ($ENVIRONMENT == 'development') {
@@ -67,11 +65,7 @@ if (!is_ajax()) {
 		<?php
 	}
 	?>
-	<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="/js/base.js"></script>
-	<script type="text/javascript" src="/js/google_analytics.js"></script>
-	<script type="text/javascript" src="/js/facebook.js"></script>
-	<script type="text/javascript" src="/js/uservoice.js"></script>
+	<script type="text/javascript" src="/core-<?php echo $VERSION; ?>.js"></script>
 </body>
 </html>
 <?php

@@ -7,7 +7,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -33,7 +33,6 @@ $CACHES = array(
 	'pages' => 'file:host=localhost port=11211 prefix=piephp_pages_ expire=600'
 );
 
-//
 // In development environments, we should use localConfig.php to override this value.
 $ENVIRONMENT = 'production';
 
@@ -41,11 +40,11 @@ $ENVIRONMENT = 'production';
 // TODO: Make this actually happen.
 $VERSION = '0.0.1';
 
-// $APP_ROOT is the directory which contains this application's files.
-$APP_ROOT = str_replace('\\', '/', dirname(dirname(__FILE__))) . '/';
+// $SITE_DIR is the directory which contains this application's files.
+$SITE_DIR = str_replace('\\', '/', dirname(dirname(__FILE__))) . '/';
 
-// $PIE_ROOT is the directory which contains PiePHP libraries and sites that use PiePHP.
-$PIE_ROOT = dirname(dirname($APP_ROOT)) . '/';
+// $PIE_DIR is the directory which contains PiePHP libraries and sites that use PiePHP.
+$PIE_DIR = dirname(dirname($SITE_DIR)) . '/';
 
 // $URL_ROOT is the part of the URL that spans from the server name (and port, if any) to the
 // controller name.  This is the URL for the dispatcher, and is usually "/" or "/index.php/".
@@ -54,12 +53,12 @@ $URL_ROOT = '/';
 
 // Any of the above settings can be overridden in a development/test/staging environment by
 // rewriting them in localConfig.php.
-include 'localConfig.php';
+include $SITE_DIR . 'localConfig.php';
 
 // If we're not posting data, we should check for a cached copy of the requested page.
 if (!count($_POST) && isset($CACHES['pages'])) {
-	include $PIE_ROOT . 'classes/Model.php';
-	include $PIE_ROOT . 'classes/' . ($CACHES['pages'][0] == 'f' ? 'File' : 'Memcache') . 'Cache.php';
+	include $PIE_DIR . 'classes/Model.php';
+	include $PIE_DIR . 'classes/' . ($CACHES['pages'][0] == 'f' ? 'File' : 'Memcache') . 'Cache.php';
 	$pageModel = new Model();
 	$pageModel->cacheConfigName = 'pages';
 	$pageModel->loadCache();
@@ -70,10 +69,12 @@ if (!count($_POST) && isset($CACHES['pages'])) {
 	. (is_localhost() ? 'l' : '');
 	$contents = $pageModel->cache->get($pageCacheKey);
 	if ($contents) {
-  	ob_start('ob_gzhandler');
+		ob_start('ob_gzhandler');
 		send_output($contents);
 	}
 }
+
+// Output buffering must be turned on in order to support post-rendering source modifications.
 // TODO: Find out why PHP won't let me get the contents of a gzipped buffer.
 ob_start();
 
@@ -83,7 +84,7 @@ ob_start();
 // and the QUERY_STRING will be "query=string".
 list($URL_PATH, $QUERY_STRING) = explode('?', $_SERVER['REQUEST_URI'] . '?');
 if (strpos($URL_PATH, $URL_ROOT) === false) {
-  $URL_PATH = str_replace('//', '/', $URL_ROOT . $URL_PATH);
+	$URL_PATH = str_replace('//', '/', $URL_ROOT . $URL_PATH);
 }
 
 // If mod_rewrite used the path as a query string, we need to separate path data from query data.
@@ -141,10 +142,10 @@ else {
 call_user_func_array(array(&$CONTROLLER, $ACTION_NAME), $PARAMETERS);
 
 if ($CONTROLLER->useCaching && isset($pageModel)) {
-	$contents = ob_get_clean();
+	$contents = trim(ob_get_clean());
 	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
 	$contents = preg_replace('/\\s+/ms', ' ', $contents);
-	$pageModel->cache->set($pageCacheKey, $contents, isset($PAGE_CACHE_TIME) ? $PAGE_CACHE_TIME : 60);
+	$pageModel->cache->set($pageCacheKey, $contents, $CONTROLLER->cacheTimeInSeconds);
 	send_output($contents);
 }
 
@@ -229,7 +230,7 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
  * @param  $output: the output to decorate and send.
  */
 function send_output($output) {
-  global $URL_ROOT;
+	global $URL_ROOT;
 	if (!is_ajax()) {
 		$session = new Session();
 		if ($session->isSignedIn) {
@@ -257,8 +258,8 @@ function send_output($output) {
  */
 function is_ajax() {
 	return (isset($_REQUEST['isAjax']) && $_REQUEST['isAjax'])
-    || (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-      && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
+		|| (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+			&& $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 }
 
 /**

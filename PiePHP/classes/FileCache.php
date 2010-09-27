@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -70,20 +70,19 @@ class FileCache {
 	 * @param  $cacheKey: the key (in conjunction with the prefix) is used to name the file.
 	 */
 	public function getPath($cacheKey) {
-		global $APP_ROOT;
-		return $APP_ROOT . 'cache/' . $this->prefix . md5($cacheKey) . '.html';
+		global $SITE_DIR;
+		return $SITE_DIR . 'cache/' . $this->prefix . md5($cacheKey) . '.html';
 	}
 
 	/**
 	 * "Flush" the cache by deleting all cache files.
 	 */
 	public function flush() {
-		global $APP_ROOT;
-    Logs::debug('flush!');
-		$directoryHandle = opendir($APP_ROOT . 'cache');
+		global $SITE_DIR;
+		$directoryHandle = opendir($SITE_DIR . 'cache');
 		while (false !== ($filename = readdir($directoryHandle))) {
 			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {
-				unlink($APP_ROOT . 'cache/' . $filename);
+				unlink($SITE_DIR . 'cache/' . $filename);
 			}
 		}
 	}
@@ -93,12 +92,12 @@ class FileCache {
 	 * @return the stats from Memcache.
 	 */
 	public function getStats() {
-		global $APP_ROOT;
+		global $SITE_DIR;
 		$files = array();
-		$directoryHandle = opendir($APP_ROOT . 'cache');
+		$directoryHandle = opendir($SITE_DIR . 'cache');
 		while (false !== ($filename = readdir($directoryHandle))) {
 			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {
-				$files[] = $APP_ROOT . 'cache/' . $filename;
+				$files[] = $SITE_DIR . 'cache/' . $filename;
 			}
 		}
 		return array('files' => count($files));

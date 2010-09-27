@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -17,7 +17,7 @@ class PatchesController extends Controller {
 	public function defaultAction() {
 		global $ENVIRONMENT;
 		global $DATABASES;
-		global $APP_ROOT;
+		global $SITE_DIR;
 		if ($ENVIRONMENT != 'development') {
 			$this->authenticate();
 		}
@@ -31,7 +31,7 @@ class PatchesController extends Controller {
 			$nextOrdinal = $model->selectValue('MAX(ordinal) FROM patches') + 1;
 			$model->ignoreErrors = false;
 
-			while (file_exists($path = $APP_ROOT . 'patches/' . $databaseName . '_database/patch' . sprintf('%05d', $nextOrdinal) . '.sql')) {
+			while (file_exists($path = $SITE_DIR . 'patches/' . $databaseName . '_database/patch' . sprintf('%05d', $nextOrdinal) . '.sql')) {
 				$patched = true;
 				//echo 'Running ' . $path . '...<br/>';
 				$statements = preg_split('/;[\r\n]/', file_get_contents($path));

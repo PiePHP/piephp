@@ -5,7 +5,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -42,8 +42,8 @@ class ErrorsController extends Controller {
 	 */
 	public function processError($errorCode) {
 		$this->renderView('errors_' . $errorCode, array(
-      'title' => $errorCode . ' Error'
-    ));
+			'title' => $errorCode . ' Error'
+		));
 	}
 
 	/**
@@ -210,11 +210,11 @@ class ErrorsController extends Controller {
 				}
 				?>
 			</form>
-      <br class="clear">
+			<br class="clear">
 			<?php
 			if ($errorStats['firstInPage']) {
 				?>
-				<link rel="stylesheet" href="/media/base.css" type="text/css">
+				<link rel="stylesheet" href="/css/base.css" type="text/css">
 				<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
 				<script type="text/javascript" src="/js/base.js"></script>
 				<script type="text/javascript" src="/js/error_handler.js"></script>
@@ -228,12 +228,13 @@ class ErrorsController extends Controller {
 	 * @param  $path: the file path for the stack trace entry.
 	 */
 	public function renderPath($path) {
-		global $APP_ROOT, $PIE_ROOT;
-		if (strpos($path, $APP_ROOT) === 0) {
-			$path = str_replace($APP_ROOT, '<i title="' . $APP_ROOT . '">APP_ROOT.</i>', $path);
+		global $SITE_DIR;
+		global $PIE_DIR;
+		if (strpos($path, $SITE_DIR) === 0) {
+			$path = str_replace($SITE_DIR, '<i title="' . $SITE_DIR . '">SITE_DIR.</i>', $path);
 		}
-		else if (strpos($path, $PIE_ROOT) === 0) {
-			$path = str_replace($PIE_ROOT, '<i title="' . $PIE_ROOT . '">PIE_ROOT.</i>', $path);
+		else if (strpos($path, $PIE_DIR) === 0) {
+			$path = str_replace($PIE_DIR, '<i title="' . $PIE_DIR . '">PIE_DIR.</i>', $path);
 		}
 		echo $path;
 	}
@@ -256,7 +257,7 @@ class ErrorsController extends Controller {
 	 * Rewrite a file using text that was posted through the error handler.
 	 */
 	public function rewriteAction() {
-		global $APP_ROOT;
+		global $SITE_DIR;
 		$file = $_REQUEST['file'];
 		$code = '';
 		$possibleEncodings = array("UTF-8", "ASCII", "Windows-1252", "ISO-8859-15", "ISO-8859-1", "ISO-8859-6", "CP1256");

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS patches;
 CREATE TABLE IF NOT EXISTS patches (
-  ordinal int unsigned NOT NULL
+	ordinal int unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO patches(ordinal) VALUES(1);

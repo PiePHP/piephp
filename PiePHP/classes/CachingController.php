@@ -1,6 +1,6 @@
 <?php
 /**
- * The sign up page for PiePHP.
+ * This is just a controller with caching turned on.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,14 +9,11 @@
  * @license    http://www.piephp.com/license
  */
 
-class SignUpController extends CachingController {
+abstract class CachingController extends Controller {
 
 	/**
-	 * Show the sign up page.
+	 * Turn caching on.
 	 */
-	public function defaultAction() {
-		$this->render(array(
-			'title' => 'Sign up'
-		));
-	}
+	public $useCaching = true;
+
 }

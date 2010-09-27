@@ -6,7 +6,7 @@
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
  * @since      Version 0.0
- * @copyright  Copyright (c) 2007-2010, Pie Software Foundation
+ * @copyright  Copyright (c) 2010, Pie Software Foundation
  * @license    http://www.piephp.com/license
  */
 
@@ -42,8 +42,8 @@ class Logs {
 	 * @param  $message: the message to be written to the file.
 	 */
 	private static function appendLogMessage($logName, $message) {
-		global $APP_ROOT;
-		FileUtility::appendLine($APP_ROOT . 'logs/' . $logName, $message);
+		global $SITE_DIR;
+		FileUtility::appendLine($SITE_DIR . 'logs/' . $logName, $message);
 	}
 
 }
