@@ -248,4 +248,19 @@ class Model {
 		return $map;
 	}
 
+	/**
+	 * Query the cache or database, then return an array .
+	 * @param  $sql: a SQL query that selects two columns.
+	 * @param  $cacheTimeInSeconds: the number of seconds to store this database result in the cache.
+	 * @return an associative array with keys from the first query column and values from the second.
+	 */
+	public function selectValues($sql, $cacheTimeInSeconds = false) {
+		$values = array();
+		$results = $this->select($sql, $cacheTimeInSeconds, true);
+		foreach ($results as $result) {
+			$values[] = $result;
+		}
+		return $values;
+	}
+
 }

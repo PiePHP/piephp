@@ -4,7 +4,7 @@ if (!is_ajax()) {
 <html>
 <head>
 	<title>PiePHP - <?php echo $title; ?></title>
-	<link rel="stylesheet" href="/core-<?php echo $VERSION; ?>.css" type="text/css">
+	<link rel="stylesheet" href="<?php echo $URL_ROOT; ?>core-<?php echo $VERSION; ?>.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
@@ -65,7 +65,7 @@ if (!is_ajax()) {
 		<?php
 	}
 	?>
-	<script type="text/javascript" src="/core-<?php echo $VERSION; ?>.js"></script>
+	<script type="text/javascript" src="<?php echo $URL_ROOT; ?>core-<?php echo $VERSION; ?>.js"></script>
 </body>
 </html>
 <?php

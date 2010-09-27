@@ -119,8 +119,13 @@ abstract class Scaffold extends Controller {
 			$this->plural = separate($this->table, ' ');
 		}
 
+		// The default action is "list".
 		$this->action = $action ? $action : 'list';
+
+		// The id must be made numeric to avoid SQL injection.
 		$this->id = $id * 1;
+
+		// We need to know whether the button used to submit was "Save" or "Save as new" or something else.
 		$this->submitButtonValue = isset($_POST['submit']) ? $_POST['submit'] : NULL;
 
 		if (!isset($this->listFields)) {
@@ -151,12 +156,12 @@ abstract class Scaffold extends Controller {
 	public function processPost() {
 		if (count($_POST)) {
 
-			$this->validate();
-			if ($this->hasValidationErrors) {
-				Logs::debug('validationErrors');
-				return;
+			if ($this->action == 'add' || $this->submitButtonValue == 'change') {
+				$this->validate();
+				if ($this->hasValidationErrors) {
+					return;
+				}
 			}
-			Logs::debug('no validationErrors');
 
 			$this->loadModel();
 			$this->model->beginTransaction();
@@ -314,7 +319,8 @@ abstract class Scaffold extends Controller {
 		$this->renderFormStart();
 		echo '<table>';
 		echo '<tr>';
-			echo '<th class="first"><input type="checkbox" name="id"></th>';
+			// TODO: Implement actions on multiple records.
+			//echo '<th class="first"><input type="checkbox" name="id"></th>';
 			foreach ($this->listFields as $fieldName) {
 				$this->fields[$fieldName]->renderListHeading();
 			}
@@ -324,7 +330,8 @@ abstract class Scaffold extends Controller {
 		foreach ($results as $resultIndex => $result) {
 			$this->result = $result;
 			echo '<tr class="' . ($resultIndex % 2 ? 'odd' : 'even') . '">';
-				echo '<td class="first"><input type="checkbox" name="id"></td>';
+				// TODO: Implement actions on multiple records.
+				//echo '<td class="first"><input type="checkbox" name="id[]"></td>'; 
 				foreach ($this->listFields as $fieldIndex => $fieldName) {
 					$isFirst = $fieldIndex < 1;
 					$this->fields[$fieldName]->renderListCell($isFirst);

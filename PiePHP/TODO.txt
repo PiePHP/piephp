@@ -1,11 +1,13 @@
-User groups field
 User group authorization
 Installer
 ------------------------
 Eliminate refresher race conditions
 Enable multiple refresher files
 Database synchronization
-Code generation
+Admin: Pagination
+Admin: Filters
+Admin: Code generation
+Admin: Actions on multiple records
 Error reporting
 News/blog
 Documentation

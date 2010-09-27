@@ -127,7 +127,7 @@ class PasswordField extends MultiField {
 		if ($scaffold->action == 'add') {
 			$this->scaffold->columnValues = array();
 			$this->setColumnValueOnScaffold();
-			$this->model->update($this->table, $this->scaffold->columnValues);
+			$this->scaffold->model->update($this->table, $this->scaffold->columnValues);
 		}
 	}
 

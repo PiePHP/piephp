@@ -32,7 +32,7 @@ class UsersScaffold extends Scaffold {
 			'required' => true
 		),
 		'userGroups' => array(
-			'type' => 'ManyToMany',
+			'type' => 'ManyToSeveral',
 			'foreignScaffold' => 'UserGroupsScaffold'
 		)
 	);
