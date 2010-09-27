@@ -9,14 +9,6 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends CachingController {
+class DocumentationController extends ViewMapperController {
 
-	/**
-	 * Show the table of contents.
-	 */
-	public function defaultAction() {
-		$this->render(array(
-			'title' => 'Documentation'
-		));
-	}
 }

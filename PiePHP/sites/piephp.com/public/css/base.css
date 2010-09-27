@@ -143,19 +143,23 @@ h4 {
 #nav a {
 	display: block;
 	float: left;
-	padding: 4px 12px;
 	color: #def;
 	text-shadow: #123 1px 1px 2px;
 	height: 14px;
-	padding: 6px 12px;
+	padding: 6px 15px;
 	line-height: 14px;
 }
 
 #userNav a {
-	padding: 3px 12px;
+	padding: 3px 15px;
 	height: 12px;
 	line-height: 12px;
 	color: #bcd;
+}
+
+#userNav a:hover {
+	text-shadow: #000 1px 1px 2px;
+  color: #fff;
 }
 
 #nav span {
@@ -168,7 +172,7 @@ h4 {
 #nav span.hover a {
 	background: #468;
 	border: 1px solid #123;
-	padding: 5px 9px;
+	padding: 5px 12px;
 	margin: 0 2px;
 	color: #fff;
 	text-shadow: #000 1px 1px 2px;
