@@ -70,6 +70,7 @@ abstract class Controller {
 		// We include the view and template in this function.
 		// They'll want easy access to some globals.
 		global $SITE_DIR;
+		global $PIE_DIR;
 		global $URL_ROOT;
 		global $HTTP_ROOT;
 		global $HTTPS_ROOT;
@@ -88,6 +89,11 @@ abstract class Controller {
 
 		// Pass the view path in so that it can be used by a template if necessary.
 		$viewPath = $SITE_DIR . 'views/' . $viewName . 'View.php';
+
+		// If the view wasn't there, try falling back to the PiePHP default for this view.
+		if (!file_exists($viewPath)) {
+			$viewPath = $PIE_DIR . 'views/' . $viewName . 'View.php';
+		}
 
 		// If no template name was passed in, use the controller's default.
 		if ($templateName === NULL) {
