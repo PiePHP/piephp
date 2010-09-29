@@ -3,7 +3,7 @@
 	<h1 id="ig">
 		<b>PiePHP</b> gives <b>instant gratification</b><br>
 		by making web development fast<br>
-		and your applications <b>even faster</b>.
+		and your websites <b>even faster</b>.
 	</h1>
 </div>
 
@@ -34,7 +34,7 @@
 		<li><b>Persistent page</b><div>The PiePHP JavaScript library can AJAXify your links and forms, so the page shell doesn't need to re-render as users browse. That means you can put media players or chat widgets or whatever you want into your page, and they won't need to stop.</div></li>
 		<li><b>Environments</b><div>PiePHP supports development, test, staging and production environments to make your development environment flexible and your live site secure.</div></li>
 		<li><b>Auto-refresh</b><div>When you save changes in your IDE, your PiePHP development environment can cause your pages to refresh in every browser window.  What better way to optimize the change &amp; verify cycle?</div></li>
-		<li><b>Error editing</b><div>In a development environment, errors are shown as editable code blocks.  So you can fix the error and move on quickly without even using your editor.</div></li>
+		<li><b>Error editing</b><div>In a development environment, errors are shown as editable code blocks.  So you can fix the error and move on quickly without even leaving the page.</div></li>
 	</ul>
 </div>
 
