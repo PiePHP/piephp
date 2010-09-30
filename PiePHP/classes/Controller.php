@@ -192,12 +192,19 @@ abstract class Controller {
 
 	/**
 	 * Authenticate a user.
+	 * @param  $allowedGroups: an array of user group names that are allowed access.
 	 */
-	public function authenticate() {
+	public function authenticate($allowedGroups = NULL) {
 		$this->session = new Session();
 		if (!$this->session->isSignedIn) {
 			$signInController = new SignInController();
 			$signInController->defaultAction();
+			exit;
+		}
+		$intersect = array_intersect($this->session->userGroups, $allowedGroups);
+		if (!count($intersect)) {
+			$errorsController = new ErrorsController();
+			$errorsController->processError(401);
 			exit;
 		}
 	}

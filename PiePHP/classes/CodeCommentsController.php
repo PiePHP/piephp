@@ -116,7 +116,6 @@ class CodeCommentsController extends Controller {
 				}
 
 				$GLOBALS['controller']->render(array(
-					'title' => 'Code comments',
 					'path' => $path,
 					'source' => $source
 				));

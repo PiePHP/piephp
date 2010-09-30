@@ -15,10 +15,12 @@ class AdminController extends Controller {
 	 * Show a list of links to available admin sections.
 	 */
 	public function defaultAction() {
-		$this->authenticate();
-		$this->render(array(
-			'title' => 'Admin'
+		$this->authenticate(array(
+			1, // System administrators
+			2, // Developers
+			3, // Administrators
 		));
+		$this->render();
 	}
 
 	/**
@@ -29,7 +31,11 @@ class AdminController extends Controller {
 	 * @param  $id: the ID of the record on which the scaffold will operate.
 	 */
 	public function catchAllAction($sectionName = '', $action = '', $id = 0) {
-		$this->authenticate();
+		$this->authenticate(array(
+			1, // System administrators
+			2, // Developers
+			3, // Administrators
+		));
 		$sectionNameCamel = upper_camel($sectionName);
 		$scaffoldName = $sectionNameCamel . 'Scaffold';
 		if (class_exists($scaffoldName, true)) {

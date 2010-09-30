@@ -1,6 +1,6 @@
 <?php
 /**
- * The API documentation for PiePHP.
+ * The User guide for PiePHP.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,6 +9,6 @@
  * @license    http://www.piephp.com/license
  */
 
-class DocumentationController extends ViewMapperController {
+class UserGuideController extends ViewMapperController {
 
 }

@@ -1,5 +1,4 @@
 <h1>Patches</h1>
-<p>The following patches were run:</p>
 <?php
 
 foreach ($results as $name => $patches) {

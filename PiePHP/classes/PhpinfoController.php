@@ -13,11 +13,13 @@ class PhpinfoController extends Controller {
 
 	/**
 	 * Show PHP info for developers.
-	 * TODO: Check user credentials for "developer" status or greater before showing them server configuration info.
 	 */
 	public function defaultAction() {
 		if ($GLOBALS['ENVIRONMENT'] != 'development') {
-			$this->authenticate();
+			$this->authenticate(array(
+				1, // System administrators
+				2, // Developers
+			));
 		}
 		phpinfo();
 	}

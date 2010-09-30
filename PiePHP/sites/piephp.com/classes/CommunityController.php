@@ -15,8 +15,6 @@ class CommunityController extends CachingController {
 	 * Show the PiePHP community homepage.
 	 */
 	public function defaultAction() {
-		$this->render(array(
-			'title' => 'Community'
-		));
+		$this->render();
 	}
 }

@@ -19,6 +19,8 @@ class SignInController extends Controller {
 		if (count($_POST)) {
 			$this->processSignIn();
 		}
+		// We must pass a title because controllers that require authorization will call it
+		// and then exit.  So the dispatcher's output decorating won't be done.
 		$this->render(array(
 			'title' => 'Sign in'
 		));
@@ -32,13 +34,13 @@ class SignInController extends Controller {
 		$password = $_POST['password'];
 		$this->loadModel();
 		$result = $this->model->selectAssoc("
-			id, username, password
+			id, username, password, user_groups
 			FROM users
 			WHERE LOWER(username) = '" . addslashes($username) . "'");
 		if ($result) {
 			$hash = md5($password . $result['id']);
 			if ($result['password'] == $hash) {
-				$this->startSessionAndSendRedirect($result['id'], $result['username']);
+				$this->startSessionAndSendRedirect($result['id'], $result['username'], $result['user_groups']);
 			}
 		}
 	}
@@ -47,11 +49,12 @@ class SignInController extends Controller {
 	 * The sign in succeeded, so start a session and send the user to the appropriate page.
 	 * @param  $userId: the ID of the user who signed in.
 	 * @param  $username: the username of the user who signed in.
+	 * @param  $userGroups: a string containing IDs of user groups that the user belongs to.
 	 */
-	public function startSessionAndSendRedirect($userId, $username) {
+	public function startSessionAndSendRedirect($userId, $username, $userGroups) {
 		$keepUserSignedIn = isset($_POST['keepSignedIn']) ? 1 : 0;
 		$session = new Session();
-		$session->start($userId, $username, $keepUserSignedIn);
+		$session->start($userId, $username, $userGroups, $keepUserSignedIn);
 		if (isset($_COOKIE['SIGN_IN_REDIRECT_URL'])) {
 			$this->sendJsRedirect($_COOKIE['SIGN_IN_REDIRECT_URL']);
 		}

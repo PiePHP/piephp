@@ -15,8 +15,6 @@ class CodeGeneratorController extends Controller {
 	 * Show the main options for code generation.
 	 */
 	public function defaultAction() {
-		$this->render(array(
-			'title' => 'Code generator'
-		));
+		$this->render();
 	}
 }

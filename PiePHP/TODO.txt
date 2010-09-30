@@ -1,16 +1,18 @@
-User group authorization
 Installer
+Redesign the veil
+Make an "Incorrect username or password" message
+Fix password validation
 ------------------------
 Eliminate refresher race conditions
+User guide
 Enable multiple refresher files
-Database synchronization
+News/blog
 Admin: Pagination
 Admin: Filters
 Admin: Code generation
 Admin: Actions on multiple records
+Database synchronization
 Error reporting
-News/blog
-Documentation
 Sign up page
 Forums
 Search

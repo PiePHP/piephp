@@ -24,9 +24,7 @@ class ViewMapperController extends CachingController {
     foreach ($arguments as $argument) {
       $viewName .= '_' . lower_camel($argument);
     }
-    $this->renderView($viewName, array(
-      'title' => ''
-    ));
+    $this->renderView($viewName);
 	}
 
 }

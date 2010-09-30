@@ -22,7 +22,6 @@ class CacheToolsController extends Controller {
 			exit;
 		}
 		$this->renderView('cacheTools_default', array(
-			'title' => 'Memcache caches',
 			'caches' => $CACHES
 		));
 	}
@@ -34,7 +33,6 @@ class CacheToolsController extends Controller {
 	public function statsAction($cacheName) {
 		$stats = $this->loadModel()->loadCache($cacheName)->getStats();
 		$this->render(array(
-			'title' => 'Cache stats',
 			'cacheName' => $cacheName,
 			'stats' => $stats
 		));

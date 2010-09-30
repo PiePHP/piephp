@@ -1,3 +1,3 @@
-<h1>Can't touch this.</h1>
+<h1>Oops!</h1>
 
-Access forbidden.
+That page doesn't exist.

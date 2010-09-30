@@ -114,10 +114,10 @@ $PARAMETERS = explode('/', substr($URL_PATH, strlen($URL_ROOT)));
 $CONTROLLER_NAME = upper_camel($PARAMETERS[0]) . 'Controller';
 
 // If the URL was "/" or if it was "/hello/" and there's no HelloController, we'll just use the
-// HomeController.  In the "/hello/" case, there's a chace that HomeController has a helloAction
+// DefaultController.  In the "/hello/" case, there's a chace that DefaultController has a helloAction
 // or a catchAllAction.
 if ($CONTROLLER_NAME == 'Controller' || !class_exists($CONTROLLER_NAME, true)) {
-	$CONTROLLER_NAME = 'HomeController';
+	$CONTROLLER_NAME = 'DefaultController';
 }
 else {
 	array_shift($PARAMETERS);
@@ -141,13 +141,17 @@ else {
 
 call_user_func_array(array(&$CONTROLLER, $ACTION_NAME), $PARAMETERS);
 
-if ($CONTROLLER->useCaching && isset($pageModel)) {
-	$contents = trim(ob_get_clean());
-	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
-	$contents = preg_replace('/\\s+/ms', ' ', $contents);
-	$pageModel->cache->set($pageCacheKey, $contents, $CONTROLLER->cacheTimeInSeconds);
-	send_output($contents);
+$contents = trim(ob_get_clean());
+$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
+$contents = preg_replace('/\\s+/ms', ' ', $contents);
+if (isset($NEED_TITLE)) {
+	preg_match('/<h1[^>]*>(.*?)<\/h1>/ms', $contents, $match);
+	$contents = str_replace('>NEED_TITLE<', '>PiePHP - ' . $match[1] . '<', $contents);
 }
+if ($CONTROLLER->useCaching && isset($pageModel)) {
+	$pageModel->cache->set($pageCacheKey, $contents, $CONTROLLER->cacheTimeInSeconds);
+}
+send_output($contents);
 
 /**
  * Check through the appropriate entries in $CLASS_DIRS to find the class that we're trying to use.
@@ -236,11 +240,16 @@ function send_output($output) {
 		if ($session->isSignedIn) {
 			$pieces = preg_split('/<div id="user">.*?<\/div>/msi', $output, 2);
 			if (count($pieces) > 1) {
+				$isAdmin = count(array_intersect($session->userGroups, array(
+					1, // System administrators
+					2, // Developers
+					3, // Administrators
+				)));
 				$output = $pieces[0] .
 					'<div id="user">' .
 						'<span>' . htmlentities($session->username) . '</span>' .
 						'<u id="userNav">' .
-							'<a href="' . $URL_ROOT . 'admin/">Admin</a>' .
+							($isAdmin ? '<a href="' . $URL_ROOT . 'admin/">Admin</a>' : '') .
 							'<a href="' . $URL_ROOT . 'sign_out/" class="noAjax">Sign out</a>' .
 						'</u>' .
 					'</div>' .
@@ -302,22 +311,4 @@ function is_mobile() {
 	strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
 }
 
-/**
- * Print a value to the page with formatting preserved.
- * @param  $var: the value to print.
- */
-function p($var) {
-	echo '<pre>';
-	print_r($var);
-	echo '</pre>';
-}
-
-/**
- * Print a value to the page with formatting preserved, then exit.
- * @param  $var: the value to print.
- */
-function x($var) {
-	p($var);
-	exit;
-}
 

@@ -43,12 +43,16 @@ class Session {
 	public function __construct() {
 		if (isset($_COOKIE[$this->sessionCookieKey])) {
 			$cookieValue = $_COOKIE[$this->sessionCookieKey];
-			list($userHash, $userId, $time, $username) = explode('-', $cookieValue, 4);
-			$expectedHash = $this->makeHash($userId, $time);
-			if ($userHash == $expectedHash) {
-				$this->isSignedIn = true;
-				$this->userId = $userId;
-				$this->username = $username;
+			$values = explode('-', $cookieValue, 5);
+			if (count($values) == 5) {
+				list($userHash, $userId, $time, $userGroups, $username) = $values;
+				$expectedHash = $this->makeHash($userId, $time, $userGroups);
+				if ($userHash == $expectedHash) {
+					$this->isSignedIn = true;
+					$this->userId = $userId;
+					$this->username = $username;
+					$this->userGroups = explode('.', $userGroups);
+				}
 			}
 		}
 	}
@@ -58,12 +62,17 @@ class Session {
 	 * Also keep track of the username.
 	 * @param  $userId: the ID of the user we are starting a session for.
 	 * @param  $username: the username, in case we need to display it without hitting the database.
+	 * @param  $userGroups: a string containing IDs of user groups that the user belongs to.
 	 * @param  $keepUserSignedIn: whether the user has selected the option to stay signed in.
 	 */
-	public function start($userId, $username, $keepUserSignedIn = false) {
+	public function start($userId, $username, $userGroups, $keepUserSignedIn = false) {
 		$time = time();
-		$hash = $this->makeHash($userId, $time);
-		$cookieValue = $hash . '-' . $userId . '-' . $time . '-' . $username;
+
+		// Use a "." as a user groups delimiter because it won't get escaped.
+		$userGroups = str_replace(',', '.', $userGroups);
+
+		$hash = $this->makeHash($userId, $time, $userGroups);
+		$cookieValue = $hash . '-' . $userId . '-' . $time . '-' . $userGroups . '-' . $username;
 
 		if ($keepUserSignedIn) {
 			// Remember who the user is for a very long time.
@@ -87,9 +96,11 @@ class Session {
 	 * Hash a user ID with a private salt in order to start or authenticate a session.
 	 * @param  $userId: the ID of the user we are starting a session for.
 	 * @param  $time: the time of session creation.
+	 * @param  $userGroups: a string containing IDs of user groups that the user belongs to.
+	 * @return the md5 hash that the cookie uses to verify the authenticity of cookie values.
 	 */
-	public function makeHash($userId, $time) {
-		$hash = md5($userId . $time . $GLOBALS['SALT']);
+	public function makeHash($userId, $time, $userGroups) {
+		$hash = md5($userId . $time . $userGroups . $GLOBALS['SALT']);
 		return $hash;
 	}
 

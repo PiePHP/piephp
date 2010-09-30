@@ -9,19 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class HomeController extends CachingController {
-
-	/**
-	 * Show the home page.
-	 */
-	public function defaultAction() {
-		$this->loadModel('blogModel');
-		$this->render(array(
-			'title' => 'The instant gratification framework',
-			'manualContentLayout' => true,
-			'posts' => $this->blogModel->posts()
-		));
-	}
+class BaseDefaultController extends CachingController {
 
 	/**
 	 * If the URI is "/something.js" or "/something.css", use the JsController or CssController.

@@ -1,9 +1,13 @@
 <?php
+if (!isset($title)) {
+	$GLOBALS['NEED_TITLE'] = true;
+	$title = 'NEED_TITLE';
+}
 if (!is_ajax()) {
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
 <html>
 <head>
-	<title>PiePHP - <?php echo $title; ?></title>
+	<title><?php echo $title; ?></title>
 	<link rel="stylesheet" href="<?php echo $URL_ROOT; ?>core-<?php echo $VERSION; ?>.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
@@ -22,7 +26,7 @@ if (!is_ajax()) {
 		<span>
 			<a href="<?php echo $HTTP_ROOT; ?>downloads">Downloads</a>
 			<a href="<?php echo $HTTP_ROOT; ?>tutorials">Tutorials</a>
-			<a href="<?php echo $HTTP_ROOT; ?>documentation">Documentation</a>
+			<a href="<?php echo $HTTP_ROOT; ?>user_guide">User guide</a>
 			<a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a>
 			<a href="<?php echo $HTTP_ROOT; ?>community">Community</a>
 		</span>
@@ -35,7 +39,7 @@ if (!is_ajax()) {
 		<?php
 		}
 		else {
-			?><var id="title">PiePHP - <?php echo $title; ?></var><?php
+			?><var id="title"><?php echo $title; ?></var><?php
 		}
 		if (isset($manualContentLayout) || is_dialog()) {
 			include $viewPath;

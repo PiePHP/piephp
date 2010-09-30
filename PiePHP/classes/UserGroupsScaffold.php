@@ -1,6 +1,7 @@
 <?php
 /**
  * Manage user groups.
+ * TODO: Make user groups editable only by a Superuser or Developer.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP

@@ -19,7 +19,9 @@ class PatchesController extends Controller {
 		global $DATABASES;
 		global $SITE_DIR;
 		if ($ENVIRONMENT != 'development') {
-			$this->authenticate();
+			$this->authenticate(array(
+				1, // System administrators
+			));
 		}
 
 		$results = array();
@@ -47,7 +49,6 @@ class PatchesController extends Controller {
 		}
 
 		$this->render(array(
-			'title' => 'Patches',
 			'results' => $results
 		));
 	}

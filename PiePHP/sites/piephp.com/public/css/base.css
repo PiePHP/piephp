@@ -271,7 +271,7 @@ h4 {
 }
 
 #content h1 {
-	background: #cde;
+	background: #dde;
 	border: 1px solid #abc;
 	margin: -18px -18px 8px -18px;
 	padding: 8px 18px;
@@ -361,6 +361,7 @@ h4 {
 	height: 23px;
 	background: #eee;
 	padding: 5px 10px;
+	overflow: hidden;
 }
 
 #features {
