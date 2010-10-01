@@ -35,19 +35,24 @@
 	overflow: visible;
 }
 
-#dialogClose {
-	position: absolute;
-	display: block;
-	top: -17px;
-	right: -17px;
-	width: 32px;
-	height: 32px;
-	background: url(../img/dialog_close.png);
-	cursor: pointer;
+#dialogCell {
+	position: relative;
+	padding: 0;
 }
 
-#dialogClose:hover {
-	background-position: bottom left;
+#dialogClose {
+	position: absolute;
+	z-index: 12;
+	display: block;
+	top: -12px;
+	right: -12px;
+	width: 30px;
+	height: 30px;
+	background: #123;
+	border: 2px solid #000;
+	text-align: center;
+	cursor: pointer;
+	font: bold 14px Verdana; 
 }
 
 #dialog fieldset {

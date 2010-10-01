@@ -24,7 +24,11 @@ if (!is_dialog()) {
 </div>
 <div>
 	<label></label>
-	<label class="for"><input type="checkbox" name="keepSignedIn">Keep me signed in</label>
+	<fieldset>
+		<label class="option">
+			<input type="checkbox" name="keepSignedIn">Keep me signed in
+		</label>
+	</fieldset>
 </div>
 <div class="actions">
 	<div>

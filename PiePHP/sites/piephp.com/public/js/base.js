@@ -314,7 +314,7 @@ var showVeil = window.showVeil = function(href) {
 	$('#veil')
 		.fadeIn()
 		.removeClass('submitted')
-		.html('<div class="veil"/><div id="dialog"/>')
+		.html('<div class="veil"/><div id="dialog"><table><tr><td id="dialogCell"/></tr></table></div>')
 		.find('.veil')
 			.css({opacity: 0.8});
 	veilLoading();
@@ -322,13 +322,14 @@ var showVeil = window.showVeil = function(href) {
 };
 
 var loadVeil = window.loadVeil = function(html) {
-	var dialogQuery = $('#dialog').html(html).css({opacity: 1});
+	var dialogQuery = $('#dialog');
+	$('#dialogCell')
+		.html(html).css({opacity: 1})
+		.prepend($('<button id="dialogClose" class="main">X</button>').click(hideVeil))
 	dialogQuery
-		.prepend($('<div id="dialogClose"/>').click(hideVeil))
 		.css({marginLeft: -dialogQuery.width() / 2})
 		.find('br:last').remove();
-		$('#veil')
-			.attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
+	$('#veil').attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
 	focusFirst(dialogQuery);
 };
 
@@ -340,6 +341,7 @@ var hideVeil = window.hideVeil = function() {
 	$('#veil').fadeOut('fast', function() {
 		$(this).empty();
 	});
+	return false;
 };
 
 wire(function() {
@@ -374,7 +376,7 @@ wire(function() {
 });
 
 var focusFirst = function(selector) {
-	var focusableQuery = $(selector).find(focusableSelector);
+	var focusableQuery = $(selector).find(focusableSelector).not('#dialogClose');
 	if (!focusableQuery.filter('.focused').size()) {
 		focusableQuery.eq(0).focus();
 	}

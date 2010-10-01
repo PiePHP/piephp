@@ -118,10 +118,11 @@ button {
 	margin: 0;
 	padding: 0;
 	font-size: 12px;
-	border-width: 1px;
+	border-width: 2px;
 	border-color: #bbd #99c #99c #bbd;
 	background: #eef;
 	color: #223;
+	border-radius: 6px;
 }
 
 button b {
@@ -139,8 +140,8 @@ button:hover {
 
 button.main {
 	font-size: 13px;
-	border-color: #669 #003 #003 #669;
-	background: #99c;
+	border-color: #123 #001 #001 #123;
+	background: #468;
 	color: #fff;
 }
 
