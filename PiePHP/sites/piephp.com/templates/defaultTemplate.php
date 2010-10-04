@@ -1,6 +1,6 @@
 <?php
 if (!isset($title)) {
-	$GLOBALS['NEED_TITLE'] = true;
+	$NEED_TITLE = true;
 	$title = 'NEED_TITLE';
 }
 if (!is_ajax()) {
@@ -12,7 +12,7 @@ if (!is_ajax()) {
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
-	<form id="veil"></form>
+	<form id="form"></form>
 	<div id="head">
 		<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
 		<div id="user">
@@ -35,6 +35,7 @@ if (!is_ajax()) {
 			<button id="go"></button>
 		</form>
 	</div>
+	<var>NOTIFICATIONS</var>
 	<div id="body">
 		<?php
 		}

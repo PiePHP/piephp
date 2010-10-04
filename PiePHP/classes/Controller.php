@@ -76,6 +76,7 @@ abstract class Controller {
 		global $HTTPS_ROOT;
 		global $ENVIRONMENT;
 		global $VERSION;
+		global $NEED_TITLE;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {
@@ -173,10 +174,13 @@ abstract class Controller {
 	 */
 	public function sendRedirect($url, $isMovedPermanently = false) {
 		if (is_ajax()) {
-			$url .= (strpos($url, '?') == false ? '?' : '&') . 'isAjax=1';
+			$url .= (strpos($url, '?') === false ? '?' : '&') . 'isAjax=1';
 		}
 		header($isMovedPermanently ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
 		header('Location: ' . $url);
+
+		// Set a cookie for any notifications so that they can be displayed in the page we're redirecting to.
+		$this->setNotificationsCookie();
 		exit;
 	}
 
@@ -187,7 +191,20 @@ abstract class Controller {
 	public function sendJsRedirect($url) {
 		$scope = is_frame() ? 'parent' : 'window';
 		echo "<script>$scope.location = '" . addslashes($url) . "'</script>";
+
+		// Set a cookie for any notifications so that they can be displayed in the page we're redirecting to.
+		$this->setNotificationsCookie();
 		exit;
+	}
+
+	/**
+	 * Set a cookie for any notifications so that they can be displayed in the page we're redirecting to.
+	 */
+	public function setNotificationsCookie() {
+		global $NOTIFICATIONS;
+		if (count($NOTIFICATIONS)) {
+			setcookie('notifications', join(',', str_replace(',', '&comma;', $this->notifications)), 0, '/');
+		}
 	}
 
 	/**
@@ -207,6 +224,15 @@ abstract class Controller {
 			$errorsController->processError(401);
 			exit;
 		}
+	}
+
+	/**
+	 * Add an error message to the list of notifications we want to send.
+	 * @param  $message: the error message to be displayed.
+	 */
+	public function notifyError($message) {
+		global $NOTIFICATIONS;
+		$NOTIFICATIONS[] = 'error ' . $message;
 	}
 
 }

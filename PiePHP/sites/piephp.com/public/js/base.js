@@ -182,6 +182,7 @@ var loadContent = function(path, html) {
 	document.title = $('#title').text();
 	$('#loading').remove();
 	lightTab();
+	log(document.cookie);
 };
 
 var checkUrl = function() {
@@ -311,25 +312,25 @@ var validateFieldDiv = function() {
 };
 
 var showVeil = window.showVeil = function(href) {
-	$('#veil')
+	$('#form')
 		.fadeIn()
 		.removeClass('submitted')
-		.html('<div class="veil"/><div id="dialog"><table><tr><td id="dialogCell"/></tr></table></div>')
-		.find('.veil')
-			.css({opacity: 0.8});
+		.html('<div id="veil"/><div id="shadow"/><div id="dialog"><table><tr><td id="cell"/></tr></table></div>');
+	$('#veil')
+		.css({opacity: 0.8});
 	veilLoading();
 	$.get(href, {isAjax: 1, isDialog: 1}, loadVeil);
 };
 
 var loadVeil = window.loadVeil = function(html) {
 	var dialogQuery = $('#dialog');
-	$('#dialogCell')
+	$('#cell')
 		.html(html).css({opacity: 1})
-		.prepend($('<button id="dialogClose" class="main">X</button>').click(hideVeil))
+		.prepend($('<button id="close" class="main"><b id="x">X</b></button>').click(hideVeil))
 	dialogQuery
 		.css({marginLeft: -dialogQuery.width() / 2})
 		.find('br:last').remove();
-	$('#veil').attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
+	$('#form').attr({method: 'post', action: dialogQuery.find('var[title=action]').text()});
 	focusFirst(dialogQuery);
 };
 
@@ -338,7 +339,7 @@ var veilLoading = function() {
 };
 
 var hideVeil = window.hideVeil = function() {
-	$('#veil').fadeOut('fast', function() {
+	$('#form').fadeOut('fast', function() {
 		$(this).empty();
 	});
 	return false;
@@ -363,7 +364,7 @@ wire(function() {
 				if (!isValid) {
 					event.stopImmediatePropagation();
 				}
-				else if (this.id == 'veil') {
+				else if (this.id == 'form') {
 					setTimeout(veilLoading, 1);
 				}
 				return isValid;
@@ -376,7 +377,7 @@ wire(function() {
 });
 
 var focusFirst = function(selector) {
-	var focusableQuery = $(selector).find(focusableSelector).not('#dialogClose');
+	var focusableQuery = $(selector).find(focusableSelector).not('#close');
 	if (!focusableQuery.filter('.focused').size()) {
 		focusableQuery.eq(0).focus();
 	}

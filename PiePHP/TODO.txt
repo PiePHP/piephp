@@ -1,5 +1,4 @@
 Installer
-Redesign the veil
 Make an "Incorrect username or password" message
 Fix password validation
 ------------------------

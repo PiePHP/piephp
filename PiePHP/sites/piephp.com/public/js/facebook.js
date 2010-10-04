@@ -1,6 +1,5 @@
 /**
- * Set UserVoice options and import their JavaScript.
- * This displays the "feedback" side tab and ultimately facilitates gathering feature ideas.
+ * Allow us to put Facebook like controls and other such stuff into pages.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -13,11 +12,17 @@ $('body').append('<div id="fb-root"/>');
 
 window.fbAsyncInit = function() {
 	var init = function() {
-		FB.init({appId: 'your app id', status: true, cookie: true, xfbml: true});
+		try {
+			FB.init({appId: 'your app id', status: true, cookie: true, xfbml: true});
+		}
+		catch (e) {
+			// Naughty naughty, Facebook.  Clean up your JavaScript.
+		}
 	};
 	init();
 	wire(init);
 }
 
 // The script is appended to the DOM, so it will load asynchronously in most browsers.
-appendScript(document.location.protocol + '//connect.facebook.net/en_US/all.js', 500);
+// TODO: turn this back on once we have a Facebook app ID.
+//appendScript(document.location.protocol + '//connect.facebook.net/en_US/all.js', 500);

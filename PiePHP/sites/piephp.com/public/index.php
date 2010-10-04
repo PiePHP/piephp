@@ -235,6 +235,7 @@ function error_handler($level, $message, $file, $lineNumber, $context) {
  */
 function send_output($output) {
 	global $URL_ROOT;
+	global $NOTIFICATIONS;
 	if (!is_ajax()) {
 		$session = new Session();
 		if ($session->isSignedIn) {
@@ -256,6 +257,14 @@ function send_output($output) {
 				$pieces[1];
 			}
 		}
+	}
+	if (count($NOTIFICATIONS)) {
+		$blocks = '';
+		foreach ($NOTIFICATIONS as $notification) {
+			list($type, $message) = explode(' ', $notification . ' ');
+			$blocks .= '<div class="' . $type . '">' . htmlentities($message) . '</div>';
+		}
+		$output = str_replace('<var>NOTIFICATIONS</var>', $blocks, $output);
 	}
 	echo $output;
 	exit;

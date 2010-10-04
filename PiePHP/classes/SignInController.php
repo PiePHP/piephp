@@ -41,8 +41,10 @@ class SignInController extends Controller {
 			$hash = md5($password . $result['id']);
 			if ($result['password'] == $hash) {
 				$this->startSessionAndSendRedirect($result['id'], $result['username'], $result['user_groups']);
+				return;
 			}
 		}
+		$this->notifyError('Incorrect username or password.');
 	}
 
 	/**
