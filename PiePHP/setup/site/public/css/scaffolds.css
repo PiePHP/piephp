@@ -1,0 +1,320 @@
+pre {
+	background: #fff;
+	color: #000;
+}
+
+input,
+select,
+textarea {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+form {
+	display: block;
+	float: left;
+}
+
+fieldset {
+	border: 1px solid #dde;
+	margin-bottom: 4px;
+}
+
+fieldset h2 {
+	font: bold 13px Arial;
+	padding: 4px 6px;
+	background: #dde;
+	border-bottom: 1px solid #dde;
+}
+
+fieldset div {
+	clear: both;
+	position: relative;
+	padding: 6px;
+}
+
+fieldset div:hover {
+	background: #ffd;
+}
+
+fieldset div div {
+	padding: 0;
+}
+
+fieldset div div:hover {
+	background: transparent;
+}
+
+fieldset div.on {
+	background: #ffc;
+}
+
+fieldset label {
+	float: left;
+	display: block;
+	width: 120px;
+	text-align: right;
+	padding: 5px;
+	color: #666;
+}
+
+fieldset fieldset {
+	border: 0;
+}
+
+label.option {
+	float: left;
+	display: block;
+	width: auto;
+	text-align: left;
+	margin: 3px 0;
+	padding: 0 0 0 4px;
+	color: #000;
+	clear: both;
+}
+
+input[type=checkbox],
+input[type=radio] {
+	margin: 0 6px 0 0;
+	padding: 0;
+}
+
+input,
+textarea,
+select,
+button {
+	margin-right: 2px;
+}
+
+input.name {
+	width: 150px;
+}
+
+input.email {
+	width: 250px;
+}
+
+input.username,
+input.password {
+	width: 200px;
+}
+
+input.hint,
+textarea.hint {
+	color: #aaa;
+}
+
+fieldset div.advice {
+	display: none;
+	padding-left: 130px;
+	color: #c00!IMPORTANT;
+}
+
+fieldset div.error {
+	display: block;
+}
+
+button {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	border-width: 1px;
+	border-color: #bbd #99c #99c #bbd;
+	background: #eef;
+	color: #223;
+}
+
+button b {
+	display: block;
+	font-weight: normal;
+	padding: 2px 5px;
+	cursor: default;
+}
+
+button:hover {
+	border-color: #cb6 #982 #982 #cb6;
+	background: #ffb;
+	color: #000;
+}
+
+button.main {
+	font-size: 13px;
+	border-color: #669 #003 #003 #669;
+	background: #99c;
+	color: #fff;
+}
+
+button.main b {
+	font-weight: bold;
+	padding: 5px 15px;
+	text-shadow: #336 1px 1px 2px;
+}
+
+button.main:hover {
+	border-color: #982 #320 #320 #982;
+	background: #b91;
+}
+
+button.main:hover b {
+	text-shadow: #000 1px 1px 2px;
+}
+
+div.actions {
+	height: 30px;
+}
+
+div.actions a {
+	float: left;
+}
+
+div.actions div {
+	float: right;
+}
+
+div.actions button {
+	margin: 3px 0 0 4px;
+}
+
+div.actions button.main {
+	margin: 0 0 0 4px;
+}
+
+form.code {
+	border: 1px solid #ee6;
+	background: #ffc url(../img/icons/error.png) no-repeat 8px 8px;
+	color: #000;
+	padding: 8px 8px 8px 28px;
+	position: relative;
+	margin: 0 0 8px 0;
+}
+
+form.code textarea {
+	position: absolute;
+	display: none;
+	z-index: 1;
+}
+
+form.code textarea.submitting {
+	background: #fff url(../img/loading.gif) no-repeat 4px 4px;
+	color: #ccc;
+}
+
+form.code textarea,
+code,
+pre,
+textarea.code {
+	font: normal 12px monospace, Courier new;
+}
+
+form.code blockquote {
+	border: 1px solid #666;
+	margin: 0;
+	padding: 0;
+	background: #fff;
+	color: #000;
+	width: 100%;
+	max-height: 200px;
+	overflow: scroll;
+	position: relative;
+}
+
+form.code blockquote.trace {
+	display: none;
+	margin-bottom: 8px;
+}
+
+form.code i {
+	color: #999;
+	font-style: normal;
+}
+
+form.code u {
+	color: #009;
+	text-decoration: none;
+}
+
+form.code blockquote code {
+	display: block;
+	white-space: nowrap;
+}
+
+form.code blockquote i {
+	background: #eee;
+}
+
+form.code code.line {
+	background: #eef;
+	border-top: 1px solid #99f;
+	border-bottom: 1px solid #99f;
+}
+
+form.code blockquote.error code.line {
+	background: #fee;
+	border-top: 1px solid #f99;
+	border-bottom: 1px solid #f99;
+}
+
+form.code div.toggle,
+form.code div.toggled {
+	cursor: pointer;
+	padding-left: 16px;
+	background: transparent url(../img/icons/toggle.png) no-repeat -16px 0px;
+}
+
+form.code div.toggled {
+	background-position: 0px -16px;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+th, td {
+	padding: 3px 6px;
+}
+
+th {
+	text-align: left;
+	border-left: 1px solid #d6d6dd;
+	border-bottom: 1px solid #bbd;
+	background: #dde;
+}
+
+td {
+	border-left: 1px solid #f8f8ff;
+	border-bottom: 1px solid #ccd;
+	background: #fff;
+}
+
+tr.odd td {
+	border-left: 1px solid #f2f2ff;
+	background: #f8f8ff;
+}
+
+th.first,
+td.first,
+tr.odd td.first {
+	border-left: 0;
+}
+
+a.add,
+a.remove {
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	line-height: 16px;
+	margin: 6px 0 0 0;
+}
+
+a.add {
+	background-image: url(../img/icons/add.png);
+}
+
+a.remove {
+	background-image: url(../img/icons/remove.png);
+}
+
+a.remove,
+a.cancel {
+	color: #c00;
+}
