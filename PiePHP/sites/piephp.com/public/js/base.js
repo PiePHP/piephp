@@ -22,7 +22,7 @@
  * The base URL is used for comparison against link HRefs and form actions to determine
  * whether they're pointing to the same host and are therefore AJAXable.
  */
-var base = location.protocol + '//' + location.host;
+var baseUrl = location.protocol + '//' + location.host;
 
 /**
  * The path of the current page helps us to track whether the user has put something
@@ -107,7 +107,7 @@ var time = function() {
 
 // TODO: Continue commenting this library (and ideally break it into smaller pieces as well.
 var getPath = function(href) {
-	return href.substring(base.length).replace(/^\/#/, '');
+	return href.substring(baseUrl.length).replace(/^\/#/, '');
 };
 
 var noIndex = function(href) {
@@ -115,7 +115,7 @@ var noIndex = function(href) {
 };
 
 var wireTasks = [function(query) {
-	query.find('[title]')
+	query.find('[title]').not('.gAd')
 		.each(function(elementIndex, element) {
 			element.HINT = element.title;
 			element.title = '';
@@ -171,7 +171,7 @@ var loadContent = function(path, html) {
 	hideVeil();
 	window.scrollTo(0, 0);
 	currentPath = path;
-	document.location = base + '/#' + path;
+	document.location = baseUrl + '/#' + path;
 	var bodyQuery = $('#body');
 	$('#body>div').removeClass('loading');
 	var htmlQuery = $(html);
@@ -396,9 +396,9 @@ $(document)
 		}
 		else {
 			if (href.charAt(0) == '/') {
-				href = base + href;
+				href = baseUrl + href;
 			}
-			if (href.substring(0, base.length + 1) == base + '/') {
+			if (href.substring(0, baseUrl.length + 1) == baseUrl + '/') {
 				loadUrl(href);
 				$(link).blur();
 				return false;
@@ -411,9 +411,9 @@ $(document)
 			var form = this;
 			var action = form.action;
 			if (action.charAt(0) == '/') {
-				action = base + action;
+				action = baseUrl + action;
 			}
-			if (action.substring(0, base.length) == base) {
+			if (action.substring(0, baseUrl.length) == baseUrl) {
 				var target = form.target;
 				form.isAjax.value = 1;
 				form.action += (action.has('?') ? '&' : '?') + 'isAjax=1&isFrame=1';

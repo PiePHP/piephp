@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 	KEY first_name (first_name,last_name)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO users VALUES (1, 'Sam', 'Eubank', 'sameubank@gmail.com', 'sameubank', '7c6a180b36896a0a8c02787eeafb0e4c');
+INSERT INTO users VALUES (1, 'Sam', 'Eubank', 'sam@piephp.com', 'sameubank', '7c6a180b36896a0a8c02787eeafb0e4c');
 
 
 DROP TABLE IF EXISTS user_groups;

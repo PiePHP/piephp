@@ -68,8 +68,9 @@
 	width: 18px;
 	height: 18px;
 	padding: 4px;
-	border-radius: 4px;
-	background: #468;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
 	text-align: center;
 	vertical-align: middle;
 	cursor: pointer;

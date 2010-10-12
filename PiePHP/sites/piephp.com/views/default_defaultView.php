@@ -38,6 +38,7 @@
 	</ul>
 </div>
 
+<iframe id="mrec" class="gAd" title="9402400169653768/3278761672" frameborder="no" src="about:blank"></iframe>
 
 <var><?
 foreach ($posts as $post) {
@@ -50,4 +51,6 @@ foreach ($posts as $post) {
 	<?
 }
 ?></var>
+
+http://pagead2.googlesyndication.com/pagead/expansion_embed.js
 

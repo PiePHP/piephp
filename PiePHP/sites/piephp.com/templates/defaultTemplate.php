@@ -35,13 +35,15 @@ if (!is_ajax()) {
 			<button id="go"></button>
 		</form>
 	</div>
-	<var>NOTIFICATIONS</var>
 	<div id="body">
 		<?php
 		}
 		else {
 			?><var id="title"><?php echo $title; ?></var><?php
 		}
+		?>
+		<var>NOTIFICATIONS</var>
+		<?php
 		if (isset($manualContentLayout) || is_dialog()) {
 			include $viewPath;
 		}

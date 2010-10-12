@@ -1,6 +1,7 @@
 Installer
 Make an "Incorrect username or password" message
 Fix password validation
+Forgot password
 ------------------------
 Eliminate refresher race conditions
 User guide

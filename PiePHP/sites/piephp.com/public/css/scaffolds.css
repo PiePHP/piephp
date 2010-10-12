@@ -120,28 +120,29 @@ button {
 	font-size: 12px;
 	border-width: 2px;
 	border-color: #bbd #99c #99c #bbd;
-	background: #eef;
+	background: #eef url(../img/button.png) center left;
 	color: #223;
-	border-radius: 6px;
+	cursor: pointer;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
 }
 
 button b {
 	display: block;
 	font-weight: normal;
-	padding: 2px 5px;
-	cursor: default;
+	padding: 4px 8px;
 }
 
 button:hover {
-	border-color: #cb6 #982 #982 #cb6;
-	background: #ffb;
 	color: #000;
 }
 
-button.main {
+button.main,
+#x {
 	font-size: 13px;
 	border-color: #123 #001 #001 #123;
-	background: #468;
+	background: #468 url(../img/mainButton.png) center left;
 	color: #fff;
 }
 
@@ -151,9 +152,14 @@ button.main b {
 	text-shadow: #336 1px 1px 2px;
 }
 
-button.main:hover {
-	border-color: #982 #320 #320 #982;
-	background: #b91;
+button:hover,
+#close:hover #x {
+	background-position: top left;
+}
+
+button:active,
+#close:active #x {
+	background-position: bottom left;
 }
 
 button.main:hover b {

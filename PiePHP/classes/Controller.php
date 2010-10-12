@@ -96,6 +96,16 @@ abstract class Controller {
 			$viewPath = $PIE_DIR . 'views/' . $viewName . 'View.php';
 		}
 
+		// If the view still isn't there, this is a 404.
+		if (!file_exists($viewPath)) {
+			$errorsController = new ErrorsController();
+			if ($ENVIRONMENT == 'development') {
+				$errorsController->notifyError('View file "' . $viewPath . '" does not exist.');
+			}
+			$errorsController->processError(404);
+			exit;
+		}
+
 		// If no template name was passed in, use the controller's default.
 		if ($templateName === NULL) {
 			$templateName = $this->defaultTemplateName;
