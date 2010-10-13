@@ -16,10 +16,7 @@
 	<?php echo '<fb:like width="282"></fb:like>'; ?>
 </div>
 
-<div id="news">
-	<h2>What's new?</h2>
-	<p>We're actively seeking talented contributors.  If you love getting things done quickly and painlessly, and if you have a knack for PHP and/or jQuery, then please get in touch with us to find out how you can be a part of the team.</p>
-</div>
+<iframe id="mrec" class="gAd" title="9402400169653768/0109456368" frameborder="no" src="about:blank"></iframe>
 
 <div id="features">
 	<h2>What's in the pie?</h2>
@@ -38,7 +35,10 @@
 	</ul>
 </div>
 
-<iframe id="mrec" class="gAd" title="9402400169653768/3278761672" frameborder="no" src="about:blank"></iframe>
+<div id="news">
+	<h2>What's new?</h2>
+	<p>We're actively seeking talented contributors.  If you love getting things done quickly and painlessly, and if you have a knack for PHP and/or jQuery, then please get in touch with us to find out how you can be a part of the team.</p>
+</div>
 
 <var><?
 foreach ($posts as $post) {

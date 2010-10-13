@@ -55,6 +55,7 @@ if (!is_ajax()) {
 			?>
 			<br class="clear">
 			</div>
+			<iframe id="sky" class="gAd" title="9402400169653768/3278761672" frameborder="no" src="about:blank"></iframe>
 			<?php
 		}
 		?>
