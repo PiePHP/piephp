@@ -52,5 +52,3 @@ foreach ($posts as $post) {
 }
 ?></var>
 
-http://pagead2.googlesyndication.com/pagead/expansion_embed.js
-

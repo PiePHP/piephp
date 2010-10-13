@@ -142,8 +142,11 @@ else {
 call_user_func_array(array(&$CONTROLLER, $ACTION_NAME), $PARAMETERS);
 
 $contents = trim(ob_get_clean());
-$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
-$contents = preg_replace('/\\s+/ms', ' ', $contents);
+// If there was an error, then don't minify.
+if (!isset($ERRORS_CONTROLLER)) {
+	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
+	$contents = preg_replace('/\\s+/ms', ' ', $contents);
+}
 if (isset($NEED_TITLE)) {
 	preg_match('/<h1[^>]*>(.*?)<\/h1>/ms', $contents, $match);
 	$contents = str_replace('>NEED_TITLE<', '>PiePHP - ' . $match[1] . '<', $contents);

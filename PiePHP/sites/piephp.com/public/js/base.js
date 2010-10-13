@@ -415,7 +415,9 @@ $(document)
 			}
 			if (action.substring(0, baseUrl.length) == baseUrl) {
 				var target = form.target;
-				form.isAjax.value = 1;
+				if (form.isAjax) {
+					form.isAjax.value = 1;
+				}
 				form.action += (action.has('?') ? '&' : '?') + 'isAjax=1&isFrame=1';
 				form.target = 'submitter';
 				setTimeout(function() {

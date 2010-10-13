@@ -22,15 +22,15 @@ class JsController extends MediaController {
 	 * @param  $groupName: the name of the file that we're grouping.
 	 */
 	public function renderFileHeader($groupName) {
-		echo 'if (!window.' . $groupName . ') (function(window, document, location) {';
-		echo 'window.' . $groupName . ' = 1;';
+		echo 'window.' . $groupName . 'JS || (function(window, document, location) {';
+		echo 'window.' . $groupName . 'JS = 1;';
 	}
 
 	/**
 	 * Close and call the function that began in the header.
 	 */
 	public function renderFileFooter() {
-		echo '})(window, document, location)';
+		echo '})(window, document, location);';
 	}
 
 	public function minify($contents) {

@@ -123,6 +123,8 @@ class ErrorsController extends Controller {
 	 */
 	public function handleError($level, $message, $file, $lineNumber, $context = NULL, $showStackTrace = true) {
 		global $HTTP_ROOT;
+		global $URL_ROOT;
+		global $VERSION;
 
 		Logs::error("$message in $file on line $lineNumber");
 
@@ -131,7 +133,7 @@ class ErrorsController extends Controller {
 			$file = str_replace('\\', '/', $file);
 
 			?>
-			<form class="code" method="post" action="<?php echo $HTTP_ROOT; ?>errors/rewrite" target="submitter">
+			<form class="code" method="post" action="<?php echo $HTTP_ROOT; ?>errors/rewrite">
 				<h3><?php echo $message; ?></h3>
 				<h4><br><?php $this->renderPath($file); ?><i>, line</i> <?php echo $lineNumber; ?></h4>
 				<?php
@@ -215,9 +217,8 @@ class ErrorsController extends Controller {
 			if ($errorStats['firstInPage']) {
 				?>
 				<link rel="stylesheet" href="/css/base.css" type="text/css">
-				<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
-				<script type="text/javascript" src="/js/base.js"></script>
-				<script type="text/javascript" src="/js/error_handler.js"></script>
+				<script type="text/javascript" src="<?php echo $URL_ROOT; ?>core-<?php echo $VERSION; ?>.js"></script>
+				<script type="text/javascript" src="<?php echo $URL_ROOT; ?>errors-<?php echo $VERSION; ?>.js"></script>
 				<?php
 			}
 		}
