@@ -72,6 +72,13 @@ if (!is_ajax()) {
 		<iframe id="refresher" src="<?php echo $URL_ROOT; ?>refresher" style="display:none"></iframe>
 		<?php
 	}
+  if ($URL_ROOT != '/') {
+    ?>
+    <script type="text/javascript">
+    urlRoot = '<?php echo $URL_ROOT; ?>';
+    </script>
+    <?php
+  }
 	?>
 	<script type="text/javascript" src="<?php echo $URL_ROOT; ?>core-<?php echo $VERSION; ?>.js"></script>
 </body>

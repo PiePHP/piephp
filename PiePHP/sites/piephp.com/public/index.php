@@ -157,15 +157,18 @@ if ($CONTROLLER->useCaching && isset($pageModel)) {
 send_output($contents);
 
 /**
- * Check through the appropriate entries in $CLASS_DIRS to find the class that we're trying to use.
+ * Try to find a class in our site's directory, otherwise find it in the PiePHP directory.
  * @param  $className: the name of the class we're trying to use.
  */
 function __autoload($className) {
-	$autoloadFile = '../classes/' . $className . '.php';
+  global $SITE_DIR;
+  global $PIE_DIR;
+	$autoloadFile = $SITE_DIR . 'classes/' . $className . '.php';
 	if (@include($autoloadFile)) {
 		return;
 	}
-	include('../../' . $autoloadFile);
+	$autoloadFile = $PIE_DIR . 'classes/' . $className . '.php';
+	include($autoloadFile);
 }
 
 /**

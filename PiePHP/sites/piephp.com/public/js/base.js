@@ -25,6 +25,12 @@
 var baseUrl = location.protocol + '//' + location.host;
 
 /**
+ * Hopefully, mod_rewrite has enabled us to use "/" as a dispatcher.
+ * If not, the urlRoot can be set in the default template.
+ */
+var urlRoot = window.urlRoot || '/';
+
+/**
  * The path of the current page helps us to track whether the user has put something
  * new into the address bar, necessitating an AJAX get.
  */

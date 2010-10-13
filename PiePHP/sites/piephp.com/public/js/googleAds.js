@@ -11,7 +11,7 @@
 wire(function(query) {
 	query.find('iframe.gAd').each(function(i, iframe) {
 		setTimeout(function() {
-			iframe.src = baseUrl + '/google_ads/' + iframe.title + '/' + $(iframe).width() + '/' + $(iframe).height();
+			iframe.src = baseUrl + urlRoot + 'google_ads/' + iframe.title + '/' + $(iframe).width() + '/' + $(iframe).height();
 			iframe.title = '';
 		}, 500);
 	});
