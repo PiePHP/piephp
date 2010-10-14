@@ -80,6 +80,10 @@ h4 {
 	padding: 0 0 3px 0;
 }
 
+li.pad {
+	margin-top: 8px;
+}
+
 #head {
 	position: relative;
 	height: 80px;
@@ -108,7 +112,7 @@ h4 {
 
 #user span {
 	float: left;
-	color: #679;
+	color: #68a;
 	padding: 2px 12px 0 0;
 	font-weight: bold;
 }
@@ -250,7 +254,10 @@ h4 {
 	font-size: 11px;
 }
 
+#wide,
+#tight,
 #content,
+#leftNav,
 #explanation,
 #download,
 #features,
@@ -264,14 +271,20 @@ h4 {
 	-moz-border-radius: 8px;
 }
 
-#content {
+#wide,
+#tight,
+#content,
+#leftNav {
 	background: #fff;
 	padding: 20px;
 	width: 762px;
-	min-height: 400px;
+	min-height: 562px;
 }
 
-#content h1 {
+#wide h1,
+#tight h1,
+#content h1,
+#leftNav h2 {
 	background: #dde;
 	border: 1px solid #abc;
 	margin: -18px -18px 8px -18px;
@@ -282,6 +295,61 @@ h4 {
 	-webkit-border-top-right-radius: 6px;
 	-moz-border-radius-topleft: 6px;
 	-moz-border-radius-topright: 6px;
+}
+
+#wide {
+	width: 932px;
+}
+
+#tight {
+	width: 554px;
+}
+
+#leftNav {
+	width: 198px;
+	padding: 0;
+	margin-right: 8px;
+	background: #012;
+	border: 1px solid #468;
+}
+
+#leftNav h2 {
+	background: #000;
+	border: 0;
+	margin: 2px;
+}
+
+#leftNav h2,
+#leftNav h3 {
+	color: #468;
+	padding: 3px 6px;
+}
+
+#leftNav h3 {
+	margin-top: 4px;
+}
+
+#leftNav a.section {
+	color: #468;
+}
+
+#leftNav a.section:hover {
+	color: #9be;
+}
+
+#leftNav a.nav {
+	display: block;
+	margin: 0 1px 1px 1px;
+	padding: 2px 6px;
+	background: #123;
+	color: #9be;
+	font-weight: normal;
+	font-size: 12px;
+}
+
+#leftNav a.nav:hover {
+	background: #234;
+	color: #fff;
 }
 
 #explanation {
@@ -422,5 +490,32 @@ div.column {
 	width: 160px;
 	height: 600px;
 	border: 1px solid #fff;
+	background: #fff;
+}
+
+#headingNav {
+	position: absolute;
+	display: block;
+}
+
+#headingNav {
+	position: absolute;
+	top: 12px;
+	right: 0;
+	display: block;
+	font-size: 18px;
+}
+
+#headingNav a {
+	background: #abf;
+	padding: 4px 8px;
+	margin-right: 8px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border: 1px solid #468;
+}
+
+#headingNav a:hover {
 	background: #fff;
 }

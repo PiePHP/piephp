@@ -1,3 +1,8 @@
+<div id="headingNav">
+	<a href="<?php echo $URL_ROOT; ?>user_guide/background/what_is_piephp">&lt;&lt;</a>
+	<a href="<?php echo $URL_ROOT; ?>user_guide/background/server_requirements">&gt;&gt;</a>
+</div>
+
 <h1>Features</h1>
 <h2>Currently available</h2>
 <ul>

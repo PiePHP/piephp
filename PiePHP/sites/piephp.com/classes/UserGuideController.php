@@ -11,4 +11,9 @@
 
 class UserGuideController extends ViewMapperController {
 
+	/**
+	 * Use a content templated with a sub-navigation for the user guide.
+	 */
+	public $contentTemplateName = 'userGuideContent';
+
 }

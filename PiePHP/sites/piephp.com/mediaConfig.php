@@ -15,7 +15,8 @@ $MEDIA_GROUPS = array(
 			'googleAds.js',
 			'googleAnalytics.js',
 			'facebook.js',
-			'uservoice.js'
+			'uservoice.js',
+			'wireDocument.js'
 		),
 		'errors' => array(
 			'errors.js'

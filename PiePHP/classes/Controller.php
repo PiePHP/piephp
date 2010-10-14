@@ -12,10 +12,15 @@
 abstract class Controller {
 
 	/**
-	 * The view template that is used if one is not provided.
-	 * Note: templates come from the project's "/templates" directory and are suffixed with "_template.php"
+	 * The controller can include a template, and the template can include a content template.
+	 * Note: templates come from the site's "/templates" directory and are suffixed with "Template.php"
 	 */
-	public $defaultTemplateName = 'default';
+	public $templateName = 'default';
+
+	/**
+	 * The template can include a content template, which will include a view.
+	 */
+	public $contentTemplateName = 'defaultContent';
 
 	/**
 	 * If a propertyName is not provided to the loadModel method, the property will be $model.
@@ -66,7 +71,7 @@ abstract class Controller {
 	 * @param  $data: optional data to be passed in to the view.
 	 * @param  $templateName: optional template name to override the controller's default template name.
 	 */
-	public function renderView($viewName, $data = array(), $templateName = NULL) {
+	public function renderView($viewName, $data = array()) {
 		// We include the view and template in this function.
 		// They'll want easy access to some globals.
 		global $SITE_DIR;
@@ -106,14 +111,13 @@ abstract class Controller {
 			exit;
 		}
 
-		// If no template name was passed in, use the controller's default.
-		if ($templateName === NULL) {
-			$templateName = $this->defaultTemplateName;
-		}
-
 		// If there's a template, include it and let it include the view, otherwise, just include the view.
-		if ($templateName) {
-			include $SITE_DIR . 'templates/' . $templateName . 'Template.php';
+		if ($this->templateName) {
+			// If there's a contentTemplate, the template can include it.
+			if ($this->contentTemplateName) {
+				$contentTemplatePath = $SITE_DIR . 'templates/' . $this->contentTemplateName . 'Template.php';
+			}
+			include $SITE_DIR . 'templates/' . $this->templateName . 'Template.php';
 		}
 		else {
 			include $viewPath;

@@ -499,7 +499,6 @@ navQuery
 	.delegate('a', 'mouseenter', animateHover)
 	.delegate('a', 'mouseleave', animateHover);
 lightTab();
-wire(document);
 
 var appendScript = window.appendScript = function(src, delay) {
 	setTimeout(function() {

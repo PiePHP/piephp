@@ -30,7 +30,10 @@ if (!is_ajax()) {
 			<a href="<?php echo $HTTP_ROOT; ?>forums">Forums</a>
 			<a href="<?php echo $HTTP_ROOT; ?>community">Community</a>
 		</span>
-		<form action="<?php echo $HTTP_ROOT; ?>search">
+		<form action="<?php echo $HTTP_ROOT; ?>search" id="searchForm">
+			<input type="hidden" name="cx" value="partner-pub-9402400169653768:3w9dl3-dv8z">
+		    <input type="hidden" name="cof" value="FORID:10">
+		    <input type="hidden" name="ie" value="ISO-8859-1">
 			<input type="text" id="search" name="q" title="Search PiePHP.com">
 			<button id="go"></button>
 		</form>
@@ -44,19 +47,11 @@ if (!is_ajax()) {
 		?>
 		<var>NOTIFICATIONS</var>
 		<?php
-		if (isset($manualContentLayout) || is_dialog()) {
-			include $viewPath;
+		if (isset($contentTemplatePath) && !is_dialog()) {
+			include $contentTemplatePath;
 		}
 		else {
-			?>
-			<div id="content">
-			<?php
 			include $viewPath;
-			?>
-			<br class="clear">
-			</div>
-			<iframe id="sky" class="gAd" title="9402400169653768/3278761672" frameborder="no" src="about:blank"></iframe>
-			<?php
 		}
 		?>
 		<?php

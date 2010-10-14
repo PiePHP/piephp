@@ -1,3 +1,8 @@
+<div id="headingNav">
+	<a href="<?php echo $URL_ROOT; ?>user_guide/get_started/url_routing">&lt;&lt;</a>
+	<a href="<?php echo $URL_ROOT; ?>user_guide/get_started/controllers">&gt;&gt;</a>
+</div>
+
 <h1>Directory structure</h1>
 <p>PiePHP can share classes and views between multiple sites, and the directory structure is set up to hold those classes, views and sites.</p>
 <p>After downloading the latest version of PiePHP and unzipping it, you will have the following directory structure:</p>

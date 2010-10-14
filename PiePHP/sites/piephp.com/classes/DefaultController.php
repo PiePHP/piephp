@@ -12,13 +12,17 @@
 class DefaultController extends BaseDefaultController {
 
 	/**
+	 * Don't use a content template.  The view has a custom layout.
+	 */
+	public $contentTemplateName = NULL;
+
+	/**
 	 * Show the home page.
 	 */
 	public function defaultAction() {
 		$this->loadModel('blogModel');
 		$this->render(array(
 			'title' => 'PiePHP - The instant gratification framework',
-			'manualContentLayout' => true,
 			'posts' => $this->blogModel->posts()
 		));
 	}

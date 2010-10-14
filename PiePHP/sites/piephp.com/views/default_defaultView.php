@@ -16,7 +16,7 @@
 	<?php echo '<fb:like width="282"></fb:like>'; ?>
 </div>
 
-<iframe id="mrec" class="gAd" title="9402400169653768/0109456368" frameborder="no" src="about:blank"></iframe>
+<iframe id="mrec" class="9402400169653768/0109456368" frameborder="0" scrolling="no"></iframe>
 
 <div id="features">
 	<h2>What's in the pie?</h2>
