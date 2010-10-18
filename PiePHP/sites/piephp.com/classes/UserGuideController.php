@@ -16,4 +16,11 @@ class UserGuideController extends ViewMapperController {
 	 */
 	public $contentTemplateName = 'userGuideContent';
 
+	/**
+	 * Show the User Guide's table of contents (which doesn't need the menu from the userGuideContentTemplate).
+	 */
+	public function defaultAction() {
+		$this->contentTemplateName = 'defaultContent';
+		$this->render();
+	}
 }

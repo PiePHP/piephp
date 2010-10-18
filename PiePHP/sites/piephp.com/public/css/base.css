@@ -62,26 +62,26 @@ h4 {
 
 h1 {
 	font-size: 24px;
-	padding: 0 0 6px 0;
 }
 
 h2 {
 	font-size: 20px;
-	padding: 0 0 5px 0;
 }
 
 h3 {
 	font-size: 16px;
-	padding: 0 0 4px 0;
 }
 
 h4 {
 	font-size: 13px;
-	padding: 0 0 3px 0;
 }
 
-li.pad {
+.pad {
 	margin-top: 8px;
+}
+
+.big {
+	font-size: 15px;
 }
 
 #head {
@@ -164,7 +164,7 @@ li.pad {
 
 #userNav a:hover {
 	text-shadow: #000 1px 1px 2px;
-  color: #fff;
+	color: #fff;
 }
 
 #nav span {
@@ -284,7 +284,8 @@ li.pad {
 #wide h1,
 #tight h1,
 #content h1,
-#leftNav h2 {
+#leftNav h2,
+.tile h2 {
 	background: #dde;
 	border: 1px solid #abc;
 	margin: -18px -18px 8px -18px;
@@ -297,6 +298,12 @@ li.pad {
 	-moz-border-radius-topright: 6px;
 }
 
+.tile h2 {
+	border-color: #dde;
+	padding: 4px 12px;
+	margin: -3px -1px 2px -1px;
+}
+
 #wide {
 	width: 932px;
 }
@@ -307,6 +314,7 @@ li.pad {
 
 #leftNav {
 	width: 198px;
+	min-height: 600px;
 	padding: 0;
 	margin-right: 8px;
 	background: #012;
@@ -427,7 +435,7 @@ li.pad {
 #fb {
 	float: right;
 	width: 282px;
-	height: 23px;
+	height: 80px;
 	background: #eee;
 	padding: 5px 10px;
 	overflow: hidden;
@@ -458,7 +466,7 @@ li.pad {
 	float: right;
 	border: 1px solid #def;
 	width: 260px;
-	height: 271px;
+	height: 214px;
 	background: #cde;
 	padding: 20px;
 	font-size: 14px;
@@ -473,24 +481,24 @@ div.column {
 	width: 33%;
 }
 
-#mrec {
+iframe.mrec,
+iframe.sky {
 	margin-top: 8px;
 	padding: 0;
 	float: right;
-	width: 300px;
-	height: 250px;
 	border: 1px solid #fff;
 	background: #fff;
 }
 
-#sky {
-	margin: 8px 0 0 8px;
-	padding: 0;
-	float: right;
+iframe.mrec {
+	width: 300px;
+	height: 250px;
+}
+
+iframe.sky {
+	margin-left: 8px;
 	width: 160px;
 	height: 600px;
-	border: 1px solid #fff;
-	background: #fff;
 }
 
 #headingNav {
@@ -518,4 +526,40 @@ div.column {
 
 #headingNav a:hover {
 	background: #fff;
+}
+
+div.column {
+	float: left;
+	width: 50%;
+}
+
+div.fourColumn {
+	float: left;
+	width: 25%;
+}
+
+div.tile {
+	border: 1px solid #dde;
+	background: #eef;
+	margin: 0 20px 20px 0;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	padding-bottom: 8px;
+}
+
+div.tile a.nav {
+	display: block;
+	padding: 4px 12px;
+}
+
+div.tile a.nav:hover {
+	background: #fff;
+}
+
+code {
+	display: block;
+	border: 1px solid #ee9;
+	background: #ffd;
+	padding: 4px 8px;
 }

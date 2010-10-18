@@ -1,6 +1,6 @@
 <div id="headingNav">
-	<a href="<?php echo $URL_ROOT; ?>user_guide/get_started/url_routing">&lt;&lt;</a>
-	<a href="<?php echo $URL_ROOT; ?>user_guide/get_started/controllers">&gt;&gt;</a>
+	<a href="<?php echo $URL_ROOT; ?>user_guide/get_started/url_routing">&lt;</a>
+	<a href="<?php echo $URL_ROOT; ?>user_guide/get_started/controllers">&gt;</a>
 </div>
 
 <h1>Directory structure</h1>

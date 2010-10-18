@@ -3,7 +3,7 @@
 	<h3>Background</h3>
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/background/what_is_piephp">What is PiePHP?</a>
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/background/features">Features</a>
-	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/background/server_requirements">Server requirements</a>
+	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/background/requirements">Requirements</a>
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/background/installation">Installation</a>
 	<h3>Get started</h3>
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/get_started/application_flow">Application flow</a>
@@ -18,6 +18,10 @@
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/get_cooking/refresher">Refresher</a>
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/get_cooking/scaffolds">Scaffolds</a>
 	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/get_cooking/persistent_page">Persistent page</a>
+	<h3>API</h3>
+	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/api/classes">Classes</a>
+	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/api/dispatcher">Dispatcher</a>
+	<a class="nav" href="<?php echo $URL_ROOT; ?>user_guide/api/globals">Globals</a>
 	<br class="clear">
 </div>
 
@@ -28,4 +32,4 @@
 	<br class="clear">
 </div>
 
-<iframe id="sky" class="9402400169653768/3278761672" frameborder="0" scrolling="no"></iframe>
+<iframe class="sky 9402400169653768 3278761672"></iframe>

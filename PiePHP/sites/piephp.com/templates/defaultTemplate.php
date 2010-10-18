@@ -32,8 +32,8 @@ if (!is_ajax()) {
 		</span>
 		<form action="<?php echo $HTTP_ROOT; ?>search" id="searchForm">
 			<input type="hidden" name="cx" value="partner-pub-9402400169653768:3w9dl3-dv8z">
-		    <input type="hidden" name="cof" value="FORID:10">
-		    <input type="hidden" name="ie" value="ISO-8859-1">
+				<input type="hidden" name="cof" value="FORID:10">
+				<input type="hidden" name="ie" value="ISO-8859-1">
 			<input type="text" id="search" name="q" title="Search PiePHP.com">
 			<button id="go"></button>
 		</form>
@@ -67,13 +67,13 @@ if (!is_ajax()) {
 		<iframe id="refresher" src="<?php echo $URL_ROOT; ?>refresher" style="display:none"></iframe>
 		<?php
 	}
-  if ($URL_ROOT != '/') {
-    ?>
-    <script type="text/javascript">
-    urlRoot = '<?php echo $URL_ROOT; ?>';
-    </script>
-    <?php
-  }
+	if ($URL_ROOT != '/') {
+		?>
+		<script type="text/javascript">
+		urlRoot = '<?php echo $URL_ROOT; ?>';
+		</script>
+		<?php
+	}
 	?>
 	<script type="text/javascript" src="<?php echo $URL_ROOT; ?>core-<?php echo $VERSION; ?>.js"></script>
 </body>

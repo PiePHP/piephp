@@ -25,4 +25,4 @@ window.fbAsyncInit = function() {
 
 // The script is appended to the DOM, so it will load asynchronously in most browsers.
 // TODO: turn this back on once we have a Facebook app ID.
-//appendScript(document.location.protocol + '//connect.facebook.net/en_US/all.js', 500);
+appendScript(document.location.protocol + '//connect.facebook.net/en_US/all.js', 500);

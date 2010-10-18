@@ -161,8 +161,8 @@ send_output($contents);
  * @param  $className: the name of the class we're trying to use.
  */
 function __autoload($className) {
-  global $SITE_DIR;
-  global $PIE_DIR;
+	global $SITE_DIR;
+	global $PIE_DIR;
 	$autoloadFile = $SITE_DIR . 'classes/' . $className . '.php';
 	if (@include($autoloadFile)) {
 		return;

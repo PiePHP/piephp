@@ -1,6 +1,6 @@
 <div id="headingNav">
-	<a href="<?php echo $URL_ROOT; ?>user_guide">&lt;&lt;</a>
-	<a href="<?php echo $URL_ROOT; ?>user_guide/background/features">&gt;&gt;</a>
+	<a href="<?php echo $URL_ROOT; ?>user_guide">&lt;</a>
+	<a href="<?php echo $URL_ROOT; ?>user_guide/background/features">&gt;</a>
 </div>
 
 <h1>What is PiePHP?</h1>

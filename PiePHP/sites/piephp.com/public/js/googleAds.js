@@ -9,22 +9,23 @@
  */
 
 wire(function(query) {
-	query.find('#mrec,#sky').each(function(i, iframe) {
+	query.find('iframe.mrec,iframe.sky').each(function(iframeIndex, iframe) {
 		setTimeout(function() {
-			var clientAndSlot = iframe.className.split('/');
+			var classNames = iframe.className.split(' ');
+			var iframeQuery = $(iframe).attr('frameborder', 0).attr('scrolling', 'no');
 			var iframeDocument = (iframe.contentWindow || iframe.contentDocument).document;
 			iframeDocument.open();
 			iframeDocument.write('<html>'
 				+ '<head><title>' + $('h1:first').text() + '</title></head>'
 				+ '<body style="margin:0;padding:0">'
+				+ '<div style="display:none">' + $('#body').html().replace(/<[^>]+>/, ' ') + '</div>'
 				+ '<script type="text/javascript">'
-				+ 'google_ad_client = "pub-' + clientAndSlot[0] + '";'
-				+ 'google_ad_slot = "' + clientAndSlot[1] + '";'
-				+ 'google_ad_width = ' + $(iframe).width() + ';'
-				+ 'google_ad_height = ' + $(iframe).height() + ';'
+				+ 'google_ad_client = "pub-' + classNames[1] + '";'
+				+ 'google_ad_slot = "' + classNames[2] + '";'
+				+ 'google_ad_width = ' + iframeQuery.width() + ';'
+				+ 'google_ad_height = ' + iframeQuery.height() + ';'
 				+ '</script>'
 				+ '<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>'
-				+ '<div style="display:none">' + $('#body').html() + '</div>'
 				+ '</body>'
 				+ '</html>');
 			iframeDocument.close();
