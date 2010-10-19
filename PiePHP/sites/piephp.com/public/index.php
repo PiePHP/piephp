@@ -37,8 +37,7 @@ $CACHES = array(
 $ENVIRONMENT = 'production';
 
 // The version number is used when generating minified JavaScript and CSS for a deployment.
-// TODO: Make this actually happen.
-$VERSION = '0.0.1';
+$VERSION = '0.0.2';
 
 // $SITE_DIR is the directory which contains this application's files.
 $SITE_DIR = str_replace('\\', '/', dirname(dirname(__FILE__))) . '/';
