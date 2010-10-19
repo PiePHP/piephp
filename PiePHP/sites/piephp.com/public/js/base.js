@@ -111,6 +111,11 @@ var time = function() {
 	return (new Date()).getTime();
 };
 
+/**
+ * Record the time when JavaScript on this page started processing.
+ */
+var startTime = time();
+
 // TODO: Continue commenting this library (and ideally break it into smaller pieces as well.
 var getPath = function(href) {
 	return href.substring(baseUrl.length).replace(/^\/#/, '');
@@ -188,7 +193,7 @@ var loadContent = function(path, html) {
 	document.title = $('#title').text();
 	$('#loading').remove();
 	lightTab();
-	log(document.cookie);
+	trackPageview(baseUrl + path);
 };
 
 var checkUrl = function() {
