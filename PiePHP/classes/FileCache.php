@@ -48,7 +48,7 @@ class FileCache {
 			if ($value) {
 				list($time, $value) = explode(':', $value, 2);
 				if (time() - $time > $this->expire) {
-					$value = '';
+					$value = NULL;
 				}
 				return $value;
 			}
@@ -71,7 +71,7 @@ class FileCache {
 	 */
 	public function getPath($cacheKey) {
 		global $SITE_DIR;
-		return $SITE_DIR . 'cache/' . $this->prefix . md5($cacheKey) . '.html';
+		return $SITE_DIR . 'cache/' . $this->prefix . md5($cacheKey) . '.cache.html';
 	}
 
 	/**

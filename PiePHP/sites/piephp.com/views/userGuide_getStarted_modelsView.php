@@ -4,3 +4,5 @@
 </div>
 
 <h1>Models</h1>
+
+<p>Models help you to use databases and caches for data storage and retrieval.</p>

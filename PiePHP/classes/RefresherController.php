@@ -45,26 +45,84 @@ class RefresherController extends Controller {
 	}
 
 	/**
+	 * If the refresher file exists, return it in a singleton array.
+	 * Otherwise, return an array of the 10 most recently modified files.
+	 */
+	public function getFilesToCheck() {
+		global $PIE_DIR;
+		global $REFRESHER_FILE;
+		global $REFRESHER_FILES;
+
+		if (isset($REFRESHER_FILE) && file_exists($REFRESHER_FILE)) {
+			return array($REFRESHER_FILE);
+		}
+		else {
+			$REFRESHER_FILES = array();
+
+			/**
+			 * Add a file to an associative array of file paths and modified times.
+			 * @param  $path: the path of the file to check.
+			 * @return true to continue.
+			 */
+			function addFile($path) {
+				global $REFRESHER_FILES;
+				if (strpos($path, '/.') === false
+					&& substr($path, -4) != '.log'
+					&& substr($path, -11) != '.cache.html') {
+					// Add the file and its modified time.
+					$REFRESHER_FILES[$path] = FileUtility::getModifiedTime($path);
+				}
+				// Keep walking.
+				return true;
+			}
+
+			// Walk through the Pie directory looking for the most recently modified files.
+			DirectoryUtility::walk($PIE_DIR, 'addFile');
+
+			// Sort files in descending order of modified time.
+			arsort($REFRESHER_FILES);
+
+			// Return the 10 most recently modified files.
+			return array_keys(array_slice($REFRESHER_FILES, 0, 10));
+		}
+	}
+
+	/**
+	 * Get the maximum modified time among an array of files.
+	 * @param  $files: the array of files whose modified times we want to check.
+	 */
+	public function getMaxModifiedTime($files) {
+		$maxTime = 0;
+		foreach ($files as $file) {
+			$maxTime = max($maxTime, FileUtility::getModifiedTime($file));
+		}
+		return $maxTime;
+	}
+
+	/**
 	 * Check the refresher file every second until we see a change or 10 minutes has passed.
 	 * If we see a change, we can tell the parent page to refresh, otherwise we just reload the refresher frame.
 	 */
 	public function scriptAction() {
-		global $REFRESHER_FILE;
 		global $CACHES;
 		$this->preventCaching();
-		$file = $REFRESHER_FILE;
-		if (!fopen($file, 'r')) {
-			$this->renderScript("alert('$file is not a valid refresher file.')");
-			exit;
+
+		$filesToCheck = $this->getFilesToCheck();
+
+		// The last modified time can be passed in to avoid missing a modification between refresher requests.
+		if (isset($_GET['m'])) {
+			$modifiedTime = $_GET['m'] * 1;
 		}
-		$old = FileUtility::getModifiedTime($file);
+		else {
+			$modifiedTime = $this->getMaxModifiedTime($filesToCheck);
+		}
 
 		// The PHP default is to allow 30 seconds for processing, so we'll give it 25 iterations of a 1-second-sleep loop.
 		for ($i = 0; $i < 25; $i++) {
-			$new = FileUtility::getModifiedTime($file);
+			$newModifiedTime = $this->getMaxModifiedTime($filesToCheck);
 
 			// If the new file's modified date is more recent than the old one's, we can refresh.
-			if ($new > $old) {
+			if ($newModifiedTime > $modifiedTime) {
 
 				// Flushing the caches ensures that we'll see the newest code even if we're on caching pages.
 				foreach ($CACHES as $cacheName => $cacheConfig) {
@@ -92,7 +150,7 @@ class RefresherController extends Controller {
 
 		}
 		// The refresher script is in a frame, so reloading the window will just reload the refresher.
-		$this->renderScript('window.location.reload()');
+		$this->renderScript('window.location = window.location.href.replace(/\?.*$/, "") + "?m=' . $modifiedTime . '"');
 	}
 
 }

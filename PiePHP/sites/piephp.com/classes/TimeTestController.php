@@ -1,6 +1,6 @@
 <?php
 /**
- * The PiePHP home page.
+ * A timing test to compare a simple request for 3 blog posts between several frameworks.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -9,7 +9,7 @@
  * @license    http://www.piephp.com/license
  */
 
-class DefaultController extends CachingController {
+class TimeTestController extends CachingController {
 
 	/**
 	 * Don't use a content template.  The content layout is all in the view.
@@ -20,8 +20,10 @@ class DefaultController extends CachingController {
 	 * Show the home page.
 	 */
 	public function defaultAction() {
-		$this->render(array(
-			'title' => 'PiePHP - The instant gratification framework'
+		$this->loadModel('blogModel');
+		$this->renderView('default_default', array(
+			'title' => 'PiePHP - The instant gratification framework',
+			'posts' => $this->blogModel->posts()
 		));
 	}
 

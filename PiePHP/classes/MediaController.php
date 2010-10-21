@@ -24,7 +24,7 @@ abstract class MediaController extends Controller {
 
 	/**
 	 * Take a request for a file, and assemble the component files.
-	 * @param  $file: The name of the files that is being requested (e.g. "core-0.0.1.js").
+	 * @param  $file: The name of the files that is being requested (e.g. "core-1.0.js").
 	 */
 	public function catchAllAction($file) {
 		global $VERSION;
@@ -65,7 +65,7 @@ abstract class MediaController extends Controller {
 
 		if ($ENVIRONMENT != 'development') {
 			$contents = $this->minify($contents);
-			file_put_contents($SITE_DIR . 'public/' . $file, $contents);
+			file_put_contents($SITE_DIR . 'public/' . $this->fileType . '/' . $file, $contents);
 		}
 	}
 
