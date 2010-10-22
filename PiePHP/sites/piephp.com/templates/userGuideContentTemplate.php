@@ -32,4 +32,4 @@
 	<br class="clear">
 </div>
 
-<iframe class="sky 9402400169653768 3278761672"></iframe>
+<iframe class="sky 9402400169653768 3278761672" frameborder="0" scrolling="no"></iframe>

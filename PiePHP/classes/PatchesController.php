@@ -33,7 +33,9 @@ class PatchesController extends Controller {
 			$nextOrdinal = $model->selectValue('MAX(ordinal) FROM patches') + 1;
 			$model->ignoreErrors = false;
 
-			while (file_exists($path = $SITE_DIR . 'patches/' . $databaseName . '_database/patch' . sprintf('%05d', $nextOrdinal) . '.sql')) {
+			$patchesDir = $SITE_DIR . 'patches/' . $databaseName . '_database/';
+
+			while (file_exists($path = $patchesDir . 'patch' . sprintf('%05d', $nextOrdinal) . '.sql')) {
 				$patched = true;
 				//echo 'Running ' . $path . '...<br/>';
 				$statements = preg_split('/;[\r\n]/', file_get_contents($path));

@@ -12,7 +12,7 @@ wire(function(query) {
 	query.find('iframe.mrec,iframe.sky').each(function(iframeIndex, iframe) {
 		setTimeout(function() {
 			var classNames = iframe.className.split(' ');
-			var iframeQuery = $(iframe).attr('frameborder', 0).attr('scrolling', 'no');
+			var iframeQuery = $(iframe);
 			var iframeDocument = (iframe.contentWindow || iframe.contentDocument).document;
 			iframeDocument.open();
 			iframeDocument.write('<html>'

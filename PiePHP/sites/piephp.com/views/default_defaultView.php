@@ -16,7 +16,7 @@
 	<?php echo '<fb:like width="282"></fb:like>'; ?>
 </div>
 
-<iframe class="mrec 9402400169653768 0109456368"></iframe>
+<iframe class="mrec 9402400169653768 0109456368" frameborder="0" scrolling="no"></iframe>
 
 <div id="features">
 	<h2>What's in the pie?</h2>
@@ -39,16 +39,4 @@
 	<h2>What's new?</h2>
 	<p>We're actively seeking talented contributors.  If you love getting things done quickly and painlessly, and if you have a knack for PHP and/or jQuery, then please get in touch with us to find out how you can be a part of the team.</p>
 </div>
-
-<var><?
-foreach ($posts as $post) {
-	?>
-	<?=$post['id']?>,
-	<?=$post['title']?>,
-	<?=$post['body']?>,
-	<?=$post['created']?>,
-	<?=$post['modified']?>,
-	<?
-}
-?></var>
 
