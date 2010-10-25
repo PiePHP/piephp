@@ -171,12 +171,15 @@ abstract class Scaffold extends Controller {
 			}
 			if ($this->action == 'add' || $this->submitButtonValue == 'new') {
 				$this->processInsert();
+				$this->notifyConfirmation('Added 1 ' . $this->singular . '.');
 			}
 			else if ($this->action == 'change') {
 				$this->processUpdate();
+				$this->notifyConfirmation('Changed 1 ' . $this->singular . '.');
 			}
 			else if ($this->action == 'remove') {
 				$this->processDelete();
+				$this->notifyConfirmation('Removed 1 ' . $this->singular . '.');
 			}
 			$this->sendRedirect($this->getRedirectUrl());
 

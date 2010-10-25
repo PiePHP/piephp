@@ -142,6 +142,7 @@ call_user_func_array(array(&$CONTROLLER, $ACTION_NAME), $PARAMETERS);
 
 $contents = trim(ob_get_clean());
 // If there was an error, then don't minify.
+// TODO: Ensure that minification doesn't mess up content inside <pre> tags, then reenable error minification.
 if (!isset($ERRORS_CONTROLLER)) {
 	$contents = preg_replace('/>[\\r\\n\\t]+</ms', '><', $contents);
 	$contents = preg_replace('/\\s+/ms', ' ', $contents);
@@ -266,8 +267,8 @@ function send_output($output) {
 	if (count($NOTIFICATIONS)) {
 		$blocks = '';
 		foreach ($NOTIFICATIONS as $notification) {
-			list($type, $message) = explode(' ', $notification . ' ');
-			$blocks .= '<div class="' . $type . '">' . htmlentities($message) . '</div>';
+			list($type, $message) = explode(' ', $notification . ' ', 2);
+			$blocks .= '<ins class="' . $type . '">' . htmlentities($message) . '</ins>';
 		}
 		$output = str_replace('<var>NOTIFICATIONS</var>', $blocks, $output);
 	}
@@ -276,7 +277,7 @@ function send_output($output) {
 }
 
 /**
- * Whether a page was requested via AJAX
+ * Whether a page was requested via AJAX.
  * @return true if the page was requested via AJAX.
  */
 function is_ajax() {

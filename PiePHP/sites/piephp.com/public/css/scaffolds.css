@@ -81,8 +81,7 @@ input[type=radio] {
 
 input,
 textarea,
-select,
-button {
+select {
 	margin-right: 2px;
 }
 
@@ -243,6 +242,8 @@ form.code u {
 form.code blockquote code {
 	display: block;
 	white-space: nowrap;
+	padding: 0;
+	border: 0;
 }
 
 form.code blockquote i {
@@ -324,4 +325,29 @@ a.remove {
 a.remove,
 a.cancel {
 	color: #c00;
+}
+
+ins.error,
+ins.warning,
+ins.confirmation {
+	display: block;
+	margin-top: 8px;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	padding: 8px 8px 8px 28px;
+	text-decoration: none;
+	color: #000;
+}
+
+ins.error {
+	background: #fcc;
+}
+
+ins.warning {
+	background: #ffc;
+}
+
+ins.confirmation {
+	background: #bfb;
 }

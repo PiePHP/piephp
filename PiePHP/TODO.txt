@@ -1,11 +1,8 @@
-Installer
-Make an "Incorrect username or password" message
 Fix password validation
 Forgot password
-------------------------
-Eliminate refresher race conditions
+Installer
 User guide
-Enable multiple refresher files
+------------------------
 News/blog
 Admin: Pagination
 Admin: Filters

@@ -66,6 +66,27 @@ abstract class Controller {
 	}
 
 	/**
+	 * Load one of this controller's properties with a model
+	 * @param  $propertyName: optional property name to override the default property "model"
+	 * @param  $className: optional class name to use instead of the default Model class.
+	 * @return the model, in case we want to chain from the load call.
+	 */
+	public function loadModel($propertyName = NULL, $className = NULL) {
+		if ($propertyName !== NULL) {
+			$className = ucfirst($propertyName);
+		}
+		else {
+			$propertyName = 'model';
+			$className = $this->defaultModelClassName;
+		}
+		if (!isset($this->$propertyName)) {
+			$className = ucfirst($propertyName);
+			$this->$propertyName = new $className();
+		}
+		return $this->$propertyName;
+	}
+
+	/**
 	 * Include a view (by way of including a template if there is one).
 	 * @param  $viewName: the name of the view to be included.
 	 * @param  $data: optional data to be passed in to the view.
@@ -149,27 +170,6 @@ abstract class Controller {
 	}
 
 	/**
-	 * Load one of this controller's properties with a model
-	 * @param  $propertyName: optional property name to override the default property "model"
-	 * @param  $className: optional class name to use instead of the default Model class.
-	 * @return the model, in case we want to chain from the load call.
-	 */
-	public function loadModel($propertyName = NULL, $className = NULL) {
-		if ($propertyName !== NULL) {
-			$className = ucfirst($propertyName);
-		}
-		else {
-			$propertyName = 'model';
-			$className = $this->defaultModelClassName;
-		}
-		if (!isset($this->$propertyName)) {
-			$className = ucfirst($propertyName);
-			$this->$propertyName = new $className();
-		}
-		return $this->$propertyName;
-	}
-
-	/**
 	 * Set a combination of headers to prevent clients from caching the response.
 	 */
 	public function preventCaching() {
@@ -241,12 +241,37 @@ abstract class Controller {
 	}
 
 	/**
+	 * Add a message to the list of notifications we want to display.
+	 * @param  $type: the type of message (error, warning or confirmation).
+	 * @param  $message: the message to be displayed.
+	 */
+	private function notify($type, $message) {
+		global $NOTIFICATIONS;
+		$NOTIFICATIONS[] = $type . ' ' . $message;
+	}
+
+	/**
 	 * Add an error message to the list of notifications we want to send.
 	 * @param  $message: the error message to be displayed.
 	 */
 	public function notifyError($message) {
-		global $NOTIFICATIONS;
-		$NOTIFICATIONS[] = 'error ' . $message;
+		$this->notify('error', $message);
+	}
+
+	/**
+	 * Add a warning message to the list of notifications we want to send.
+	 * @param  $message: the warning message to be displayed.
+	 */
+	public function notifyWarning($message) {
+		$this->notify('warning', $message);
+	}
+
+	/**
+	 * Add a confirmation message to the list of notifications we want to send.
+	 * @param  $message: the confirmation message to be displayed.
+	 */
+	public function notifyConfirmation($message) {
+		$this->notify('confirmation', $message);
 	}
 
 }

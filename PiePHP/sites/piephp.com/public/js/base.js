@@ -337,7 +337,11 @@ var loadVeil = window.loadVeil = function(html) {
 	var dialogQuery = $('#dialog');
 	$('#cell')
 		.html(html).css({opacity: 1})
-		.prepend($('<button id="close" class="main"><b id="x">X</b></button>').click(hideVeil))
+		.append($('<button id="close" class="main"><b id="x">X</b></button>').click(function() {
+			hideVeil();
+		}).focus(function() {
+			return false;
+		}))
 	dialogQuery
 		.css({marginLeft: -dialogQuery.width() / 2})
 		.find('br:last').remove();
@@ -417,7 +421,7 @@ $(document)
 		}
 	})
 	.delegate('form', 'submit', function(event) {
-		// Mimic AJAX posting by submitting the form through the "submitter" iframe
+		// Mimic AJAX posting by submitting the form through the "submitter" iframe.
 		if ($('#submitter').size()) {
 			var form = this;
 			var action = form.action;
@@ -485,7 +489,7 @@ $('<iframe name="submitter" id="submitter" style="display:none"/>')
 		var doc = this.contentWindow.document;
 		var href = doc.location.href;
 		if (href != 'about:blank' && !href.has('errors/rewrite')) {
-			var path = getPath(href).replace(/[\?&]isAjax=[01]/, '');
+			var path = getPath(href).replace(/[\?&]is(Ajax|Frame|Dialog)=[01]/g, '');
 			loadContent(path, doc.body.innerHTML);
 		}
 	});
