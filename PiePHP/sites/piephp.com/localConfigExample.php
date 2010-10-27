@@ -2,7 +2,9 @@
 
 $ENVIRONMENT = 'development';
 
-$DATABASES['default'] = 'mysql:host=localhost username=YOUR_USERNAME password=YOUR_PASSWORD database=piephp';
+$DATABASES['default'] = 'mysql:host=localhost database=piephp username=YOUR_USERNAME password=YOUR_PASSWORD';
+//$DATABASES['default'] = 'pg:host=localhost port=5432 dbname=piephp user=YOUR_USERNAME password=YOUR_PASSWORD';
+
 $CACHES['default'] = 'file:expire=10';
 $CACHES['pages'] = 'file:prefix=piephp_pages_ expire=10';
 

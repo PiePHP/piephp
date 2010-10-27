@@ -32,16 +32,24 @@ class Model {
 	public $cache = NULL;
 
 	/**
-	 * Get the driver type and config array from a config string.
+	 * Get the driver type and DBMS-specific config from a PiePHP config string.
+	 * @param $configString: A string like "mysql:host=YOUR_HOST username=YOUR_USER password=YOUR_PW database=YOUR_DB".
 	 */
 	public function getTypeAndConfig($configString) {
 		list($type, $string) = explode(':', $configString, 2);
+
+		// pg_connect takes a connection string, so for PostgreSQL, we don't need to break it into an array.
+		if ($type == 'pg') {
+			return array($type, $string);
+		}
+
 		$pairs = explode(' ', $string);
 		$config = array();
 		foreach ($pairs as $pair) {
 			list($key, $value) = explode('=', $pair, 2);
 			$config[$key] = $value;
 		}
+		$config['string'] = $string;
 		return array($type, $config);
 	}
 
@@ -61,6 +69,9 @@ class Model {
 				list($type, $config) = $this->getTypeAndConfig($database);
 				if ($type == 'mysql') {
 					$this->database = new MysqlDatabase($config, $this->databaseConfigName);
+				}
+				else if ($type == 'pg') {
+					$this->database = new PgDatabase($config, $this->databaseConfigName);
 				}
 				else {
 					trigger_error("Unsupported database: $this->databaseConfigName, type: $type", E_USER_ERROR);
