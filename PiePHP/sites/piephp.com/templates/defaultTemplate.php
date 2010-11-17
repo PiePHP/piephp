@@ -7,14 +7,21 @@ if (!is_ajax()) {
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
 <html>
 <head>
-	<title><?php echo $title; ?></title>
+	<title><?php echo htmlentities($title); ?></title>
+    <meta <?php echo 'property="og:title"'; ?> content="<?php echo htmlentities($title); ?>"/>
+    <meta <?php echo 'property="og:type"'; ?> content="non_profit"/>
+    <meta <?php echo 'property="og:url"'; ?> content="<?php echo $HTTP_ROOT; ?>"/>
+    <meta <?php echo 'property="og:image"'; ?> content="<?php echo $URL_ROOT; ?>img/pie.gif"/>
+    <meta <?php echo 'property="og:site_name"'; ?> content="PiePHP"/>
+    <meta <?php echo 'property="fb:admins"'; ?> content="USER_ID"/>
+    <meta <?php echo 'property="og:description"'; ?> content=""/>
 	<link rel="stylesheet" href="<?php echo $URL_ROOT; ?>css/core-<?php echo $VERSION; ?>.css" type="text/css">
 	<link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
 	<form id="form"></form>
 	<div id="head">
-		<a href="<?php echo $HTTP_ROOT; ?>" id="logo">PiePHP</a>
+		<a href="<?php echo $HTTP_ROOT; ?>" id="logo">It's PiePHP</a>
 		<div id="user">
 			<u id="userNav">
 				<a href="<?php echo $HTTP_ROOT; ?>sign_up" class="veil"><b>Sign Up</b></a>
@@ -62,7 +69,7 @@ if (!is_ajax()) {
 		Copyright &copy; 2007-2010, Pie Software Foundation, All rights reserved
 	</div>
 	<?php
-	if ($ENVIRONMENT == 'development') {
+	if ($ENVIRONMENT == 'development' && isset($REFRESHER_ENABLED) && $REFRESHER_ENABLED) {
 		?>
 		<iframe id="refresher" src="<?php echo $URL_ROOT; ?>refresher" style="display:none"></iframe>
 		<?php

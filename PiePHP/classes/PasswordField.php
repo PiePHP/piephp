@@ -1,6 +1,6 @@
 <?php
 /**
- * A PasswordField consists of the old password if necessary, plus the new password and a confirmation password.
+ * A PasswordField consists of the current password if necessary, plus the new password and a confirmation password.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -22,7 +22,12 @@ class PasswordField extends MultiField {
 	public $maxlength = 32;
 
 	/**
-	 * The new password is required.
+	 * The current password is required when a non-admin is trying to change a password.
+	 */
+	public $currentPassword;
+
+	/**
+	 * The new password is required when adding, and is required for changing a password.
 	 */
 	public $newPassword;
 
@@ -30,6 +35,11 @@ class PasswordField extends MultiField {
 	 * A confirmation password pretty much ensures that the user hasn't mis-typed the new password.
 	 */
 	public $confirmPassword;
+
+	/**
+	 * Show a strength meter by default.
+	 */
+	public $showStrength = true;
 
 	/**
 	 * Initialize the field by creating its component fields.
@@ -41,13 +51,21 @@ class PasswordField extends MultiField {
 		$this->fields = array();
 		$required = $settings['required'] && $scaffold->action == 'add';
 
-		if ($scaffold->action == 'change') {
+		$scaffold->session->userGroups = array(4);
+
+		$userCanChangeOthersPasswords = $scaffold->userIsInGroup(array(
+			1, // System administrators
+			2, // Developers
+			3, // Administrators
+		));
+
+		if ($scaffold->action == 'change' && !$userCanChangeOthersPasswords) {
 
 			$this->fields[] = $this->currentPassword = new Field(array(
 				'name' => 'current_' . $settings['name'],
 				'type' => 'Password',
 				'cssClass' => 'currentPassword password',
-				'advice' => 'To change your password, you must provide your password.',
+				'advice' => say('To change your password, you must provide your current password.'),
 				'required' => $required
 			), $scaffold);
 
@@ -58,7 +76,15 @@ class PasswordField extends MultiField {
 			'type' => 'Password',
 			'cssClass' => 'newPassword password',
 			'required' => $required,
-			'label' => $scaffold->action == 'add' ? 'Choose a password' : 'New password'
+			'label' => say($scaffold->action == 'add' ? 'Choose a password' : 'New password'),
+			'tip' => $this->showStrength ?
+				'<i class="tip passwordStrength"><var>' .
+				say('Weak', 'password strength') .
+				'</var><var>' .
+				say('Good', 'password strength') .
+				'</var><var>' .
+				say('Strong', 'password strength') .
+				'</var><b class="meter"></b></i>' : NULL
 		), $scaffold);
 
 		if ($scaffold->action == 'add' || $scaffold->action == 'change') {
@@ -67,9 +93,9 @@ class PasswordField extends MultiField {
 				'name' => 'confirm_' . $settings['name'],
 				'type' => 'Password',
 				'cssClass' => 'confirmPassword password',
-				'advice' => 'Please type the password again for confirmation.',
+				'advice' => say('Please type the password again for confirmation.'),
 				'required' => $required,
-				'label' => 'Re-type password'
+				'label' => say('Re-type password')
 			), $scaffold);
 		}
 
@@ -104,8 +130,8 @@ class PasswordField extends MultiField {
 		// Whether we're adding or changing, the newPassword value must match the confirmPassword value.
 		$isValid = ($this->newPassword->getValue() == $this->confirmPassword->getValue());
 
-		// If we're changing a password and we're not an administrator, the current password is required.
-		if ($this->scaffold->action == 'change' && $this->newPassword->getValue()) {
+		// If the user is setting a new password and the currentPassword field exists, it must be correct.
+		if ($this->newPassword->getValue() && $this->currentPassword) {
 			$hash = $this->hash($this->currentPassword->getValue());
 			$sql = $this->column . '
 				FROM ' . $this->scaffold->table . '
@@ -114,7 +140,9 @@ class PasswordField extends MultiField {
 			if ($hash != $result[$this->column]) {
 				$isValid = false;
 				$this->currentPassword->hasValidationErrors = true;
-				$this->currentPassword->advice = 'The password was incorrect.';
+				if ($this->currentPassword->getValue()) {
+					$this->currentPassword->advice = say('The password you entered does not match your current password.');
+				}
 			}
 		}
 		return $isValid;

@@ -35,7 +35,7 @@ code u {
 <p>The routing logic would take the upper camel case controller and lower camel case action, and append "Controller" and "Action" to them respectively.  So it would try to do something like this:
 	<code>
 	$controller = new <b>Forums</b>Controller();<br>
-	$controller-><i>post</i>Action(<u>'reply'</u>, <u>'1234'</u>);
+	$controller-&gt;<i>post</i>Action(<u>'reply'</u>, <u>'1234'</u>);
 	</code>
 </p>
 
@@ -47,7 +47,7 @@ code u {
 <p>The routing logic would take the upper camel case controller and call its defaultAction:
 	<code>
 	$controller = new <b>Forums</b>Controller();<br>
-	$controller-><i>default</i>Action();
+	$controller-&gt;<i>default</i>Action();
 	</code>
 </p>
 
@@ -59,7 +59,7 @@ code u {
 <p>The routing logic would just use the DefaultController's defaultAction:
 	<code>
 	$controller = new <b>Default</b>Controller();<br>
-	$controller-><i>default</i>Action();
+	$controller-&gt;<i>default</i>Action();
 	</code>
 </p>
 
@@ -71,6 +71,6 @@ code u {
 <p>The routing logic would look for the NewsController's piePhpIsComingToChicagoAction. When it doesn't find that, it will resort to the NewsController's catchAllAction:
 	<code>
 	$controller = new <b>News</b>Controller();<br>
-	$controller->catchAllAction(<i>"PiePHP is coming to Chicago"</i>);
+	$controller-&gt;catchAllAction(<i>"PiePHP is coming to Chicago"</i>);
 	</code>
 </p>

@@ -21,7 +21,7 @@ class CacheToolsController extends Controller {
 			$this->statsAction($names[0]);
 			exit;
 		}
-		$this->renderView('cacheTools_default', array(
+		$this->renderView('cacheTools/default', array(
 			'caches' => $CACHES
 		));
 	}

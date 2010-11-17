@@ -22,7 +22,7 @@ class Field {
 	public $column = '';
 
 	/**
-	 * The field type is used by scaffolds to instantiate its subclass.
+	 * The field type is used by scaffolds to instantiate subclasses.
 	 * TODO: Determine whether it's necessary for this to be a property.
 	 */
 	public $type = 'Field';
@@ -102,8 +102,8 @@ class Field {
 		echo '<div>';
 			echo '<label>' . $this->getLabel() . '</label>';
 			$this->renderInput();
-			$this->renderAdvice();
 			$this->renderTip();
+			$this->renderAdvice();
 		echo '</div>';
 	}
 
@@ -120,11 +120,13 @@ class Field {
 	 * The input can be overridden to be a textarea, select, radios, checkboxes, etc.
 	 */
 	public function renderInput() {
-		echo '<input type="' . $this->type . '" name="' . $this->name . '"';
+		echo '<input type="' . ($this->type == 'Password' ? 'password' : 'text') . '" name="' . $this->name . '"';
 		if ($this->maxlength) {
 			echo ' maxlength="' . $this->maxlength . '"';
 		}
-		$this->renderInputClass();
+		if ($className = $this->getInputClass()) {
+			echo ' class="' . $className . '"';
+		}
 		echo ' value="' . htmlentities($this->type == 'password' ? '' : $this->getValue()) . '"';
 		if ($this->hint) {
 			echo ' title="' . htmlentities($this->hint) . '"';
@@ -154,23 +156,24 @@ class Field {
 	}
 
 	/**
-	 * Render the CSS class for this field.
-	 * TODO: This might be more straightforward if it returned a value.
+	 * Get the CSS class for this field for style and validation purposes.
+	 * @return the class name.
 	 */
-	public function renderInputClass() {
+	public function getInputClass() {
 		$className = $this->cssClass ? $this->cssClass : lower_camel($this->type);
 		if ($this->required) {
 			$className = 'required ' . $className;
 		}
-		if ($className) {
-			echo ' class="' . $className . '"';
-		}
+		return $className;
 	}
 
 	/**
 	 * Render a tip message that explains the usage of this method.
 	 */
 	public function renderTip() {
+		if (isset($this->tip)) {
+			echo $this->tip;
+		}
 	}
 
 	/**

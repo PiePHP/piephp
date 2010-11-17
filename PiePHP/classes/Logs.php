@@ -1,7 +1,7 @@
 <?php
 /**
- * Write to log files in the application's logs directory.
- * If this is a production, we'll only write to the error log.
+ * Write to log files in the sites's logs directory.
+ * When in a production environment, we'll only write to the error log.
  *
  * @author     Sam Eubank <sam@piephp.com>
  * @package    PiePHP
@@ -43,7 +43,7 @@ class Logs {
 	 */
 	private static function appendLogMessage($logName, $message) {
 		global $SITE_DIR;
-		FileUtility::appendLine($SITE_DIR . 'logs/' . $logName, $message);
+		FileUtility::appendLine($SITE_DIR . 'data/logs/' . $logName, $message);
 	}
 
 }

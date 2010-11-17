@@ -188,13 +188,14 @@ class Model {
 	 * Query the cache, or failing that, the database, and return results.
 	 * @param  $sql: the SQL query to execute.
 	 * @param  $cacheTimeInSeconds: the number of seconds to store these database results in the cache.
-	 * @param  $valuesOnly: whether to return values only, or return column names as well.
-	 * @return results as an array of associative arrays (or an array of arrays if $valuesOnly == true).
+	 * @param  $returnAssociativeArrays: whether to return each row as an associative array.
+	 * @return results as an array of associative arrays (or an array of arrays if $returnAssociativeArrays == false).
 	 */
-	public function select($sql, $cacheTimeInSeconds = false, $valuesOnly = false) {
+	public function select($sql, $cacheTimeInSeconds = false, $returnAssociativeArrays = true) {
 		// Try getting cached results.
 		if ($cacheTimeInSeconds !== false && $this->loadCache()) {
-			$cacheKey = strlen($sql) < 255 ? $sql : md5($sql);
+			$cacheKey = $sql . ($returnAssociativeArrays ? '' : '!');
+			$cacheKey = strlen($cacheKey) < 255 ? $cacheKey : md5($cacheKey);
 			$value = $this->cache->get($cacheKey);
 			if ($value) {
 				return unserialize($value);
@@ -205,7 +206,7 @@ class Model {
 		}
 		// No results from the cache, so connect to the database and get them.
 		$this->loadDatabase();
-		$results = $this->database->select($sql, $valuesOnly);
+		$results = $this->database->select($sql, $returnAssociativeArrays);
 		// Try caching results for next time.
 		if ($cacheTimeInSeconds !== false) {
 			$this->cache->set($cacheKey, serialize($results), $cacheTimeInSeconds);
@@ -220,7 +221,7 @@ class Model {
 	 * @return the result as an associative array (or NULL if there were no results).
 	 */
 	public function selectRow($sql, $cacheTimeInSeconds = false) {
-		return array_shift($this->select($sql, $cacheTimeInSeconds, true));
+		return array_shift($this->select($sql, $cacheTimeInSeconds, false));
 	}
 
 	/**
@@ -251,7 +252,7 @@ class Model {
 	 */
 	public function selectMap($sql, $cacheTimeInSeconds = false) {
 		$map = array();
-		$results = $this->select($sql, $cacheTimeInSeconds, true);
+		$results = $this->select($sql, $cacheTimeInSeconds, false);
 		foreach ($results as $result) {
 			list($key, $value) = $result;
 			$map[$key] = $value;
@@ -260,14 +261,14 @@ class Model {
 	}
 
 	/**
-	 * Query the cache or database, then return an array .
+	 * Query the cache or database, then return an array with one value from each row.
 	 * @param  $sql: a SQL query that selects two columns.
 	 * @param  $cacheTimeInSeconds: the number of seconds to store this database result in the cache.
-	 * @return an associative array with keys from the first query column and values from the second.
+	 * @return an array with one value from each row.
 	 */
 	public function selectValues($sql, $cacheTimeInSeconds = false) {
 		$values = array();
-		$results = $this->select($sql, $cacheTimeInSeconds, true);
+		$results = $this->select($sql, $cacheTimeInSeconds, false);
 		foreach ($results as $result) {
 			$values[] = $result;
 		}

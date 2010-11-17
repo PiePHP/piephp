@@ -41,7 +41,7 @@ class ErrorsController extends Controller {
 	 * @param  $errorCode:
 	 */
 	public function processError($errorCode) {
-		$this->renderView('errors_' . $errorCode, array(
+		$this->renderView('errors/' . $errorCode, array(
 			'title' => $errorCode . ' Error'
 		));
 	}

@@ -22,7 +22,7 @@ class ViewMapperController extends CachingController {
 			$arguments = array('default');
 		}
 		foreach ($arguments as $argument) {
-			$viewName .= '_' . lower_camel($argument);
+			$viewName .= '/' . lower_camel($argument);
 		}
 		$this->renderView($viewName);
 	}

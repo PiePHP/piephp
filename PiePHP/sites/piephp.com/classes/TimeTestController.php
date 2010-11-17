@@ -21,7 +21,7 @@ class TimeTestController extends CachingController {
 	 */
 	public function defaultAction() {
 		$this->loadModel('blogModel');
-		$this->renderView('timeTest_default', array(
+		$this->renderView('timeTest/default', array(
 			'title' => 'PiePHP - The instant gratification framework',
 			'posts' => $this->blogModel->posts()
 		));

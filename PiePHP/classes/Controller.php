@@ -58,9 +58,17 @@ abstract class Controller {
 
 	/**
 	 * If the second part of the URL does not match a known action for the controller, its catchAllAction is called.
-	 * This can be overridden if we wish to deal with arbitrary URLs.
+	 * Subclasses can override this method in order to deal with arbitrary URLs.
 	 */
 	public function catchAllAction() {
+		// If the catchAllAction is not overridden, an undefined action should result in a 404.
+		$this->show404();
+	}
+
+	/**
+	 * Show a 404 page and report it as having been shown.
+	 */
+	public function show404() {
 		$errorsController = new ErrorsController();
 		$errorsController->processError(404);
 	}
@@ -103,6 +111,7 @@ abstract class Controller {
 		global $ENVIRONMENT;
 		global $VERSION;
 		global $NEED_TITLE;
+		global $REFRESHER_ENABLED;
 
 		// Put the data into variables that can be referred to within the scope of the template and view.
 		if (is_array($data)) {
@@ -124,11 +133,10 @@ abstract class Controller {
 
 		// If the view still isn't there, this is a 404.
 		if (!file_exists($viewPath)) {
-			$errorsController = new ErrorsController();
 			if ($ENVIRONMENT == 'development') {
-				$errorsController->notifyError('View file "' . $viewPath . '" does not exist.');
+				$this->notifyError('View file "' . $viewPath . '" does not exist.');
 			}
-			$errorsController->processError(404);
+			$this->show404();
 			exit;
 		}
 
@@ -155,16 +163,22 @@ abstract class Controller {
 		global $CONTROLLER_NAME;
 		global $ACTION_NAME;
 
-		// Slice "Controller" off the end of the controller name, and lowercase the first letter.
+		// Slice "Controller" off the end of the controller name.
 		$controller = substr($CONTROLLER_NAME, 0, -10);
+		// Make the first letter lower case, so this can be lowerCamelCase.
 		$controller[0] = strtolower($controller[0]);
+		// If it was a child controller like Store_ItemsController, make the underscores into directory separators.
+		while ($position = strpos($controller, '_')) {
+			$controller[$position] = '/';
+			$controller[$position + 1] = strtolower($controller[$position + 1]);
+		}
 
 		// Slice "Action" off the end of the action name.
 		$action = substr($ACTION_NAME, 0, -6);
 
 		// For example, the MyAccountController's profileSettingsAction will have the viewName "myAccount_profileSettings".
-		// This viewName will resolve to the file: "/views/myAccount_profileSettingsView.php"
-		$viewName = $controller . '_' . $action;
+		// This viewName will resolve to the file: "/views/myAccount/profileSettingsView.php"
+		$viewName = $controller . '/' . $action;
 
 		$this->renderView($viewName, $data, $templateName);
 	}
@@ -212,42 +226,60 @@ abstract class Controller {
 	}
 
 	/**
-	 * Set a cookie for any notifications so that they can be displayed in the page we're redirecting to.
+	 * Set a cookie for any notifications so they can be displayed in the page we're redirecting to.
 	 */
 	public function setNotificationsCookie() {
 		global $NOTIFICATIONS;
 		if (count($NOTIFICATIONS)) {
-			setcookie('notifications', join(',', str_replace(',', '&comma;', $this->notifications)), 0, '/');
+			setcookie('notifications', serialize($NOTIFICATIONS), 0, '/');
 		}
 	}
 
 	/**
-	 * Authenticate a user.
-	 * @param  $allowedGroups: an array of user group names that are allowed access.
+	 * Ensure that the controller has a session to use.
 	 */
-	public function authenticate($allowedGroups = NULL) {
-		$this->session = new Session();
+	public function ensureSession() {
+		if (!$this->session) {
+			$this->session = new Session();
+		}
+	}
+
+	/**
+	 * Make sure the user is in a group that is authorized.
+	 * @param  $authorizedGroups: an ID or array of IDs for authorized user groups.
+	 */
+	public function authorize($authorizedGroups = NULL) {
+		$this->ensureSession();
+		// If the user hasn't signed in, they're definitely not authorized.
 		if (!$this->session->isSignedIn) {
 			$signInController = new SignInController();
 			$signInController->defaultAction();
 			exit;
+			// TODO: Find a way to avoid skipping the dispatcher's finishing tasks.
 		}
-		$intersect = array_intersect($this->session->userGroups, $allowedGroups);
-		if (!count($intersect)) {
+		//
+		if (!$this->userIsInGroup($authorizedGroups)) {
 			$errorsController = new ErrorsController();
 			$errorsController->processError(401);
 			exit;
+			// TODO: Find a way to avoid skipping the dispatcher's finishing tasks.
 		}
 	}
 
 	/**
-	 * Add a message to the list of notifications we want to display.
-	 * @param  $type: the type of message (error, warning or confirmation).
-	 * @param  $message: the message to be displayed.
+	 * Find out if a user is in one or more groups.
+	 * @param  $groups: an ID or array of IDs for authorized user groups.
 	 */
-	private function notify($type, $message) {
-		global $NOTIFICATIONS;
-		$NOTIFICATIONS[] = $type . ' ' . $message;
+	public function userIsInGroup($groups = NULL) {
+		$this->ensureSession();
+		// Ensure that we're working with an array.
+		// TODO: Determine whether this is necessary.
+		if (!is_array($groups)) {
+			$groups = array($groups);
+		}
+		// Find out the whether the user's groups and the argument groups have IDs in common.
+		$intersection = array_intersect($this->session->userGroups, $groups);
+		return count($intersection) > 1;
 	}
 
 	/**
@@ -272,6 +304,16 @@ abstract class Controller {
 	 */
 	public function notifyConfirmation($message) {
 		$this->notify('confirmation', $message);
+	}
+
+	/**
+	 * Add a message to the list of notifications we want to display.
+	 * @param  $type: the type of message (error, warning or confirmation).
+	 * @param  $message: the message to be displayed.
+	 */
+	private function notify($type, $message) {
+		global $NOTIFICATIONS;
+		$NOTIFICATIONS[] = $type . ' ' . $message;
 	}
 
 }

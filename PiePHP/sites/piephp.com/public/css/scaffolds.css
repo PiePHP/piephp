@@ -98,6 +98,25 @@ input.password {
 	width: 200px;
 }
 
+i.tip {
+	display: inline-block;
+	font: bold 11px Arial;
+	color: #999;
+}
+
+i.passwordStrength {
+	display: none;
+	vertical-align: top;
+	margin-left: 4px;
+}
+
+i.passwordStrength b.meter {
+	display: block;
+	border: 1px solid #666;
+	height: 6px;
+	width: 100px;
+}
+
 input.hint,
 textarea.hint {
 	color: #aaa;
@@ -242,8 +261,8 @@ form.code u {
 form.code blockquote code {
 	display: block;
 	white-space: nowrap;
-	padding: 0;
-	border: 0;
+	padding: 0!important;
+	border: 0!important;
 }
 
 form.code blockquote i {
@@ -278,7 +297,8 @@ table {
 	border-spacing: 0;
 }
 
-th, td {
+th,
+td {
 	padding: 3px 6px;
 }
 
@@ -327,12 +347,13 @@ a.cancel {
 	color: #c00;
 }
 
-ins.error,
-ins.warning,
-ins.confirmation {
+h4.error,
+h4.warning,
+h4.confirmation {
 	display: block;
 	margin-top: 8px;
 	border-radius: 8px;
+	border: 2px solid #fff;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	padding: 8px 8px 8px 28px;
@@ -340,14 +361,17 @@ ins.confirmation {
 	color: #000;
 }
 
-ins.error {
-	background: #fcc;
+h4.error {
+	background: #fbb;
+	color: #600;
 }
 
-ins.warning {
-	background: #ffc;
+h4.warning {
+	background: #ffb;
+	color: #660;
 }
 
-ins.confirmation {
-	background: #bfb;
+h4.confirmation {
+	background: #9f9;
+	color: #040;
 }

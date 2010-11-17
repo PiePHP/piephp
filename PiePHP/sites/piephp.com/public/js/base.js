@@ -263,6 +263,7 @@ var validationRules = {
 	username: {test: /^[a-zA-Z0-9_\.-]+$/},
 	password: {minlength: 4},
 	confirmPassword: function(v, d) { return d.form[d.name.replace(/confirm/, 'new')].value == v; },
+	currentPassword: function(v, d) { return d.form[d.name.replace(/current/, 'new')].value.trim() ? v.length > 4 : 1; },
 	email: {test: /^(?!\.)([a-zA-Z0-9_\.\-#\$%\*\/\?\|\^\{\}`~&\'\+\-=_])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
 	phone: {test: /^\+?[\d \.x\-]{8,20}$/},
 	addressLine: {maxlength: 50},
@@ -275,6 +276,8 @@ var validateFieldDiv = function() {
 	var fieldDivQuery = $(fieldDiv);
 	formQuery = fieldDivQuery.closest('form');
 	fieldsQuery = fieldDivQuery.find(formFieldsSelector);
+
+	//log(fieldsQuery);
 
 	// If the form has been submitted, or if all fields in this fieldDiv have changed, we can validate.
 	if (formQuery.hasClass('submitted') || !fieldsQuery.not('.changed').size()) {
@@ -296,29 +299,10 @@ var validateFieldDiv = function() {
 					isValid = isValid && validationRules.eval(rule, value, field);
 				});
 			}
-			/*
-			if (isValid && className.has('ajax')) {
-				clearTimeout(field.timer);
-				field.timer = setTimeout(function() {
-					if (value != field.searched) {
-						var data = {field: name};
-						data[name] = value;
-						$.get(contextPath + '/login/register/check/validate', data, function(json) {
-							isValid = json.result;
-							$('#advice-' + name + '-ajax')
-								.text(isValid ? '' : json.messages[0])
-								[isValid ? 'removeClass' : 'addClass']('error')
-								[isValid ? 'hide' : 'fadeIn']();
-						}, 'json');
-					}
-					field.searched = value;
-				}, 200);
-			}
-			*/
 		});
 		adviceQuery
 			[isValid ? 'removeClass' : 'addClass']('error')
-			[isValid ? 'hide' : 'fadeIn']();
+			[isValid ? 'fadeOut' : 'fadeIn']();
 	}
 };
 
@@ -341,7 +325,7 @@ var loadVeil = window.loadVeil = function(html) {
 			hideVeil();
 		}).focus(function() {
 			return false;
-		}))
+		}));
 	dialogQuery
 		.css({marginLeft: -dialogQuery.width() / 2})
 		.find('br:last').remove();
@@ -387,6 +371,38 @@ wire(function() {
 		})
 		.delegate(formFieldsSelector, 'change', function() {
 			$(this).addClass('changed');
+		})
+		.delegate('.newPassword', 'focus keypress keyup mouseup blur', function(event) {
+			var eventType = event.type;
+			var passwordQuery = $(this);
+			var value = passwordQuery.val();
+			var strengthQuery = passwordQuery.next('.passwordStrength');
+			strengthQuery.css({display: value ? 'inline-block' : 'none'});
+
+			var characterReplacementScore = function(pattern) {
+				var replaced = value.replace(pattern, '');
+				var uniques = 0;
+				var has = {};
+				replaced.split('').each(function(characterIndex, character) {
+					if (!has[character]) {
+						has[character] = 1;
+						uniques++;
+					}
+				});
+				return Math.sqrt(2 * Math.min(uniques, 6)) * 1.2;
+			};
+
+			var strength = Math.round(Math.max(1, Math.min(10,
+				value.length / 8 +
+				characterReplacementScore(/[^a-z]/g) +
+				characterReplacementScore(/[^0-9]/g) +
+				characterReplacementScore(/[^A-Z]/g) +
+				characterReplacementScore(/[a-zA-Z0-9]/g))));
+
+			var rg = ['', 'f0', 'f2', 'f4', 'f6', 'f8', 'ca', '9a', '6a', '3a', '0a'];
+
+			strengthQuery.find('b').html('<div style="height:100%;width:' + strength + '0%;background:#' + rg[strength] + '0"/>');
+			strengthQuery.find('var').hide().eq(strength < 6 ? 0 : strength < 8 ? 1 : 2).css({display: 'inline'});
 		})
 		.delegate(fieldDivSelector, 'click blur mouseup keyup change', validateFieldDiv);
 });
@@ -469,9 +485,6 @@ $(document)
 	})
 	.delegate('form', 'submit', function() {
 		$(this).find('.hint').val('');
-	})
-	.delegate('.password.new', 'focus keypress keyup mouseup', function() {
-
 	})
 	.keydown(function(event) {
 		if (event.keyCode == 27) {

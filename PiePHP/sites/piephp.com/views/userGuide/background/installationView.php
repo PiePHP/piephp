@@ -10,7 +10,7 @@
 	<li class="pad">Unzip to a directory on your machine (which we will call <b>PiePHP</b>).</li>
 	<li class="pad">Point your Apache <b>DocumentRoot</b> to <b>PiePHP/sites/piephp.com/public</b>.</li>
 	<li class="pad">Copy <b>PiePHP/sites/piephp.com/localConfigExample.php</b> to <b>PiePHP/sites/piephp.com/localConfig.php</b> and change the necessary parameters (like your database connection).</li>
-	<li class="pad">Go to http://YOUR_DOMAIN/patches to execute database patches.</li>
+	<li class="pad">Go to http://YOUR_DOMAIN/data/patches to execute database patches.</li>
 </ol>
 
 <p>If you would like to help us build an installer, please contact <b>sam<var>username</var>@piephp<var>domain</var>.com</b>.</p>

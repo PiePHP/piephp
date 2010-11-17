@@ -19,7 +19,7 @@ class PatchesController extends Controller {
 		global $DATABASES;
 		global $SITE_DIR;
 		if ($ENVIRONMENT != 'development') {
-			$this->authenticate(array(
+			$this->authorize(array(
 				1, // System administrators
 			));
 		}
@@ -33,7 +33,7 @@ class PatchesController extends Controller {
 			$nextOrdinal = $model->selectValue('MAX(ordinal) FROM patches') + 1;
 			$model->ignoreErrors = false;
 
-			$patchesDir = $SITE_DIR . 'patches/' . $databaseName . '_database/';
+			$patchesDir = $SITE_DIR . 'data/patches/' . $databaseName . 'Database/';
 
 			while (file_exists($path = $patchesDir . 'patch' . sprintf('%05d', $nextOrdinal) . '.sql')) {
 				$patched = true;

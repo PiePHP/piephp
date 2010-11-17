@@ -29,7 +29,7 @@ $DATABASES = array(
 
 // Caches can be used for things like query results and full-page HTML.
 $CACHES = array(
-	'default' => 'memcache:host=localhost port=11211 prefix=piephp_ expire=600',
+	'default' => 'file:host=localhost port=11211 prefix=piephp_ expire=600',
 	'pages' => 'file:host=localhost port=11211 prefix=piephp_pages_ expire=600'
 );
 
@@ -37,7 +37,7 @@ $CACHES = array(
 $ENVIRONMENT = 'production';
 
 // The version number is used when generating minified JavaScript and CSS for a deployment.
-$VERSION = '0.0.2';
+$VERSION = '0.0.3';
 
 // $SITE_DIR is the directory which contains this application's files.
 $SITE_DIR = str_replace('\\', '/', dirname(dirname(__FILE__))) . '/';
@@ -50,8 +50,7 @@ $PIE_DIR = dirname(dirname($SITE_DIR)) . '/';
 // For deployments to servers without mod_rewrite, this can be changed in localConfig.php.
 $URL_ROOT = '/';
 
-// Any of the above settings can be overridden in a development/test/staging environment by
-// rewriting them in localConfig.php.
+// Any of the settings above can be overridden in by rewriting them in localConfig.php.
 include $SITE_DIR . 'localConfig.php';
 
 // If we're not posting data, we should check for a cached copy of the requested page.
@@ -64,14 +63,18 @@ if (!count($_POST) && isset($CACHES['pages'])) {
 	$pageCacheKey = $_SERVER['REQUEST_URI'] . '&'
 	. (is_ajax() ? 'a' : '')
 	. (is_dialog() ? 'd' : '')
-	. (is_https() ? 'h' : '')
-	. (is_localhost() ? 'l' : '');
+	. (is_https() ? 'h' : '');
 	$contents = $pageModel->cache->get($pageCacheKey);
 	if ($contents) {
 		ob_start('ob_gzhandler');
 		send_output($contents);
 	}
 }
+
+if (isset($_COOKIE['notifications'])) {
+	$NOTIFICATIONS = unserialize($_COOKIE['notifications']);
+}
+setcookie('notifications', '', time(), '/');
 
 // Output buffering must be turned on in order to support post-rendering source modifications.
 // TODO: Find out why PHP won't let me get the contents of a gzipped buffer.
@@ -163,12 +166,11 @@ send_output($contents);
 function __autoload($className) {
 	global $SITE_DIR;
 	global $PIE_DIR;
-	$autoloadFile = $SITE_DIR . 'classes/' . $className . '.php';
-	if (@include($autoloadFile)) {
+	$autoloadFile = 'classes/' . str_replace('_', '/', $className) . '.php';
+	if (@include($SITE_DIR . $autoloadFile)) {
 		return;
 	}
-	$autoloadFile = $PIE_DIR . 'classes/' . $className . '.php';
-	include($autoloadFile);
+	include($PIE_DIR . $autoloadFile);
 }
 
 /**
@@ -268,7 +270,7 @@ function send_output($output) {
 		$blocks = '';
 		foreach ($NOTIFICATIONS as $notification) {
 			list($type, $message) = explode(' ', $notification . ' ', 2);
-			$blocks .= '<ins class="' . $type . '">' . htmlentities($message) . '</ins>';
+			$blocks .= '<h4 class="' . $type . '">' . $message . '</h4>';
 		}
 		$output = str_replace('<var>NOTIFICATIONS</var>', $blocks, $output);
 	}
@@ -281,9 +283,7 @@ function send_output($output) {
  * @return true if the page was requested via AJAX.
  */
 function is_ajax() {
-	return (isset($_REQUEST['isAjax']) && $_REQUEST['isAjax'])
-		|| (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-			&& $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
+	return isset($_REQUEST['isAjax']);
 }
 
 /**
@@ -311,19 +311,26 @@ function is_https() {
 }
 
 /**
- * Whether the page is being viewed on the machine it is being served from.
- * @return true if it's being viewed on localhost.
- */
-function is_localhost() {
-	return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
-}
-
-/**
  * Whether the page is being viewed on a mobile device.
  * @return true if it is being viewed on a mobile device.
  */
 function is_mobile() {
-	strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
+	strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false
+		|| strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false
+		|| strpos($_SERVER['HTTP_USER_AGENT'], 'Blackberry') !== false;
+}
+
+/**
+ * Use a phrase in the base language to find a phrase in the target language.
+ * @return a phrase in the target language.
+ * TODO: Apply the arguments programmatically.
+ */
+function say($phrase, $contextOrSubstitutions = '', $substitutions = array()) {
+	global $INTERNATIONALIZATION_SERVICE;
+	if (!$INTERNATIONALIZATION_SERVICE) {
+		$INTERNATIONALIZATION_SERVICE = new InternationalizationService();
+	}
+	return $INTERNATIONALIZATION_SERVICE->say($phrase, $contextOrSubstitutions, $substitutions);
 }
 
 

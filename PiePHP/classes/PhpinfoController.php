@@ -16,7 +16,7 @@ class PhpinfoController extends Controller {
 	 */
 	public function defaultAction() {
 		if ($GLOBALS['ENVIRONMENT'] != 'development') {
-			$this->authenticate(array(
+			$this->authorize(array(
 				1, // System administrators
 				2, // Developers
 			));

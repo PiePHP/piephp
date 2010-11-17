@@ -51,10 +51,8 @@
 
 <div class="structure">
 	<div class="folder">piephp.com<i>An example PiePHP site</i></div>
-	<div class="folder indent">cache<i>Responses that have been rendered and stored for fast access</i></div>
+	<div class="folder indent">data<i>Cached data, logs, database patches, etc.</i></div>
 	<div class="folder indent">classes<i>Classes used by a specific site</i></div>
-	<div class="folder indent">logs<i>Error logs and debug logs for a specific site</i></div>
-	<div class="folder indent">patches<i>Database patches that can be run in sequence to build the site's database</i></div>
 	<div class="folder indent">public<i>The DocumentRoot for your site</i></div>
 	<div class="folder indent">templates<i>Template files that will include your views</i></div>
 	<div class="folder indent">views<i>PHP views that can be shared between sites</i></div>

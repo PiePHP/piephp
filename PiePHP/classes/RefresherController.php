@@ -22,26 +22,19 @@ class RefresherController extends Controller {
 		<html>
 		<head>
 			<title>Refresher</title>
-			<script type="text/javascript" src="/js/jquery-1.4.2.js"></script>
 		</head>
 		<body>
 			<script type="text/javascript">
 				setTimeout(function() {
-					$('body').load('<?php echo $URL_ROOT; ?>refresher/script/' + (new Date()).getTime());
+					var scriptElement = document.createElement('script');
+					scriptElement.src = '<?php echo $URL_ROOT; ?>refresher/script/' + (new Date()).getTime();
+					document.body.appendChild(scriptElement);
 				}, 500);
 				setTimeout(window.location.reload, 30000);
 			</script>
 		</body>
 		</html>
 		<?php
-	}
-
-	/**
-	 * Echo some code wrapped in script tags.
-	 * @param  $code: a snippet of JavaScript code.
-	 */
-	public function renderScript($code) {
-		echo '<script type="text/javascript">' . $code . '</script>';
 	}
 
 	/**
@@ -141,7 +134,8 @@ class RefresherController extends Controller {
 				}
 
 				// The refresher script is in a frame, so in order to reload the page it's on, we must reload the parent.
-				$this->renderScript('parent.location.reload()');
+				header('Content-type: text/javascript');
+				echo 'parent.location.reload();';
 				exit;
 			}
 
@@ -150,7 +144,9 @@ class RefresherController extends Controller {
 
 		}
 		// The refresher script is in a frame, so reloading the window will just reload the refresher.
-		$this->renderScript('window.location = window.location.href.replace(/\?.*$/, "") + "?m=' . $modifiedTime . '"');
+		header('Content-type: text/javascript');
+		echo 'window.location = window.location.href.replace(/\?.*$/, "") + "?m=' . $modifiedTime . '";';
+		exit;
 	}
 
 }

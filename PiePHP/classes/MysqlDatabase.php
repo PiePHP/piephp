@@ -17,34 +17,31 @@ class MysqlDatabase extends Database {
 	 * @param  $configName: the configuration comes from $DATABASES[$configName].
 	 */
 	public function __construct($config, $configName = 'default') {
-		$this->connection = mysql_pconnect($config['host'], $config['username'], $config['password'])
+		$this->connection = mysql_pconnect($config['host'], $config['user'], $config['password'])
 			or $this->triggerError('Could not connect to ' . $configName . ' database.');
-		mysql_select_db($config['database'])
-			or $this->triggerError('Database ' . $config['database'] . ' does not exist.');
+		mysql_select_db($config['dbname'])
+			or $this->triggerError('Database ' . $config['dbname'] . ' does not exist.');
 	}
 
 	/**
 	 * Begin a database transaction.
 	 */
 	public function beginTransaction() {
-		// TODO: Implement transaction stuff.
-		//$this->query('BEGIN TRANSACTION');
+		$this->query('BEGIN');
 	}
 
 	/**
 	 * Roll back the current database transaction.
 	 */
 	public function rollbackTransaction() {
-		// TODO: Implement transaction stuff.
-		//$this->query('ROLLBACK TRANSACTION');
+		$this->query('ROLLBACK');
 	}
 
 	/**
 	 * Commit the current database transaction.
 	 */
 	public function commitTransaction() {
-		// TODO: Implement transaction stuff.
-		//$this->query('COMMIT TRANSACTION');
+		$this->query('COMMIT');
 	}
 
 	/**
@@ -65,15 +62,15 @@ class MysqlDatabase extends Database {
 	/**
 	 * Do a query on the database, and return results.
 	 * @param  $sql: a SQL query string.
-	 * @param  $valuesOnly: whether to return values only, or return column names as well.
-	 * @return results as an array of associative arrays (or an array of arrays if $valuesOnly == true).
+	 * @param  $returnAssociativeArrays: whether to return each row as an associative array.
+	 * @return results as an array of associative arrays (or an array of arrays if $returnAssociativeArrays == false).
 	 */
-	public function select($sql, $valuesOnly = false) {
+	public function select($sql, $returnAssociativeArrays = true) {
 		$resource = $this->query('SELECT ' . $sql);
 		$results = array();
 		if ($resource) {
-			$fetcher = $valuesOnly ? 'mysql_fetch_row' : 'mysql_fetch_assoc';
-			while ($assoc = $fetcher($resource)) {
+			$fetchFunction = $returnAssociativeArrays ? 'mysql_fetch_assoc' : 'mysql_fetch_row';
+			while ($assoc = $fetchFunction($resource)) {
 				$results[] = $assoc;
 			}
 		}

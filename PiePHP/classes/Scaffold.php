@@ -156,43 +156,45 @@ abstract class Scaffold extends Controller {
 	public function processPost() {
 		if (count($_POST)) {
 
-			if ($this->action == 'add' || $this->submitButtonValue == 'change') {
+			if ($this->action == 'add' || $this->submitButtonValue == 'save') {
 				$this->validate();
-				if ($this->hasValidationErrors) {
-					return;
+			}
+
+			if ($this->hasValidationErrors) {
+				$this->notifyError(say('Please provide the requested information and try again.'));
+			}
+			else {
+				$this->loadModel();
+				$this->model->beginTransaction();
+	
+				foreach ($this->fields as $field) {
+					$field->processBeforeScaffold();
 				}
+				if ($this->action == 'add' || $this->submitButtonValue == 'new') {
+					$this->processInsert();
+					$this->notifyConfirmation(say('1 {0} has been added.', array(say($this->singular))));
+				}
+				else if ($this->action == 'change') {
+					$this->processUpdate();
+					$this->notifyConfirmation(say('1 {0} has been changed.', array(say($this->singular))));
+				}
+				else if ($this->action == 'remove') {
+					$this->processDelete();
+					$this->notifyConfirmation(say('1 {0} has been removed.', array(say($this->singular))));
+				}
+				$this->sendRedirect($this->getRedirectUrl());
+	
+				foreach ($this->fields as $field) {
+					$field->processAfterScaffold();
+				}
+	
+				$this->model->commitTransaction();
 			}
-
-			$this->loadModel();
-			$this->model->beginTransaction();
-
-			foreach ($this->fields as $field) {
-				$field->processBeforeScaffold();
-			}
-			if ($this->action == 'add' || $this->submitButtonValue == 'new') {
-				$this->processInsert();
-				$this->notifyConfirmation('Added 1 ' . $this->singular . '.');
-			}
-			else if ($this->action == 'change') {
-				$this->processUpdate();
-				$this->notifyConfirmation('Changed 1 ' . $this->singular . '.');
-			}
-			else if ($this->action == 'remove') {
-				$this->processDelete();
-				$this->notifyConfirmation('Removed 1 ' . $this->singular . '.');
-			}
-			$this->sendRedirect($this->getRedirectUrl());
-
-			foreach ($this->fields as $field) {
-				$field->processAfterScaffold();
-			}
-
-			$this->model->commitTransaction();
 		}
 	}
 
 	/**
-	 * Assess the validity of each of this scaffold's field.
+	 * Assess the validity of each of this scaffold's fields.
 	 */
 	public function validate() {
 		foreach ($this->fields as $field) {

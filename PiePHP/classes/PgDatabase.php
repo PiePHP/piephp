@@ -63,15 +63,15 @@ class PgDatabase extends Database {
 	/**
 	 * Do a query on the database, and return results.
 	 * @param  $sql: a SQL query string.
-	 * @param  $valuesOnly: whether to return values only, or return column names as well.
-	 * @return results as an array of associative arrays (or an array of arrays if $valuesOnly == true).
+	 * @param  $returnAssociativeArrays: whether to return each row as an associative array.
+	 * @return results as an array of associative arrays (or an array of arrays if $returnAssociativeArrays == false).
 	 */
-	public function select($sql, $valuesOnly = false) {
+	public function select($sql, $returnAssociativeArrays = true) {
 		$resource = $this->query('SELECT ' . $sql);
 		$results = array();
 		if ($resource) {
-			$fetcher = $valuesOnly ? 'pg_fetch_row' : 'pg_fetch_assoc';
-			while ($assoc = $fetcher($resource)) {
+			$fetchFunction = $returnAssociativeArrays ? 'pg_fetch_assoc' : 'pg_fetch_row';
+			while ($assoc = $fetchFunction($resource)) {
 				$results[] = $assoc;
 			}
 		}

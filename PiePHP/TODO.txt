@@ -1,17 +1,15 @@
-Fix password validation
 Forgot password
 Installer
-User guide
-------------------------
+User guide (continued)
 News/blog
-Admin: Pagination
-Admin: Filters
-Admin: Code generation
-Admin: Actions on multiple records
-Database synchronization
-Error reporting
+Scaffolds: Pagination
+Scaffolds: Filters
 Sign up page
 Forums
 Search
 Test suite
 Internationalization
+Database synchronization
+Error reporting via email
+Scaffolds: Code generation
+Scaffolds: Actions on multiple records

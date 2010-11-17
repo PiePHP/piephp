@@ -71,7 +71,7 @@ class FileCache {
 	 */
 	public function getPath($cacheKey) {
 		global $SITE_DIR;
-		return $SITE_DIR . 'cache/' . $this->prefix . md5($cacheKey) . '.cache.html';
+		return $SITE_DIR . 'data/cache/' . $this->prefix . md5($cacheKey) . '.cache.html';
 	}
 
 	/**
@@ -79,10 +79,10 @@ class FileCache {
 	 */
 	public function flush() {
 		global $SITE_DIR;
-		$directoryHandle = opendir($SITE_DIR . 'cache');
+		$directoryHandle = opendir($SITE_DIR . 'data/cache');
 		while (false !== ($filename = readdir($directoryHandle))) {
 			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {
-				unlink($SITE_DIR . 'cache/' . $filename);
+				unlink($SITE_DIR . 'data/cache/' . $filename);
 			}
 		}
 	}
@@ -94,10 +94,10 @@ class FileCache {
 	public function getStats() {
 		global $SITE_DIR;
 		$files = array();
-		$directoryHandle = opendir($SITE_DIR . 'cache');
+		$directoryHandle = opendir($SITE_DIR . 'data/cache');
 		while (false !== ($filename = readdir($directoryHandle))) {
 			if (substr($filename, 0, strlen($this->prefix)) == $this->prefix) {
-				$files[] = $SITE_DIR . 'cache/' . $filename;
+				$files[] = $SITE_DIR . 'data/cache/' . $filename;
 			}
 		}
 		return array('files' => count($files));
