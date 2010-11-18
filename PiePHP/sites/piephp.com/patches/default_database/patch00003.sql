@@ -1,1 +1,0 @@
-DROP TABLE IF EXISTS users_user_groups;
