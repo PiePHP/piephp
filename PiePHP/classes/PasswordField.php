@@ -109,7 +109,7 @@ class PasswordField extends MultiField {
 	 * @return the salted password hash.
 	 */
 	public function hash($password) {
-		return md5($password . $this->scaffold->id);
+		return Authentication::hashPasswordSalt($password, $this->scaffold->id);
 	}
 
 	/**

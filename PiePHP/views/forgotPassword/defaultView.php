@@ -1,32 +1,29 @@
 <?php
 if (is_ajax()) {
 	?>
-	<var title="action"><?php echo $HTTPS_ROOT; ?>forgot_password/</var>
+	<var title="action"><?= $url ?></var>
 	<?php
 }
 if (!is_dialog()) {
 	?>
-	<form method="post" action="<?php echo $HTTPS_ROOT; ?>forgot_password/">
+	<form method="post" action="<?= $url ?>">
 	<?php
 }
 ?>
 <fieldset class="forgot">
 	<h2>Forgot Your Password?</h2>
 	<p class="explaination">
-		Enter either your username or email address below to have your password
+		Enter your username and email address below to have your password
 		reset and sent to the email address you have on file.
 	</p>
 	<div>
 		<label>Username</label>
-		<input type="text" name="username" maxlength="32" class="username" value="" />
+		<input type="text" name="username" maxlength="32" class="required username" value="" />
 		<div class="advice">Please enter your username.</div>
 	</div>
 	<div>
-		<span class="label or"><em>Or</em></span>
-	</div>
-	<div>
 		<label>Email</label>
-		<input type="text" name="email" maxlength="32" class="email" value="" />
+		<input type="text" name="email" maxlength="32" class="required email" value="" />
 		<div class="advice">Please enter your email.</div>
 	</div>
 	<div class="actions">
