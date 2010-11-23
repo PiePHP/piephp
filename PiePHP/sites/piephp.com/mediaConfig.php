@@ -5,7 +5,8 @@ $MEDIA_GROUPS = array(
 		'core' => array(
 			'base.css',
 			'scaffolds.css',
-			'veil.css'
+			'veil.css',
+			'forgot-password.css',
 		)
 	),
 	'js' => array(

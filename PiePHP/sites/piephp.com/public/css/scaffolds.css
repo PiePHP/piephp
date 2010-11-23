@@ -49,7 +49,8 @@ fieldset div.on {
 	background: #ffc;
 }
 
-fieldset label {
+fieldset label,
+fieldset .label {
 	float: left;
 	display: block;
 	width: 120px;
@@ -192,7 +193,13 @@ div.actions a {
 	float: left;
 }
 
+div.actions div.left {
+	float: left;
+	padding-top: 8px;
+}
+
 div.actions div {
+	clear: none;
 	float: right;
 }
 
