@@ -38,7 +38,7 @@ class SignInController extends Controller {
 			FROM users
 			WHERE LOWER(username) = '" . addslashes($username) . "'");
 		if ($result) {
-			$hash = md5($password . $result['id']);
+			$hash = Authentication::hashPasswordSalt($password, $result['id']);
 			if ($result['password'] == $hash) {
 				$this->startSessionAndSendRedirect($result['id'], $result['username'], $result['user_groups']);
 				return;

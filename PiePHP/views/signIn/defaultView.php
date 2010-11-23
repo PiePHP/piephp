@@ -31,6 +31,9 @@ if (!is_dialog()) {
 	</fieldset>
 </div>
 <div class="actions">
+	<div class="left">
+		<a href="<?= $HTTPS_ROOT ?>forgot_password/">Forgot your password?</a>
+	</div>
 	<div>
 		<button type="submit" class="main"><b>Sign In</b></button>
 	</div>
