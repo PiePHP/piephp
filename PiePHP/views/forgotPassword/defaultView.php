@@ -13,21 +13,13 @@ if (!is_dialog()) {
 <fieldset class="forgot">
 	<h2>Forgot Your Password?</h2>
 	<p class="explaination">
-		Enter either your username or email address below to have your password
+		Enter either your username below to have your password
 		reset and sent to the email address you have on file.
 	</p>
 	<div>
 		<label>Username</label>
-		<input type="text" name="username" maxlength="32" class="username" value="" />
+		<input type="text" name="username" maxlength="32" class="required username" value="" />
 		<div class="advice">Please enter your username.</div>
-	</div>
-	<div>
-		<span class="label or"><em>Or</em></span>
-	</div>
-	<div>
-		<label>Email</label>
-		<input type="text" name="email" maxlength="32" class="email" value="" />
-		<div class="advice">Please enter your email.</div>
 	</div>
 	<div class="actions">
 		<div>
