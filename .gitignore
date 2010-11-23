@@ -1,0 +1,11 @@
+*~
+*.swp
+.buildpath
+.project
+.settings
+build
+code_coverage
+coverage
+.DS_Store
+Icon?
+nbproject
