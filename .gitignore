@@ -9,3 +9,5 @@ coverage
 .DS_Store
 Icon?
 nbproject
+PiePHP/sites/piephp.com/data/cache
+PiePHP/sites/piephp.com/data/logs
